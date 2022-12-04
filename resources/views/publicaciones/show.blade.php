@@ -51,9 +51,9 @@
 
                 {{--                <%--                agregar a favoritos y contacto--%>--}}
                 <div class="d-flex mb-3">
-                    <div class="text-primary mr-2 ms-2 me-2">
-                        <a href="#" class="btn btn-outline-primary btn-sm">Agregar a favoritos</a>
-                    </div>
+{{--                    <div class="text-primary mr-2 ms-2 me-2">--}}
+{{--                        <a href="#" class="btn btn-outline-primary btn-sm">Agregar a favoritos</a>--}}
+{{--                    </div>--}}
                     <div class="text-primary mr-2 ms-2 me-2">
                         <a href="#" class="btn btn-outline-primary btn-sm">Contactar</a>
                     </div>
