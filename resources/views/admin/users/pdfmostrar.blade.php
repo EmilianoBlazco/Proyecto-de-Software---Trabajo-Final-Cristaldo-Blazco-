@@ -146,10 +146,10 @@
             </td>
             <td colspan="3" class="header-cell border title">Easy-Rent</td>
         </tr>
-        <tr class="header-row border">
-            <td colspan="3" class="header-cell border subtitle" style="color: red">Secretaria de Bienestar Estudiantil - FCEQyN - UNaM.
-            </td>
-        </tr>
+{{--        <tr class="header-row border">--}}
+{{--            <td colspan="3" class="header-cell border subtitle" style="color: red">Secretaria de Bienestar Estudiantil - FCEQyN - UNaM.--}}
+{{--            </td>--}}
+{{--        </tr>--}}
         <tr class="header-row border">
             <td colspan="3" class="header-cell border subtitle">Titulo del reporte:
                 <span class="enphasis">Listado de Usuarios</span>

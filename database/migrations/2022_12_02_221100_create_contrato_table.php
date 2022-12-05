@@ -21,6 +21,7 @@ return new class extends Migration
             $table->boolean('tipo_contrato');//bolean (Con o sin contrato)
 
             //para contrato especifico mezclado con lens
+            $table->string('titulo_contrato');
             $table->longText('descripcion_contrato');
             $table->timestamp('fecha_inicio_contrato');
             $table->timestamp('fecha_vencimiento_contrato');

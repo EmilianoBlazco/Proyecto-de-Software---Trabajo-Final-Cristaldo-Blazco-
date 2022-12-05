@@ -38,5 +38,6 @@
     <orderEntry type="library" name="leaflet" level="application" />
     <orderEntry type="library" name="42d5adcbca" level="application" />
     <orderEntry type="library" name="42d5adcbca" level="application" />
+    <orderEntry type="library" name="ckeditor" level="application" />
   </component>
 </module>

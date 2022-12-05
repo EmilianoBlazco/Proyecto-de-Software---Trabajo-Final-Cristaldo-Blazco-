@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Contrato;
+use App\Models\Publicacion;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class ContratoController extends Controller

@@ -23,7 +23,7 @@
                 <h5 class="text-bold">Informacion de la operación:</h5>
                 <div class="flex my-1">
                     <h6 class="text-bold mt-3">Operacion:</h6>
-                    <span >{{($auditoria->event)}} de datos.</span>
+                    <span >{{__($auditoria->event)}} datos.</span>
                 </div>
                 <div class="flex my-1">
                     <h6 class="text-bold">Fecha de operación:</h6>
@@ -34,7 +34,7 @@
                 <div class="flex my-1">
                     <h6 class="text-bold">Tabla afectada:</h6>
                     <span>
-                        {{$auditoria->auditable_type}}
+                        {{substr($auditoria->auditable_type,11)}}
                     </span>
                 </div>
             </div>
