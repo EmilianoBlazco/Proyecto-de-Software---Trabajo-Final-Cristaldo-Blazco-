@@ -65,7 +65,15 @@
                                         <td>
                                             <div class="d-flex px-2 py-1">
                                                 <div class="">
-                                                    <img src="img/rents/7.webp" class="avatar avatar-xl me-3" alt="logo">
+                                                    <img src="
+                                                    @foreach($imagenes as $imagen)
+                                                    @if($imagen->id_publicacion == $publicacion->id)
+                                                        {{asset($imagen->url_imagen)}}
+                                                        @break
+                                                    @endif
+                                                    @endforeach"
+                                                         class="avatar avatar-sm me-3" alt="user1">
+{{--                                                    <img src="img/rents/7.webp" class="avatar avatar-xl me-3" alt="logo">--}}
                                                 </div>
                                                 <div class="d-flex flex-column justify-content-center">
                                                     <h3 class="mb-0"><a href="{{route('publicaciones.borrado.restaurar',$publicacion->id)}}" title="{{$publicacion->titulo_publicacion}}">{{substr($publicacion->titulo_publicacion,0,17)}}@if(strlen($publicacion->titulo_publicacion)>17)...@endif
@@ -85,7 +93,7 @@
 
                                         </td>
                                         <td class="align-middle text-center">
-                                            <span class="badge bg-gradient-success">{{$publicacion->estado_publicacion}}</span>
+                                            <span class="badge bg-gradient-danger">{{$publicacion->estado_publicacion}}</span>
                                         </td>
                                         {{--                                        <td class="align-middle text-center">--}}
                                         {{--                                            <span class="text-secondary text-xs font-weight-normal">420(Ver si implementar)</span>--}}
@@ -93,10 +101,10 @@
                                         <td class="align-middle text-center">
                                             <span class="text-secondary text-xs font-weight-normal">{{$publicacion->deleted_at->format('d-m-Y')}}</span>
                                         </td>
-                                        <td class="align-middle text-center">
+                                        <td class="align-middle">
                                             <form action="{{route('publicaciones.borrado.restaurar',$publicacion->id)}}" method="POST">
                                                             @csrf
-                                                            <button type="submit" style="color: rgb(64,161,49)">Restaurar<br> Publicacion</button>
+                                                            <button class="fas fa-sync" type="submit" title="Restaurar publicacion"></button>
                                                         </form>
                                         </td>
                                         <td class="align-middle">

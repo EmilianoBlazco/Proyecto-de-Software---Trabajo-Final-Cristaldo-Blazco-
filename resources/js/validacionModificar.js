@@ -19,7 +19,6 @@ form.addEventListener('submit', (e) => {
         const precio = document.getElementById('inputPrecio');
         const titulo = document.getElementById('inputTitulo');
         const descripcion = document.getElementById('inputDescripcion');
-        const imagenes = document.getElementById('input-file');
 
 
 
@@ -43,7 +42,6 @@ form.addEventListener('submit', (e) => {
     document.getElementById('divPrecio').innerText = '';
     document.getElementById('divTitulo').innerText = '';
     document.getElementById('divDescripcion').innerText = '';
-    document.getElementById('divImagenes').innerText = '';
 
     document.getElementById('progresTipo').className = 'multisteps-form__progress-btn js-active';
     document.getElementById('progresUbicacion').className = 'multisteps-form__progress-btn';
@@ -158,8 +156,8 @@ form.addEventListener('submit', (e) => {
             document.getElementById('progresCaracteristica').className = 'multisteps-form__progress-btn text-danger';
             errores++;
         }
-        if(superficieCubierta.value > 100) {
-            document.getElementById('divSuperficieCubierta').innerText = 'Debe ingresar un valor menor a 100';
+        if(superficieCubierta.value > 999999) {
+            document.getElementById('divSuperficieCubierta').innerText = 'Debe ingresar un valor menor a 999999';
             document.getElementById('progresCaracteristica').className = 'multisteps-form__progress-btn text-danger';
             errores++;
         }
@@ -172,13 +170,11 @@ form.addEventListener('submit', (e) => {
             document.getElementById('progresCaracteristica').className = 'multisteps-form__progress-btn text-danger';
             errores++;
         }
-        if(superficieTotal.value > 100) {
-            document.getElementById('divSuperficieTotal').innerText = 'Debe ingresar un valor menor a 100';
+        if(superficieTotal.value > 999999) {
+            document.getElementById('divSuperficieTotal').innerText = 'Debe ingresar un valor menor a 999999';
             document.getElementById('progresCaracteristica').className = 'multisteps-form__progress-btn text-danger';
             errores++;
         }
-        console.log(superficieTotal.value);
-        console.log(superficieCubierta.value);
         if(superficieTotal.value < superficieCubierta.value) {
             document.getElementById('divSuperficieTotal').innerText = 'La superficie total debe ser mayor a la superficie cubierta';
             document.getElementById('progresCaracteristica').className = 'multisteps-form__progress-btn text-danger';
@@ -234,18 +230,6 @@ form.addEventListener('submit', (e) => {
         }
     }
 
-    if(imagenes.value === '') {
-        document.getElementById('divImagenes').innerText = 'Debe ingresar al menos una imagen';
-        document.getElementById('progresImagen').className = 'multisteps-form__progress-btn text-danger';
-        errores++;
-    }
-
-    // si la cantidad de imagenes es mayor a de 6, error
-    if(imagenes.files.length > 6) {
-        document.getElementById('divImagenes').innerText = 'Debe ingresar un máximo de 6 imágenes';
-        document.getElementById('progresImagen').className = 'multisteps-form__progress-btn text-danger';
-        errores++;
-    }
 
     // si no hay errores, se envia el formulario
     if(errores === 0) {

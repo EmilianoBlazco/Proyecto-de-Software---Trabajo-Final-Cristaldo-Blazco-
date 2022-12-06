@@ -74,7 +74,7 @@ class PublicacionController extends Controller
             $mercadoPagoTransaccion->tipo_pago = $payment_type_id;
             $mercadoPagoTransaccion->id_usuario = Auth::user()->id;
             $mercadoPagoTransaccion->nombre_usuario = Auth::user()->name;
-            $mercadoPagoTransaccion->id_contrato = $contrato->id;
+            //$mercadoPagoTransaccion->id_contrato = $contrato->id;
             $mercadoPagoTransaccion->save();
 
 //            //enviar correo al propietario de la publicacion (ver que onda con el envio de correos)
@@ -215,8 +215,9 @@ class PublicacionController extends Controller
         $ciudades = Ciudad::get();
         $comodidades = Comodidad::get();
         $caracteristicasComodidades = CaracteristicaComodidad::get();
+        $imagenes = Imagen::get();
 
-        return view('publicaciones.edit', compact('publicacion', 'provincias', 'tiposPropiedad', 'ciudades', 'comodidades', 'caracteristicasComodidades'));
+        return view('publicaciones.edit', compact('publicacion', 'provincias', 'tiposPropiedad', 'ciudades', 'comodidades', 'caracteristicasComodidades', 'imagenes'));
     }
 
 
@@ -228,6 +229,8 @@ class PublicacionController extends Controller
             'titulo'=>['required'],
             'descripcion'=>['required'],
         ]);
+        $imagenes = Imagen::get();
+
         //$publicacion = Publicacion::find($publicacion); Funciona igual porque tenemos  Publicacion $publicacion como segundo parametro
         //Pagina 1 del formulario
         //$publicacion->tipo_propiedad = $request->input('tipo_propiedad');
@@ -264,10 +267,27 @@ class PublicacionController extends Controller
         //Pagina 4 del formulario
         //Falta imagen
 
-        //Pagina 5 del formulario
-        //Falta los checkboxs
 
         $publicacion->save();
+
+//        actualizar las imagenes
+        $imagenes = $request->file('file')->store('public/imagenes');
+        $imagenes1 = $request->file('file1')->store('public/imagenes');
+        $imagenes2 = $request->file('file2')->store('public/imagenes');
+        $imagenes3 = $request->file('file3')->store('public/imagenes');
+        $imagenes4 = $request->file('file4')->store('public/imagenes');
+
+        $url = Storage::url($imagenes);
+        $url1 = Storage::url($imagenes1);
+        $url2 = Storage::url($imagenes2);
+        $url3 = Storage::url($imagenes3);
+        $url4 = Storage::url($imagenes4);
+
+        $imagen = Imagen::where('id_publicacion', $publicacion->id)->first();
+        $imagen->url_imagen = $url;
+        $imagen->save();
+
+
 
         session()->flash('estado_publicacion','Se modifico de manera exitosa la Publicacion');
 
@@ -297,8 +317,10 @@ class PublicacionController extends Controller
     {
         $publicaciones = Publicacion::onlyTrashed()->get();
         $tiposPropiedades = TipoPropiedad::get();
+        $imagenes = Imagen::get();
 
-        return view('publicaciones.borradores.borradores',['publicaciones'=> $publicaciones,'tiposPropiedades' => $tiposPropiedades]);
+        return view('publicaciones.borradores.borradores',['publicaciones'=> $publicaciones, 'tiposPropiedades' => $tiposPropiedades, 'imagenes' => $imagenes]);
+//        return view('publicaciones.borradores.borradores',['publicaciones'=> $publicaciones,'tiposPropiedades' => $tiposPropiedades]);
     }
 
     public function eliminarPublicacionesBasura($id)

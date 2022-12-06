@@ -225,7 +225,7 @@
 
                                         <div class="mt-5">
                                             <div class="input-group input-group-outline my-3 ">
-                                                <label class="form-label">Superficie cubierta</label>
+                                                <label class="form-label">Superficie cubierta (<b>m<sup>2</sup></b>)</label>
                                                 <input class="form-control" name="cubierta" type="number"  value="{{old('cubierta')}}" id="inputSuperficieCubierta">
                                             </div>
                                             <div class="text-danger"  id="divSuperficieCubierta" ></div>
@@ -238,7 +238,7 @@
 
                                         <div class="mt-5">
                                             <div class="input-group input-group-outline my-3 ">
-                                                <label class="form-label">Superficie total</label>
+                                                <label class="form-label">Superficie total (<b>m<sup>2</sup></b>)</label>
                                                 <input class="form-control" name="total_terreno" type="number"  value="{{old('total_terreno')}}" id="inputSuperficieTotal">
                                             </div>
                                             <div class="text-danger"  id="divSuperficieTotal" ></div>

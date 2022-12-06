@@ -14,7 +14,7 @@
 
         <div class="container my-auto">
             <div class="row">
-                <div class="col-lg-7 col-md-10">
+                <div class="col-lg-7 col-md-10 mt-8">
                     <h1 class="text-white">Consulte sus propiedades</h1>
                 </div>
             </div>
@@ -69,7 +69,7 @@
                                                     <h3 class="mb-0"><a href="{{route('publicaciones.show',$publicacion->id)}}"  target="_blank" title="{{$publicacion->titulo_publicacion}}">{{substr($publicacion->titulo_publicacion,0,17)}}@if(strlen($publicacion->titulo_publicacion)>17)...@endif
 
                                                         </a></h3>
-                                                    <p class="text-xs text-secondary mb-0">$ {{$publicacion->precio_publicacion}}</p>
+                                                    <p class="text-xs text-secondary mb-0"><b>$ {{$publicacion->precio_publicacion}}</b></p>
                                                 </div>
                                             </div>
                                         </td>
@@ -82,7 +82,11 @@
 
                                         </td>
                                         <td class="align-middle text-center">
-                                            <span class="badge bg-gradient-success">{{$publicacion->estado_publicacion}}</span>
+                                            @if($publicacion->estado_publicacion == "Activo")
+                                                <span class="badge bg-gradient-success">{{$publicacion->estado_publicacion}}</span>
+                                            @else
+                                                <span class="badge bg-gradient-warning">{{$publicacion->estado_publicacion}}</span>
+                                            @endif
                                         </td>
 {{--                                        <td class="align-middle text-center">--}}
 {{--                                            <span class="text-secondary text-xs font-weight-normal">420(Ver si implementar)</span>--}}

@@ -1,7 +1,14 @@
 <x-app-layout>
     <x-slot name="title">Modificar una propiedad publicada</x-slot>
 
-    @vite(['resources/css/material-kit.css', 'resources/css/nucleo-icons.css','resources/css/multistep.css', 'resources/js/multistep.js', 'resources/css/nucleo-svg.css'])
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+          integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+          crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+            integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+            crossorigin=""></script>
+
+    @vite(['resources/css/material-kit.css', 'resources/css/nucleo-icons.css','resources/css/multistep.css', 'resources/js/multistep.js', 'resources/css/nucleo-svg.css','resources/js/validacionModificar.js', 'resources/js/modificarUbicacion.js'])
 
     <body>
 
@@ -22,18 +29,18 @@
                     <div class="row mt-5">
                         <div class=" ml-auto mr-auto mb-4">
                             <div class="multisteps-form__progress">
-                                <button class="multisteps-form__progress-btn js-active" type="button" title="User Info">Tipo de Propiedad</button>
-                                <button class="multisteps-form__progress-btn" type="button" title="Address">Ubicación</button>
-                                <button class="multisteps-form__progress-btn" type="button" title="Order Info">Características</button>
-                                <button class="multisteps-form__progress-btn" type="button" title="Comments">Imágenes</button>
-                                <button class="multisteps-form__progress-btn" type="button" title="Comments">Caracerísticas específicas</button>
+                                <button class="multisteps-form__progress-btn js-active" type="button" title="User Info" id="progresTipo">Tipo de Propiedad</button>
+                                <button class="multisteps-form__progress-btn" type="button" title="Address" id="progresUbicacion">Ubicación</button>
+                                <button class="multisteps-form__progress-btn" type="button" title="Order Info" id="progresCaracteristica">Características</button>
+                                <button class="multisteps-form__progress-btn" type="button" title="Comments" id="progresImagen">Encabezado de la publicación</button>
+                                <button class="multisteps-form__progress-btn" type="button" title="Comments" id="progresComodidad">Caracerísticas específicas</button>
                             </div>
                         </div>
                     </div>
                     <!--form panels-->
                     <div class="row">
                         <div class="col-12 col-lg-8 m-auto">
-                            <form class="multisteps-form__form" action="{{route('publicaciones.update', $publicacion)}}" method="POST">
+                            <form class="multisteps-form__form" action="{{route('publicaciones.update', $publicacion)}}" method="POST" id="form" enctype="multipart/form-data">
                                 @csrf @method('Patch')
 
                                 <!--PANEL TIPO DE PROPIEDAD-->
@@ -42,7 +49,7 @@
                                     <div class="multisteps-form__content">
 
                                         <div class="form-row mt-4 shadow-none p-3 mb-5 bg-light rounded">
-                                            <select class="multisteps-form__select form-control" name="tipo_propiedad">
+                                            <select class="multisteps-form__select form-control" name="tipo_propiedad" id="inputTipo">
                                                 @foreach($tiposPropiedad as $tipoPropiedad)
                                                     <option value="{{$tipoPropiedad->id}}"
                                                             @if($tipoPropiedad->id == $publicacion->id_tipo_propiedad)
@@ -51,13 +58,14 @@
                                                     >{{$tipoPropiedad->nombre_tipo_propiedad}}</option>
                                                 @endforeach
                                             </select>
+                                            <div class="text-danger"  id="divTipo" ></div>
 
                                             {{--                                @error('tipo_propiedad')--}}
                                             {{--                                <small style="color:red">{{$message}}</small>--}}
                                             {{--                                @enderror--}}
 
                                         </div>
-
+                                        <div>Los campos marcados con un <b>(*)</b> son obligatorios</div>
                                         <div class="button-row d-flex mt-4">
                                             <button class="btn btn-primary ml-auto js-btn-next" type="button" title="Next">Siguiente</button>
                                         </div>
@@ -71,22 +79,37 @@
                                     <div class="multisteps-form__content">
 
 
-
-                                        <div class="form-row mt-4  shadow-none p-3 mb-5 bg-light rounded">
-                                            <div class="col">
-                                                <input class="form-control" name="calle" type="text" value="{{old('calle',$publicacion->calle_publicacion)}}">
+                                        <div>
+                                            <div class="input-group input-group-outline o my-3 is-focused">
+                                                <label class="form-label">Calle (*)</label>
+                                                <input class="form-control" name="calle" type="text" value="{{old('calle',$publicacion->calle_publicacion)}}" id="inputCalle">
                                             </div>
+                                            <div class="text-danger"  id="divCalle" ></div>
                                         </div>
 
-                                        <div class="form-row mt-4 shadow-none p-3 mb-5 bg-light rounded">
-                                            <div class="col">
-                                                <input class="form-control" name="altura" type="number" placeholder="Altura" value="{{old('altura',$publicacion->altura_publicacion)}}">
+{{--                                        <div class="form-row mt-4  shadow-none p-3 mb-5 bg-light rounded">--}}
+{{--                                            <div class="col">--}}
+{{--                                                <input class="form-control" name="calle" type="text" value="{{old('calle',$publicacion->calle_publicacion)}}">--}}
+{{--                                            </div>--}}
+{{--                                        </div>--}}
+
+                                        <div class="mt-5">
+                                            <div class="input-group input-group-outline o my-3 is-focused">
+                                                <label class="form-label">Altura (*)</label>
+                                                <input class="form-control" name="altura" type="number" value="{{old('altura',$publicacion->altura_publicacion)}}" id="inputAlturaPublicacion">
                                             </div>
+                                            <div class="text-danger"  id="divAltura" ></div>
                                         </div>
 
+{{--                                        <div class="form-row mt-4 shadow-none p-3 mb-5 bg-light rounded">--}}
+{{--                                            <div class="col">--}}
+{{--                                                <input class="form-control" name="altura" type="number" placeholder="Altura" value="{{old('altura',$publicacion->altura_publicacion)}}">--}}
+{{--                                            </div>--}}
+{{--                                        </div>--}}
+
 
                                         <div class="form-row mt-4 shadow-none p-3 mb-5 bg-light rounded">
-                                            <select class="multisteps-form__select form-control" name="provincia">
+                                            <select class="multisteps-form__select form-control" name="provincia" id="inputProvincia">
                                                 <option selected="selected" name="provincia">Seleccione la provincia</option>
                                                 @foreach($provincias as $provincia)
                                                     <option value="{{$provincia->id}}"
@@ -96,10 +119,11 @@
                                                     >{{$provincia->nombre_provincia}}</option>
                                                 @endforeach
                                             </select>
+                                            <div class="text-danger"  id="divProvincia" ></div>
                                         </div>
 
                                         <div class="form-row mt-4 shadow-none p-3 mb-5 bg-light rounded">
-                                            <select class="multisteps-form__select form-control" name="ciudad">
+                                            <select class="multisteps-form__select form-control" name="ciudad" id="inputCiudad">
                                                 <option selected="selected" name="ciudad">Seleccione la localidad</option>
                                                 @foreach($ciudades as $ciudade)
                                                     <option value="{{$ciudade->id}}"
@@ -109,6 +133,7 @@
                                                     >{{$ciudade->nombre_ciudad}}</option>
                                                 @endforeach
                                             </select>
+                                            <div class="text-danger"  id="divCiudad" ></div>
                                         </div>
                                     </div>
 
@@ -117,8 +142,9 @@
 
                                             <div id="map" style="width: 100%; height:450px"></div>
 
-                                            <input type="hidden" id="latitud" name="latitud" />
-                                            <input type="hidden" id="longitud" name="longitud" />
+                                            <input type="hidden" id="latitud" name="latitud" value="{{old('latitud',$publicacion->latitud_publicacion)}}" />
+                                            <input type="hidden" id="longitud" name="longitud" value="{{old('longitud',$publicacion->longitud_publicacion)}}" />
+                                            <div class="text-danger"  id="divMapa" ></div>
                                         </div>
                                     </div>
 
@@ -138,48 +164,92 @@
                                     <h3 class="multisteps-form__title">Caracteristicas Generales</h3>
                                     <div class="multisteps-form__content">
 
-                                        <div class="form-row mt-4  shadow-none p-3 mb-5 bg-light rounded">
-                                            <div class="col">
-                                                <input class="form-control" name="ambientes" type="number" placeholder="Ambientes" value="{{old('ambientes',$publicacion->ambientes_publicacion)}}">
+                                        <div class="mt-5">
+                                            <div class="input-group input-group-outline o my-3 is-focused">
+                                                <label class="form-label">Ambientes</label>
+                                                <input class="form-control" name="ambientes" type="number"  value="{{old('ambientes',$publicacion->ambientes_publicacion)}}" id="inputAmbiente">
                                             </div>
+                                            <div class="text-danger"  id="divAmbiente" ></div>
                                         </div>
 
+{{--                                        <div class="form-row mt-4  shadow-none p-3 mb-5 bg-light rounded">--}}
+{{--                                            <div class="col">--}}
+{{--                                                <input class="form-control" name="ambientes" type="number" placeholder="Ambientes" value="{{old('ambientes',$publicacion->ambientes_publicacion)}}">--}}
+{{--                                            </div>--}}
+{{--                                        </div>--}}
 
-                                        <div class="form-row mt-4  shadow-none p-3 mb-5 bg-light rounded">
-                                            <div class="col">
-                                                <input class="form-control" name="dormitorios" type="number" placeholder="Dormitorios" value="{{old('dormitorios', $publicacion->dormitorios_publicacion)}}">
+
+                                        <div class="mt-5">
+                                            <div class="input-group input-group-outline o my-3 is-focused">
+                                                <label class="form-label">Dormitorios</label>
+                                                <input class="form-control" name="dormitorios" type="number"  value="{{old('dormitorios', $publicacion->dormitorios_publicacion)}}" id="inputDormitorio">
                                             </div>
+                                            <div class="text-danger"  id="divDormitorio" ></div>
                                         </div>
 
-                                        <div class="form-row mt-4  shadow-none p-3 mb-5 bg-light rounded">
-                                            <div class="col">
-                                                <input class="form-control" name="baños" type="number" placeholder="Baños" value="{{old('baños', $publicacion->banios_publicacion)}}">
+                                        <div class="mt-5">
+                                            <div class="input-group input-group-outline o my-3 is-focused">
+                                                <label class="form-label">Baños</label>
+                                                <input class="form-control" name="baños" type="number" value="{{old('baños', $publicacion->banios_publicacion)}}" id="inputBanio">
                                             </div>
+                                            <div class="text-danger"  id="divBanio" ></div>
                                         </div>
 
-                                        <div class="form-row mt-4  shadow-none p-3 mb-5 bg-light rounded">
-                                            <div class="col">
-                                                <input class="form-control" name="cocheras" type="number" placeholder="Cocheras" value="{{old('cocheras', $publicacion->cochera_publicacion)}}">
+                                        <div class="mt-5">
+                                            <div class="input-group input-group-outline o my-3 is-focused">
+                                                <label class="form-label">Cochera</label>
+                                                <input class="form-control" name="cocheras" type="number" value="{{old('cocheras', $publicacion->cochera_publicacion)}}" id="inputCochera">
                                             </div>
+                                            <div class="text-danger"  id="divCochera" ></div>
                                         </div>
 
-                                        <div class="form-row mt-4  shadow-none p-3 mb-5 bg-light rounded">
-                                            <div class="col">
-                                                <input class="form-control" name="cubierta" type="number" placeholder="Superficie cubierta" value="{{old('cubierta', $publicacion->superficie_cubierta_casa)}}">
+{{--                                        <div class="form-row mt-4  shadow-none p-3 mb-5 bg-light rounded">--}}
+{{--                                            <div class="col">--}}
+{{--                                                <input class="form-control" name="cocheras" type="number" placeholder="Cocheras" value="{{old('cocheras', $publicacion->cochera_publicacion)}}">--}}
+{{--                                            </div>--}}
+{{--                                        </div>--}}
+
+                                        <div class="mt-5">
+                                            <div class="input-group input-group-outline o my-3 is-focused">
+                                                <label class="form-label">Superficie cubierta (<b>m<sup>2</sup></b>)</label>
+                                                <input class="form-control" name="cubierta" type="number"  value="{{old('cubierta', $publicacion->superficie_cubierta_casa)}}" id="inputSuperficieCubierta">
                                             </div>
+                                            <div class="text-danger"  id="divSuperficieCubierta" ></div>
                                         </div>
 
-                                        <div class="form-row mt-4  shadow-none p-3 mb-5 bg-light rounded">
-                                            <div class="col">
-                                                <input class="form-control" name="total_terreno" type="number" placeholder="Superficie total del terreno" value="{{old('total_terreno', $publicacion->superficie_total_terreno)}}">
+{{--                                        <div class="form-row mt-4  shadow-none p-3 mb-5 bg-light rounded">--}}
+{{--                                            <div class="col">--}}
+{{--                                                <input class="form-control" name="cubierta" type="number" placeholder="Superficie cubierta" value="{{old('cubierta', $publicacion->superficie_cubierta_casa)}}">--}}
+{{--                                            </div>--}}
+{{--                                        </div>--}}
+
+                                        <div class="mt-5">
+                                            <div class="input-group input-group-outline o my-3 is-focused">
+                                                <label class="form-label">Superficie total (<b>m<sup>2</sup></b>)</label>
+                                                <input class="form-control" name="total_terreno" type="number"  value="{{old('total_terreno', $publicacion->superficie_total_terreno)}}" id="inputSuperficieTotal">
                                             </div>
+                                            <div class="text-danger"  id="divSuperficieTotal" ></div>
                                         </div>
 
-                                        <div class="form-row mt-4  shadow-none p-3 mb-5 bg-light rounded">
-                                            <div class="col">
-                                                <input class="form-control" name="precio" type="number" placeholder="Precio" value="{{old('precio', $publicacion->precio_publicacion)}}">
+{{--                                        <div class="form-row mt-4  shadow-none p-3 mb-5 bg-light rounded">--}}
+{{--                                            <div class="col">--}}
+{{--                                                <input class="form-control" name="total_terreno" type="number" placeholder="Superficie total del terreno" value="{{old('total_terreno', $publicacion->superficie_total_terreno)}}">--}}
+{{--                                            </div>--}}
+{{--                                        </div>--}}
+
+                                        <div class="mt-5">
+                                            <div class="input-group input-group-outline o my-3 is-focused">
+                                                <label class="form-label">Precio (*)</label>
+                                                <input class="form-control" name="precio" type="number" value="{{old('precio', $publicacion->precio_publicacion)}}" id="inputPrecio">
                                             </div>
+                                            <div class="text-danger"  id="divPrecio" ></div>
                                         </div>
+
+{{--                                        <div class="form-row mt-4  shadow-none p-3 mb-5 bg-light rounded">--}}
+{{--                                            <div class="col">--}}
+{{--                                                <input class="form-control" name="precio" type="number" placeholder="Precio" value="{{old('precio', $publicacion->precio_publicacion)}}">--}}
+{{--                                            </div>--}}
+{{--                                        </div>--}}
 
                                     </div>
 
@@ -194,8 +264,126 @@
 
                                 </div>
 
-                                <!--PANEL IMAGENES-->
+
+
                                 <div class="multisteps-form__panel shadow p-4 rounded bg-white" data-animation="scaleIn">
+                                    <h3 class="multisteps-form__title">Título y descripción de la propiedad</h3>
+                                    <div class="multisteps-form__content">
+
+{{--                                        <div class="mt-5">--}}
+{{--                                            <div class="input-group input-group-outline my-3">--}}
+{{--                                                <label class="form-label">Título (*)</label>--}}
+{{--                                                value="{{old('precio', $publicacion->precio_publicacion)}}"--}}
+{{--                                                <input class="form-control" name="titulo" type="text"  value="{{old('titulo', $publicacion->titulo_publicacion)}}" id="inputTitulo">--}}
+{{--                                            </div>--}}
+{{--                                            <div class="text-danger"  id="divTitulo" ></div>--}}
+{{--                                        </div>--}}
+
+                                        <div class="mt-5">
+                                            <div class="input-group input-group-outline o my-3 is-focused">
+                                                <label class="form-label">Título (*)</label>
+                                                <input class="form-control" name="titulo" type="text"  value="{{old('titulo', $publicacion->titulo_publicacion)}}" id="inputTitulo">
+                                            </div>
+                                            <div class="text-danger"  id="divTitulo" ></div>
+                                        </div>
+
+
+
+                                        <div class="mt-5">
+                                            <div class="input-group input-group-outline my-3 is-focused">
+                                                <label class="form-label">Descripción de la publicación (*)</label>
+                                                <textarea class="form-control" name="descripcion" id="inputDescripcion">{{old('descripcion', $publicacion->descripcion_publicacion)}}</textarea>
+                                            </div>
+                                            <div class="text-danger"  id="divDescripcion" ></div>
+                                        </div>
+
+
+                                        <h3 class="mt-4">Imagenes</h3>
+                                        <div class="form-row mt-4  shadow-none p-3 mb-5 bg-light rounded">
+                                            <div class="col">
+                                                <h6>Esta sera la imagen de portada de la publicacion</h6>
+                                                <input name="file" type="file" accept="image/*" value="{{old('imagen')}}" id="input-file">
+                                                @error('file')
+                                                <small style="color:red">{{$message}}</small>
+                                                @enderror
+                                            </div>
+                                        </div>
+                                        <div class="form-row mt-4  shadow-none p-3 mb-5 bg-light rounded">
+                                            <div class="col">
+                                                <input name="file1" type="file" accept="image/*" value="{{old('imagen')}}">
+                                                @error('file')
+                                                <small style="color:red">{{$message}}</small>
+                                                @enderror
+                                            </div>
+                                        </div>
+                                        <div class="form-row mt-4  shadow-none p-3 mb-5 bg-light rounded">
+                                            <div class="col">
+                                                <input name="file2" type="file" accept="image/*" value="{{old('imagen')}}">
+                                                @error('file')
+                                                <small style="color:red">{{$message}}</small>
+                                                @enderror
+                                            </div>
+                                        </div>
+                                        <div class="form-row mt-4  shadow-none p-3 mb-5 bg-light rounded">
+                                            <div class="col">
+                                                <input name="file3" type="file" accept="image/*" value="{{old('imagen')}}">
+                                                @error('file')
+                                                <small style="color:red">{{$message}}</small>
+                                                @enderror
+                                            </div>
+                                        </div>
+                                        <div class="form-row mt-4  shadow-none p-3 mb-5 bg-light rounded">
+                                            <div class="col">
+                                                <input name="file4" type="file" accept="image/*" value="{{old('imagen')}}">
+                                                @error('file')
+                                                <small style="color:red">{{$message}}</small>
+                                                @enderror
+                                            </div>
+                                        </div>
+
+                                        <div class="text-danger"  id="divImagenes" ></div>
+
+
+{{--                                        <div class="form-row mt-4  shadow-none p-3 mb-5 bg-light rounded" style="display: flex; justify-content: center;">--}}
+{{--                                            <div class="col">--}}
+{{--                                                @foreach($imagenes as $imagen)--}}
+{{--                                                    @if($imagen->id_publicacion == $publicacion->id)--}}
+{{--                                                        <img src="{{asset($imagen->url_imagen)}}" alt="imagen" class="w-20">--}}
+{{--                                                    @endif--}}
+{{--                                                @endforeach--}}
+{{--                                            </div>--}}
+{{--                                        </div>--}}
+
+
+                                    </div>
+
+                                    <div class="form-row mt-4 shadow-none p-3 mb-5 bg-light rounded flex flex-row justify-center align-items-center">
+                                        <div class="col">
+                                            @foreach($imagenes as $imagen)
+                                                @if($imagen->id_publicacion == $publicacion->id)
+                                                    <img src="{{asset($imagen->url_imagen)}}" alt="imagen" class="h-20">
+                                                @endif
+                                            @endforeach
+                                        </div>
+                                    </div>
+
+
+
+                                    <div class="button-row d-flex mt-4 " >
+                                        <div class="col">
+                                            <button class="btn btn-primary js-btn-prev" type="button" title="Prev">Anterior</button>
+                                        </div>
+                                        <div class="col text-md-end">
+                                            <button class="btn btn-primary js-btn-next " type="button" title="Next">Siguiente</button>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+
+
+                                <!--PANEL IMAGENES-->
+                               {{-- <div class="multisteps-form__panel shadow p-4 rounded bg-white" data-animation="scaleIn">
                                     <h3 class="multisteps-form__title">Fotos de la propiedad. Puede cargar hasta 5 imagenes</h3>
                                     <div class="multisteps-form__content">
 
@@ -247,7 +435,7 @@
                                         </div>
                                     </div>
 
-                                </div>
+                                </div>--}}
 
 
                                 <!--single form panel-->
@@ -281,152 +469,8 @@
                                             <button class="btn btn-success ml-auto" type="submit" title="Send">Enviar</button>
                                         </div>
                                     </div>
-
                                 </div>
 
-
-                                <!--       <div class="multisteps-form__panel shadow p-4 rounded bg-white" data-animation="scaleIn">
-                                           <h3 class="multisteps-form__title">Comodidades</h3>
-                                           <div class="multisteps-form__content">
-
-                                               <div class="form-row mt-4  shadow-none p-3 mb-5 bg-light rounded">
-                                                   <h6 class="p-2" >Caracteristicas especificas</h6>
-                                                   <div class="col form-check-inline">
-                                                       <input type="checkbox" class="form-check-input " >
-                                                       <label class="form-check-label" for="exampleCheck1">Acceso para personas con discapacidad</label>
-                                                   </div>
-
-                                                   <div class="col form-check-inline">
-                                                       <input type="checkbox" class="form-check-input " >
-                                                       <label class="form-check-label" for="exampleCheck1">Permiten mascotas</label>
-                                                   </div>
-
-                                               </div>
-
-                                               <div class="form-row mt-4  shadow-none p-3 mb-5 bg-light rounded">
-                                                   <h6 class="p-2" >Caracteristicas</h6>
-                                                   <div class="col form-check-inline">
-                                                       <input type="checkbox" class="form-check-input ">
-                                                       <label class="form-check-label" for="exampleCheck1">Aire acondicionado</label>
-                                                   </div>
-
-                                                   <div class="col form-check-inline">
-                                                       <input type="checkbox" class="form-check-input ">
-                                                       <label class="form-check-label" for="exampleCheck1">Amoblado</label>
-                                                   </div>
-
-                                                   <div class="col form-check-inline">
-                                                       <input type="checkbox" class="form-check-input ">
-                                                       <label class="form-check-label" for="exampleCheck1">Calefaccion</label>
-                                                   </div>
-
-                                                   <div class="col form-check-inline">
-                                                       <input type="checkbox" class="form-check-input ">
-                                                       <label class="form-check-label" for="exampleCheck1">Cocina equipada</label>
-                                                   </div>
-
-                                                   <div class="col form-check-inline">
-                                                       <input type="checkbox" class="form-check-input " >
-                                                       <label class="form-check-label" for="exampleCheck1">Lavarropas</label>
-                                                   </div>
-
-                                                   <div class="col form-check-inline">
-                                                       <input type="checkbox" class="form-check-input " >
-                                                       <label class="form-check-label" for="exampleCheck1">Termotanque</label>
-                                                   </div>
-
-                                                   <div class="col form-check-inline">
-                                                       <input type="checkbox" class="form-check-input " >
-                                                       <label class="form-check-label" for="exampleCheck1">Vigilancia</label>
-                                                   </div>
-
-                                               </div>
-
-                                               <div class="form-row mt-4  shadow-none p-3 mb-5 bg-light rounded">
-                                                   <h6 class="p-2">Servicios</h6>
-                                                   <div class="col form-check-inline">
-                                                       <input type="checkbox" class="form-check-input " >
-                                                       <label class="form-check-label" for="exampleCheck1">Ascensor</label>
-                                                   </div>
-
-                                                   <div class="col form-check-inline">
-                                                       <input type="checkbox" class="form-check-input " >
-                                                       <label class="form-check-label" for="exampleCheck1">Internet/Wifi</label>
-                                                   </div>
-
-                                                   <div class="col form-check-inline">
-                                                       <input type="checkbox" class="form-check-input " >
-                                                       <label class="form-check-label" for="exampleCheck1">Lavanderia</label>
-                                                   </div>
-
-                                                   <div class="col form-check-inline">
-                                                       <input type="checkbox" class="form-check-input ">
-                                                       <label class="form-check-label" for="exampleCheck1">Servicio de limpieza</label>
-                                                   </div>
-
-                                               </div>
-
-                                               <div class="form-row mt-4  shadow-none p-3 mb-5 bg-light rounded">
-                                                   <h6 class="p-2">Ambientes</h6>
-                                                   <div class="col form-check-inline">
-                                                       <input type="checkbox" class="form-check-input " >
-                                                       <label class="form-check-label" for="exampleCheck1">Balcon</label>
-                                                   </div>
-
-                                                   <div class="col form-check-inline">
-                                                       <input type="checkbox" class="form-check-input " >
-                                                       <label class="form-check-label" for="exampleCheck1">Cocina</label>
-                                                   </div>
-
-                                                   <div class="col form-check-inline">
-                                                       <input type="checkbox" class="form-check-input " >
-                                                       <label class="form-check-label" for="exampleCheck1">Comedor</label>
-                                                   </div>
-
-                                                   <div class="col form-check-inline">
-                                                       <input type="checkbox" class="form-check-input " >
-                                                       <label class="form-check-label" for="exampleCheck1">Hall</label>
-                                                   </div>
-
-                                                   <div class="col form-check-inline">
-                                                       <input type="checkbox" class="form-check-input " >
-                                                       <label class="form-check-label" for="exampleCheck1">Jardin</label>
-                                                   </div>
-
-                                                   <div class="col form-check-inline">
-                                                       <input type="checkbox" class="form-check-input " >
-                                                       <label class="form-check-label" for="exampleCheck1">Lavadero</label>
-                                                   </div>
-
-                                                   <div class="col form-check-inline">
-                                                       <input type="checkbox" class="form-check-input " >
-                                                       <label class="form-check-label" for="exampleCheck1">Living</label>
-                                                   </div>
-
-                                                   <div class="col form-check-inline">
-                                                       <input type="checkbox" class="form-check-input " >
-                                                       <label class="form-check-label" for="exampleCheck1">Living comedor</label>
-                                                   </div>
-
-                                                   <div class="col form-check-inline">
-                                                       <input type="checkbox" class="form-check-input " >
-                                                       <label class="form-check-label" for="exampleCheck1">Patio</label>
-                                                   </div>
-
-                                                   <div class="col form-check-inline">
-                                                       <input type="checkbox" class="form-check-input " >
-                                                       <label class="form-check-label" for="exampleCheck1">Sotano</label>
-                                                   </div>
-
-                                                   <div class="col form-check-inline">
-                                                       <input type="checkbox" class="form-check-input " >
-                                                       <label class="form-check-label" for="exampleCheck1">Terraza</label>
-                                                   </div>
-
-                                               </div>
-
-                                           </div>
-                   -->
 
                             </form>
                         </div>
@@ -441,82 +485,6 @@
         </div>
     </div>
 
-    <script>
-
-        function iniciarMap(){
-
-            // Lista de tareas
-            // - Visualizar la posicion del usuario
-            // - Mostrar un marcador en el mapa
-            // - Mostrar un cuadro de dialogo con la informacion del marcador
-            // - Permitir que el usuario pueda agregar solamente un marcadores
-            // - Indicar ruta desde el punto actual hasta el marcador
-
-            // establecer un marker con el imagen map-marker-2-512.png
-            // var icono = {
-            //     url: '../../assets/img/map-marker-2-512.png',
-            //     scaledSize: new google.maps.Size(30, 30),
-            //     origin: new google.maps.Point(0,0),
-            //     anchor: new google.maps.Point(16, 31)
-            //
-            // };
-
-            // Obtenemos la posicion del usuario
-            navigator.geolocation.getCurrentPosition(function(posicion){
-                // Creamos un objeto con las coordenadas del usuario
-                var coords = new google.maps.LatLng({{$publicacion->latitud_publicacion}}, {{$publicacion->longitud_publicacion}});
-                // Creamos un objeto mapa y especificamos el elemento DOM donde se va a mostrar
-                var map = new google.maps.Map(document.getElementById('map'), {
-                    zoom: 15,
-                    center: coords
-                });
-                // Creamos el marcador en el mapa con sus propiedades
-                // para nuestro obetivo tenemos que poner el atributo draggable en true
-                // position pondremos las mismas coordenas que obtuvimos en la geolocalizacion
-                var marker = new google.maps.Marker({
-                    map: map,
-                    draggable: true,
-                    animation: google.maps.Animation.DROP,
-                    position: coords
-                    // icon: icono
-                });
-
-                // Creamos un evento que detecta el click sobre el marcador
-                // y muestra la informacion del mismo en un cuadro de dialogo de Google Maps
-                marker.addListener('click', function(event){
-
-
-                    // Creamos la ventana de informacion
-                    infoWindow = new google.maps.InfoWindow({
-                        content: '<p>Latitud: ' + marker.getPosition().lat() + '</p><p>Longitud: ' + marker.getPosition().lng() + '</p>'
-                    });
-
-                    // Abrimos la ventana de informacion
-                    infoWindow.open(map, marker);
-
-                    console.log("HOLA MUNDO");
-                });
-
-                google.maps.event.addListener(marker, 'dragend', function(event){
-                    // enviamos la posicion del marcador al input de latitud y longitud
-                    document.getElementById('latitud').value = this.getPosition().lat();
-                    document.getElementById('longitud').value = this.getPosition().lng();
-
-                    // imprimir longitud y latitud
-                    console.log("Latitud: " + this.getPosition().lat());
-                    console.log("Longitud: " + this.getPosition().lng());
-                });
-
-            });
-
-
-
-        }
-
-
-    </script>
-
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDFRitCKrHHCHbh9KlJed9j697DDQEW-Go&callback=iniciarMap"></script>
 
     </body>
 </x-app-layout>
