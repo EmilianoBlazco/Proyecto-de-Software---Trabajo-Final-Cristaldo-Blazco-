@@ -152,7 +152,7 @@
 {{--        </tr>--}}
         <tr class="header-row border">
             <td colspan="3" class="header-cell border subtitle">Titulo del reporte:
-                <span class="enphasis">Listado de Usuarios</span>
+                <span class="enphasis">Listado de registros de auditoria</span>
             </td>
         </tr>
         <tr class="header-row border">
@@ -200,48 +200,24 @@
     <p>Easy-Rent - Copyright &copy; <?php echo date("Y");?></p>
 </footer>
 
-{{--<table class="table table-striped text-center">--}}
-{{--    <thead class="thead-dark">--}}
-{{--    <tr>--}}
-{{--        <th>Id</th>--}}
-{{--        <th>Name</th>--}}
-{{--        <th>Email</th>--}}
-{{--        <th></th>--}}
-{{--    </tr>--}}
-{{--    </thead>--}}
-{{--    <tbody>--}}
-{{--    @foreach ($users as $user)--}}
-{{--        <tr>--}}
-{{--            <td>{{ $user->id }}</td>--}}
-{{--            <td>{{ $user->name }}</td>--}}
-{{--            <td>{{ $user->email }}</td>--}}
-{{--        </tr>--}}
-{{--    @endforeach--}}
-{{--    </tbody>--}}
-{{--</table>--}}
-
 <table class="data-table border">
     <thead class="data-table-head border">
     <tr class="data-table__row border">
         <th class="data-table__row-head border">Nombre</th>
-        <th class="data-table__row-head border">email</th>
-{{--        <th class="data-table__row-head border">email verificado</th>--}}
-        <th class="data-table__row-head border">rol</th>
-        <th class="data-table__row-head border">fecha de creacion</th>
+        <th class="data-table__row-head border">Tipo de Usuario</th>
+        <th class="data-table__row-head border">Accion realizada</th>
+        <th class="data-table__row-head border">Fecha y hora de creacion</th>
+        <th class="data-table__row-head border">Modelo</th>
     </tr>
     </thead>
     <tbody class="data-table-body">
-    @foreach ($users as $user)
+    @foreach ($auditorias as $auditoria)
         <tr class="data-table__row border">
-            <td class="data-table__row-data border">{{ $user->name }}</td>
-            <td class="data-table__row-data border">{{ $user->email }}</td>
-{{--            @if ($user->email_verified_at !== NULL)--}}
-{{--                <td class="data-table__row-data border">{{ $user->email_verified_at }}</td>--}}
-{{--            @else--}}
-{{--                <td class="data-table__row-data border">no verificado</td>--}}
-{{--            @endif--}}
-            <td class="data-table__row-data border">{{ $user->roles->pluck('name')->implode(', ')}}</td>
-            <td class="data-table__row-data border">{{ $user->created_at->format('d-m-Y')}}</td>
+            <td class="data-table__row-data border">{{ $auditoria->user->name }}</td>
+            <td class="data-table__row-data border">{{ $auditoria->user->roles->pluck('name')->implode(', ')}}</td>
+            <td class="data-table__row-data border">{{ __($auditoria->event)}}</td>
+            <td class="data-table__row-data border">{{ $auditoria->created_at->format('d-m-Y // H:i' )}}</td>
+            <td class="data-table__row-data border">{{ substr($auditoria->auditable_type,11)}}</td>
         </tr>
     @endforeach
     </tbody>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\CaracteristicaComodidad;
 use App\Models\Ciudad;
+use App\Models\Comentario;
 use App\Models\Comodidad;
 use App\Models\Imagen;
 use App\Models\MercadoPagoTransaccion;
@@ -86,7 +87,23 @@ class PublicacionController extends Controller
 //            $propietario = User::find($publicacion->id_usuario);
 //            $propietario->notify(new \App\Notifications\PublicacionAlquilada($publicacion));
 
-            return redirect()->route('publicaciones.index');
+            return redirect()->route('publicaciones.index')->with('alquilado','ok');
+        }elseif ($status == 'pending'){
+            return redirect()->route('publicaciones.index')->with('pendiente','pend');
+        }elseif ($status == 'rejected'){
+
+            $mercadoPagoTransaccion = new MercadoPagoTransaccion();
+            $mercadoPagoTransaccion->numero_transaccion = $id_transaccion;
+            $mercadoPagoTransaccion->estado_transaccion = $status;
+            $mercadoPagoTransaccion->monto_transaccion = $transaction_amount;
+            $mercadoPagoTransaccion->metodo_pago = $payment_method_id;
+            $mercadoPagoTransaccion->tipo_pago = $payment_type_id;
+            $mercadoPagoTransaccion->id_usuario = Auth::user()->id;
+            $mercadoPagoTransaccion->nombre_usuario = Auth::user()->name;
+            //$mercadoPagoTransaccion->id_contrato = $contrato->id;
+            $mercadoPagoTransaccion->save();
+
+            return redirect()->route('publicaciones.index')->with('rechazado', 'rej');
         }
     }
 
@@ -95,8 +112,9 @@ class PublicacionController extends Controller
 
         $caracteristicaComodidades = CaracteristicaComodidad::get()->where('id_publicacion',$publicacion->id);
         $imagenes = Imagen::get();
+        $comentarios = Comentario::get()->where('id_publicacion',$publicacion->id);
 
-        return view('publicaciones.show',compact('publicacion','caracteristicaComodidades', 'imagenes'));
+        return view('publicaciones.show',compact('publicacion','caracteristicaComodidades', 'imagenes', 'comentarios'));
 //        return view('publicaciones.show',['publicacion'=> $publicacion]);
     }
 
@@ -109,6 +127,7 @@ class PublicacionController extends Controller
         $caracteristicasComodidades = CaracteristicaComodidad::get();
 
         return view('publicaciones.create', compact('provincias', 'tiposPropiedad', 'ciudades', 'comodidades', 'caracteristicasComodidades'));
+//        return to_route('publicaciones.create', compact('provincias', 'tiposPropiedad', 'ciudades', 'comodidades', 'caracteristicasComodidades'))->with('creacion','ok');
     }
 
 //    {
@@ -287,12 +306,8 @@ class PublicacionController extends Controller
         $imagen->url_imagen = $url;
         $imagen->save();
 
-
-
-        session()->flash('estado_publicacion','Se modifico de manera exitosa la Publicacion');
-
         //return to_route('publicaciones.index');
-        return to_route('publicaciones.index',$publicacion);
+        return to_route('publicaciones.index',$publicacion)->with('modificar','ok');
     }
 
     public function destroy(Request $request, Publicacion $publicacion)
@@ -303,7 +318,7 @@ class PublicacionController extends Controller
         $publicacion->save();
         $publicacion->delete();
 
-        return to_route('publicaciones.index')->with('estado_publicacion','Se elimino de manera exitosa la Publicacion');
+        return to_route('publicaciones.index')->with('deshabilitar','ok');
     }
 
     public function borrado()
@@ -319,15 +334,16 @@ class PublicacionController extends Controller
         $tiposPropiedades = TipoPropiedad::get();
         $imagenes = Imagen::get();
 
-        return view('publicaciones.borradores.borradores',['publicaciones'=> $publicaciones, 'tiposPropiedades' => $tiposPropiedades, 'imagenes' => $imagenes]);
+        return view('publicaciones.borradores.borradores',['publicaciones'=> $publicaciones, 'tiposPropiedades' => $tiposPropiedades, 'imagenes' => $imagenes])->with('borradousuario','ok');
 //        return view('publicaciones.borradores.borradores',['publicaciones'=> $publicaciones,'tiposPropiedades' => $tiposPropiedades]);
+//        return to_route('publicaciones.borradores.borradores',compact[$publicaciones,$tiposPropiedades,$imagenes])->with('borradousuario','ok');
     }
 
     public function eliminarPublicacionesBasura($id)
     {
         $publicaciones = Publicacion::onlyTrashed()->findOrFail($id);
         $publicaciones->forceDelete();
-        return to_route('publicaciones.index')->with('estado_publicacion','Se restauro de manera exitosa la Publicacion');
+        return to_route('publicaciones.index')->with('publicacionbasura','ok');
         //Esta ruta tiene que cambiarse para que te lleve a la parte de adminLTE
     }
 
@@ -338,6 +354,7 @@ class PublicacionController extends Controller
 //        $publicaciones->save();
         $publicaciones->restore();
 
-        return to_route('publicaciones.index')->with('estado_publicacion','Se restauro de manera exitosa la Publicacion');
+        return to_route('publicaciones.index')->with('restaurar','ok');
     }
+
 }

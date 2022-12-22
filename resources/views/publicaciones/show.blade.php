@@ -5,6 +5,7 @@
     @vite(['resources/css/material-kit.css', 'resources/css/nucleo-icons.css','resources/css/multistep.css', 'resources/js/multistep.js', 'resources/css/nucleo-svg.css', 'resources/js/map.js', 'resources/js/bootstrap.js'])
     <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900|Roboto+Slab:400,700" />
     <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
 
 
@@ -105,7 +106,11 @@
                             <div class="row align-items-start">
                                 <h3 class="font-weight-semi-bold mb-4 col">$ {{ number_format($publicacion->precio_publicacion, 2, ',', '.')  }} ARS</h3>
                                 {{--           -----------------ACÁ VA EL BOTÓN DE MERCADO PAGO-----------------------------------------------------------}}
-                                <a href="#" class="btn btn-primary btn-block col">Solicitar Alquiler</a>
+                                @if($publicacion->estado_publicacion == "Activo")
+                                    <a href="#" class="btn btn-primary btn-block col">Solicitar Alquiler</a>
+                                @elseif($publicacion->estado_publicacion == "Alquilado")
+                                    <input type="number">
+                                @endif
                                 <div class="cho-container"></div>
                                 {{--           -----------------ACÁ VA EL BOTÓN DE MERCADO PAGO-----------------------------------------------------------}}
                             </div>
@@ -222,6 +227,61 @@
             </div>
 
             {{--            Comentarios--}}
+{{--            <a href="{{route('comentarios.index')}}">Comentarios</a>--}}
+{{--            @foreach($comentarios as $comentario)--}}
+{{--                $comentario->comentario--}}
+{{--            @endforeach--}}
+            <h4 class="text-center mb-5">{{$comentarios->where('estado_comentario', 0)->count()}} comentarios</h4>
+
+
+            <form action="{{route('comentario.store',$publicacion)}}" method="post">
+                @csrf
+{{--                @if(isset($comentario->id))--}}
+{{--                    <input type="hidden" name="id_comentario_padre" value="{{$comentario->id}}">--}}
+{{--                @endif--}}
+                <div class="form-group">
+                    <textarea class="form-control" name="descripcion" id="descripcion" rows="3" placeholder="Comentar:"></textarea>
+                </div>
+                <button type="submit" class="btn btn-dark">Enviar</button>
+            </form>
+        @foreach($comentarios as $comentario)
+            @if($comentario->estado_comentario == 0)
+                <div class="border p-3">
+                    <p class="font-weight-bolder"><b>Escrito por:<b> {{$comentario->user->name}} </p>
+                    <form action="{{route('comentario.update',[$publicacion->id,$comentario->id])}}" method="POST">
+                        @csrf @method('PATCH')
+                        <button type="submit" class="btn btn-danger">Eliminar</button>
+                    </form>
+
+                    <p>{{$comentario->comentario}}</p>
+                    <button class="btn btn-success" data-toggle="collapse" data-target="#respuesta-{{$comentario->id}}">Responder</button>
+{{--                    <div id="respuesta-{{$comentario->id}}" class="collapse">--}}
+{{--                        <form action="{{route('comentarios.store')}}" method="post">--}}
+{{--                            @csrf--}}
+{{--                            <input type="hidden" name="publicacion_id" value="{{$publicacion->id}}">--}}
+{{--                            <input type="hidden" name="comentario_id" value="{{$comentario->id}}">--}}
+{{--                            <textarea name="comentario" id="" cols="30" rows="10"></textarea>--}}
+{{--                            <button type="submit">Enviar</button>--}}
+{{--                        </form>--}}
+                        <form action="{{route('comentario.store',$publicacion)}}" method="post">
+                            @csrf
+                            @if(isset($comentario->id))
+                                <input type="hidden" name="id_comentario_padre" value="{{$comentario->id}}">
+                            @endif
+                            {{--                    <input type="hidden" name="user_id" value="{{auth()->id}}">--}}
+                            <div class="form-group">
+                                <textarea class="form-control" name="descripcion" id="descripcion" rows="3" placeholder="Comentar:"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-dark">Enviar</button>
+                        </form>
+
+{{--                    </div>--}}
+                </div>
+            @endif
+            @endforeach
+
+
+{{--            @include('comentarios.index' , ['comentarios' => $comentarios])--}}
            @livewire('publicaciones.show-coments', ['publicacion' => $publicacion])
         </div>
     </div>
@@ -239,15 +299,15 @@
         // Crea un ítem en la preferencia
         $item = new MercadoPago\Item();
         $item->title = $publicacion->titulo_publicacion;
-        $item->quantity = 1;
+        $item->quantity = 1;//aca tiene que ir valor que se obtenga del multiplicador
         $item->unit_price = $publicacion->precio_publicacion;
         $preference->items = array($item);
 
         //Manejo de las rutas cuando salen de la pagina de pago
         $preference->back_urls = array(
-        "success" => route('publicaciones.pagar', $publicacion),
-        "failure" => "http://www.tu-sitio/failure",
-        "pending" => "http://www.tu-sitio/pending"
+            "success" => route('publicaciones.pagar', $publicacion),
+            "failure" => route('publicaciones.pagar', $publicacion),
+            "pending" => route('publicaciones.pagar', $publicacion)
         );
         $preference->auto_return = "approved";
 
@@ -258,6 +318,32 @@
     <script src="https://sdk.mercadopago.com/js/v2"></script>
     <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"></script>
     <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+
+    @if(session('alquilado') == 'ok')
+        <script>
+            Swal.fire(
+                'Alquilado!',
+                'Ya puede acceder a la comodidad de su nuevo hogar.',
+                'success'
+            )
+        </script>
+    @elseif(session('pendiente') == 'pend')
+        <script>
+            Swal.fire(
+                'Pendiente!',
+                'Su pago esta pendiente a ser aprobado.',
+                'warning'
+            )
+        </script>
+    @elseif(session('rechazado') == 'rej')
+        <script>
+            Swal.fire(
+                'Rechazado!',
+                'Su pago fue rechazo. Por favor intente por otro medio de pago.',
+                'Error'
+            )
+        </script>
+    @endif
 
     <script>
         const mp = new MercadoPago("{{config('services.mercadopago.key')}}", {

@@ -4,38 +4,43 @@
 
 @section('content_header')
     <a class="btn btn-secondary btn-sm float-right" href="{{route('admin.auditoria')}}">volver al listado</a>
-    <h1>Mas informacion sobre los registros de actividad</h1>
+    <h1>Informacion mas detallada del registro seleccionado</h1>
 @stop
 
 @section('content')
 
+    <div>
+        <a href="{{route('auditoriamas.pdf')}}" class="btn btn-primary" target="_blank" >Generar PDF</a>
+    </div>
+
     <div class="w-full h-max flex flex-col p-1">
-{{--        <div class="container">--}}
-{{--            <h3 class="text-base text-zinc-800 capitalize">registro de auditoria: cambios</h3>--}}
-
-{{--                <a class="btn btn-primary btn-sm col align-self-end" href="{{route('admin.auditoria')}}">volver al listado</a>--}}
-
-{{--        </div>--}}
         {{-- cabecera de informacion general --}}
         <div class="mx-2 my-2 p-2 mb-4 flex flex-row items-start justify-start border border-zinc-300 border-collapse">
             {{-- informacion de operacion --}}
             <div class="mr-1 p-2">
                 <h5 class="text-bold">Informacion de la operación:</h5>
+                <br>
                 <div class="flex my-1">
-                    <h6 class="text-bold mt-3">Operacion:</h6>
-                    <span >{{__($auditoria->event)}} datos.</span>
+                    <h6><b>Operacion:</b> {{__($auditoria->event)}} datos.</h6>
                 </div>
                 <div class="flex my-1">
-                    <h6 class="text-bold">Fecha de operación:</h6>
-                    <span >
-                        {{ \Carbon\Carbon::parse($auditoria->created_at)->locale('es_Ar')->format('d-m-Y H:i') }} Hrs.
-                    </span>
+                    <h6><b>Responsable:</b> {{$auditoria->user->name}}</h6>
                 </div>
                 <div class="flex my-1">
-                    <h6 class="text-bold">Tabla afectada:</h6>
-                    <span>
-                        {{substr($auditoria->auditable_type,11)}}
-                    </span>
+                    <h6><b>Rol dentro del sistema:</b>
+                        @foreach($auditoria->user->roles as $rol)
+                            {{$rol->name}}
+                        @endforeach
+                    </h6>
+                </div>
+                <div class="flex my-1">
+                    <h6><b> Fecha de operación:</b> {{ \Carbon\Carbon::parse($auditoria->created_at)->locale('es_Ar')->format('d-m-Y') }}</h6>
+                </div>
+                <div class="flex my-1">
+                    <h6><b> Hora de operación:</b> {{ \Carbon\Carbon::parse($auditoria->created_at)->locale('es_Ar')->format('H:i') }} Hrs.</h6>
+                </div>
+                <div class="flex my-1">
+                    <h6><b>Tabla afectada:</b> {{substr($auditoria->auditable_type,11)}}</h6>
                 </div>
             </div>
             {{-- informacion del responsable --}}

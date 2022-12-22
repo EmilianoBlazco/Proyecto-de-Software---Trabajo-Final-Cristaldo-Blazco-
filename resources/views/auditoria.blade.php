@@ -8,6 +8,17 @@
 
 @section('content')
 
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-4">
+                <input wire:model="search" class="form-control" placeholder="Ingrese nombre de usuario o email para buscar">
+            </div>
+            <div>
+                <a href="{{route('auditoria.pdf')}}" class="btn btn-primary" target="_blank" >Generar PDF</a>
+            </div>
+        </div>
+    </div>
+
     <div class="card">
 
         @if($auditorias->count())

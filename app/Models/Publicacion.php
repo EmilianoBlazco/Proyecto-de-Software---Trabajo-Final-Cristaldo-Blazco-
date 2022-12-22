@@ -127,5 +127,17 @@ class Publicacion extends Model implements Auditable
         return $this->hasMany(Imagen::class, 'id_publicacion');
     }
 
+    //uno a muchos comentarios
+    public function Comentario()
+    {
+        return $this->hasMany(Comentario::class, 'id_publicacion')->whereNull('id_comentario_padre');
+    }
+
+    //uno a muchos calificaciones
+    public function Calificacion()
+    {
+        return $this->hasMany(Calificacion::class, 'id_publicacion');
+    }
+
 
 }

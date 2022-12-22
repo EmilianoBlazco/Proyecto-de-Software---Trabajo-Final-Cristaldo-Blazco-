@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\AuditoriaController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\ComentarioController;
 use App\Http\Controllers\ContratoController;
 use App\Http\Controllers\OCRController;
 use App\Http\Controllers\WebHooksController;
@@ -58,6 +59,14 @@ Route::get('/registroPropiedad/{publicacion}/pagar',[PublicacionController::clas
 Route::patch('/registroPropiedad/{publicacion}',[PublicacionController::class, 'update'])->name('publicaciones.update');//Cambiar en BD Publicacion
 Route::delete('/registroPropiedad/{publicacion}',[PublicacionController::class, 'destroy'])->name('publicaciones.destroy');//Eliminar Publicacion
 
+//Pagina de Comentarios
+Route::get('/registroPropiedad/{publicacion}/comentarios',[ComentarioController::class, 'index'])->name('comentarios.index');//Comentarios de la Publicacion
+Route::post('/registroPropiedad/{publicacion}/comentarios',[ComentarioController::class, 'store'])->name('comentario.store');//Almacenar Comentario
+//Route::get('/registroPropiedad/{publicacion}/comentarios/{comentario}/edit',[ComentarioController::class, 'editComentario'])->name('publicaciones.editComentario');//Modificar Comentario
+Route::patch('/registroPropiedad/{publicacion}/comentarios/{comentario}',[ComentarioController::class, 'update'])->name('comentario.update');//Cambiar en BD Comentario
+Route::delete('/registroPropiedad/{publicacion}/comentarios/{comentario}',[ComentarioController::class, 'destroy'])->name('comentario.destroy');//Eliminar Comentario
+
+
 //Pagina de Contratos
 Route::get('/contratos',[ContratoController::class, 'index'])->name('contratos.index');//Pagina principal para ver los contratos registrados
 Route::get('/contratos/create',[ContratoController::class, 'create'])->name('contratos.create');//Crear Contrato
@@ -83,6 +92,8 @@ Route::get('/', function () {
 
 //Ruta para creacion de PDF
 Route::get('admin/users/pdf', [UserController::class, 'pdf'])->name('admin.users.pdf');
+Route::get('/pdf', [AuditoriaController::class, 'pdf'])->name('auditoria.pdf');
+Route::get('/pdfs', [AuditoriaController::class, 'pdfmas'])->name('auditoriamas.pdf'); //ver
 
 Route::middleware([
     'auth:sanctum',

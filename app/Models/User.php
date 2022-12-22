@@ -133,4 +133,14 @@ class User extends Authenticatable implements Auditable
     protected $appends = [
         'profile_photo_url',
     ];
+
+//    public function publicacions()
+//    {
+//        return $this->hasMany(Publicacion::class, 'id_usuario');
+//    }
+
+    public function comentario()
+    {
+        return $this->hasMany(Comentario::class, 'id_usuario');
+    }
 }

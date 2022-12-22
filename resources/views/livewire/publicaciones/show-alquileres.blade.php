@@ -4,7 +4,7 @@
 
 
 
-    <div class="row px-xl-5">
+    <div class="row px-xl-5" >
 
 {{--         Sidebar de filtros de busqueda --}}
         <div class="col-lg-3 col-md-12 p-3">
@@ -12,7 +12,10 @@
 
 
                 <div class="card-header">
-                    <h4 class="card-title">Puede filtrar por:</h4>
+                    <h4 class="card-title">Esta filtrando por:</h4>
+                    <div class="text-center">
+                        <button wire:click="limpiarFiltros" class="btn btn-outline-primary btn-sm fas fa-eraser"> Limpiar filtros</button>
+                    </div>
                 </div>
 {{--                 Precio start --}}
                 <div class="border-bottom mb-4 pb-4">
@@ -132,9 +135,8 @@
                 </div>
 {{--                botón centrado de limpiar filtros--}}
                 <div class="text-center">
-                    <button wire:click="limpiarFiltros" class="btn btn-outline-primary btn-sm">Limpiar filtros</button>
+                    <button wire:click="limpiarFiltros" class="btn btn-outline-primary btn-sm fas fa-eraser"> Limpiar filtros</button>
                 </div>
-
             </div>
         </div>
 {{--         Shop Sidebar End --}}
@@ -172,23 +174,41 @@
                                 <div class="card" style="--bs-btn-hover-bg:100">
                                     <a href="{{route('publicaciones.show',$publicacion->id)}}" target="_blank" class="position-relative overflow-hidden">
                                         <div class="ratio ratio-1x1">
-                                            <div id="carousel-12" class="carousel slide" data-bs-ride="false">
-                                                <div class="carousel-inner">
-                                                    <div class="carousel-item active ratio ratio-1x1"><img class="w-100 d-block card-img-top" style="object-fit:cover; height:100%; width: 100%;" src="
+{{--                                            <div id="carousel-12" class="carousel slide" data-bs-ride="false">--}}
+{{--                                                <div class="carousel-inner">--}}
+{{--                                                    <div class="carousel-item active ratio ratio-1x1"><img class="w-100 d-block card-img-top" style="object-fit:cover; height:100%; width: 100%;" src="--}}
+{{--                                                    @foreach($imagenes as $imagen)--}}
+{{--                                                        @if($imagen->id_publicacion == $publicacion->id)--}}
+{{--                                                            {{asset($imagen->url_imagen)}}--}}
+{{--                                                            @break--}}
+{{--                                                        @endif--}}
+{{--                                                    @endforeach" alt="Slide Image" /></div>--}}
+{{--                                                    <div class="carousel-item ratio ratio-1x1"><img class="w-100 d-block card-img-top" style="object-fit:cover; height:100%; width: 100%;" src="../../assets/img/rents/2.webp" alt="Slide Image" /></div>--}}
+{{--                                                    <div class="carousel-item ratio ratio-1x1"><img class="w-100 d-block card-img-top" style="object-fit:cover; height:100%; width: 100%;" src="../../assets/img/rents/3.webp" alt="Slide Image" /></div>--}}
+{{--                                                </div>--}}
+{{--                                                <div><a class="carousel-control-prev" href="#carousel-12" role="button" data-bs-slide="prev"><span class="carousel-control-prev-icon" aria-hidden="true"></span><span class="visually-hidden">Previous</span></a><a class="carousel-control-next" href="#carousel-12" role="button" data-bs-slide="next"><span class="carousel-control-next-icon" aria-hidden="true"></span><span class="visually-hidden">Next</span></a></div>--}}
+{{--                                                <ol class="carousel-indicators">--}}
+{{--                                                    <li class="active" data-bs-target="#carousel-1" data-bs-slide-to="0"></li>--}}
+{{--                                                    <li data-bs-target="#carousel-12" data-bs-slide-to="1"></li>--}}
+{{--                                                    <li data-bs-target="#carousel-12" data-bs-slide-to="2"></li>--}}
+{{--                                                </ol>--}}
+{{--                                            </div>--}}
+                                            <div id="carousel-1" class="carousel slide shadow-lg" data-bs-ride="true">
+                                                <div class="carousel-inner" {{$cantidad = 1}}>
+
                                                     @foreach($imagenes as $imagen)
                                                         @if($imagen->id_publicacion == $publicacion->id)
-                                                            {{asset($imagen->url_imagen)}}
-                                                            @break
+                                                            <div class="carousel-item @if($cantidad == 1) active @endif ratio ratio-1x1 "><img class="rounded" style="object-fit:cover; height:100%; width: 100%;" src="{{asset($imagen->url_imagen)}}" alt="Slide Image" /></div {{++$cantidad}}>
                                                         @endif
-                                                    @endforeach" alt="Slide Image" /></div>
-                                                    <div class="carousel-item ratio ratio-1x1"><img class="w-100 d-block card-img-top" style="object-fit:cover; height:100%; width: 100%;" src="../../assets/img/rents/2.webp" alt="Slide Image" /></div>
-                                                    <div class="carousel-item ratio ratio-1x1"><img class="w-100 d-block card-img-top" style="object-fit:cover; height:100%; width: 100%;" src="../../assets/img/rents/3.webp" alt="Slide Image" /></div>
+                                                    @endforeach
                                                 </div>
-                                                <div><a class="carousel-control-prev" href="#carousel-12" role="button" data-bs-slide="prev"><span class="carousel-control-prev-icon" aria-hidden="true"></span><span class="visually-hidden">Previous</span></a><a class="carousel-control-next" href="#carousel-12" role="button" data-bs-slide="next"><span class="carousel-control-next-icon" aria-hidden="true"></span><span class="visually-hidden">Next</span></a></div>
+                                                <div><a class="carousel-control-prev" href="#carousel-1" role="button" data-bs-slide="prev"><span class="fa fa-arrow-left fa-2x" aria-hidden="true"></span><span class="visually-hidden">Previous</span></a><a class="carousel-control-next" href="#carousel-1" role="button" data-bs-slide="next"><span class="fa fa-arrow-right fa-2x" aria-hidden="true"></span><span class="visually-hidden">Next</span></a></div>
                                                 <ol class="carousel-indicators">
                                                     <li class="active" data-bs-target="#carousel-1" data-bs-slide-to="0"></li>
-                                                    <li data-bs-target="#carousel-12" data-bs-slide-to="1"></li>
-                                                    <li data-bs-target="#carousel-12" data-bs-slide-to="2"></li>
+                                                    <li data-bs-target="#carousel-1" data-bs-slide-to="1"></li>
+                                                    <li data-bs-target="#carousel-1" data-bs-slide-to="2"></li>
+                                                    <li data-bs-target="#carousel-1" data-bs-slide-to="3"></li>
+                                                    <li data-bs-target="#carousel-1" data-bs-slide-to="4"></li>
                                                 </ol>
                                             </div>
                                         </div>
