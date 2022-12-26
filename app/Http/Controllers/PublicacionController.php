@@ -176,51 +176,64 @@ class PublicacionController extends Controller
 
 
         //Se obtiene la imagen
-        $imagenes = $request->file('file')->store('public/imagenes');
-        $imagenes1 = $request->file('file1')->store('public/imagenes');
-        $imagenes2 = $request->file('file2')->store('public/imagenes');
-        $imagenes3 = $request->file('file3')->store('public/imagenes');
-        $imagenes4 = $request->file('file4')->store('public/imagenes');
-
-//        $url = Storage::url($imagenes);
-//        $url1 = Storage::url($imagenes1);
-//        $url2 = Storage::url($imagenes2);
-//        $url3 = Storage::url($imagenes3);
-//        $url4 = Storage::url($imagenes4);
+        //Si la imagen no es nula, se guarda en la carpeta public/images y se crea la variable
+        if($request->hasFile('file')){
+            $imagenes = $request->file('file')->store('public/imagenes');
+        }
+        if($request->hasFile('file1')){
+            $imagenes1 = $request->file('file1')->store('public/imagenes');
+        }
+        if($request->hasFile('file2')){
+            $imagenes2 = $request->file('file2')->store('public/imagenes');
+        }
+        if($request->hasFile('file3')){
+            $imagenes3 = $request->file('file3')->store('public/imagenes');
+        }
+        if($request->hasFile('file4')){
+            $imagenes4 = $request->file('file4')->store('public/imagenes');
+        }
 
         $publicacion->save();
         $publicacion->caracteristica_comodidades()->attach($request->input('caracteristicas'));
 
 
         //Se guarda las imagenes en la tabla imagenes despues que se creo la publicacion
-        $url = Storage::url($imagenes);
-        $imageness->url_imagen = $url;
-        $imageness->id_publicacion = $publicacion->id;
-        $imageness->save();
 
-        $url1 = Storage::url($imagenes1);
-        $imageness2->url_imagen = $url1;
-        $imageness2->id_publicacion = $publicacion->id;
-        $imageness2->save();
+        if(isset($imagenes)){
+                $url = Storage::url($imagenes);
+                $imageness->url_imagen = $url;
+                $imageness->id_publicacion = $publicacion->id;
+                $imageness->save();
+        }
+        if(isset($imagenes1)){
+            $url1 = Storage::url($imagenes1);
+            $imageness2->url_imagen = $url1;
+            $imageness2->id_publicacion = $publicacion->id;
+            $imageness2->save();
+        }
 
-        $url2 = Storage::url($imagenes2);
-        $imageness3->url_imagen = $url2;
-        $imageness3->id_publicacion = $publicacion->id;
-        $imageness3->save();
+        if(isset($imagenes2)){
+            $url2 = Storage::url($imagenes2);
+            $imageness3->url_imagen = $url2;
+            $imageness3->id_publicacion = $publicacion->id;
+            $imageness3->save();
+        }
 
-        $url3 = Storage::url($imagenes3);
-        $imageness4->url_imagen = $url3;
-        $imageness4->id_publicacion = $publicacion->id;
-        $imageness4->save();
+        if(isset($imagenes3)){
+            $url3 = Storage::url($imagenes3);
+            $imageness4->url_imagen = $url3;
+            $imageness4->id_publicacion = $publicacion->id;
+            $imageness4->save();
+        }
 
 //        $imageness->save();
 
-        $url4 = Storage::url($imagenes4);
-        $imageness5->url_imagen = $url4;
-        $imageness5->id_publicacion = $publicacion->id;
-
-
-        $imageness5->save();
+        if(isset($imagenes4)){
+            $url4 = Storage::url($imagenes4);
+            $imageness5->url_imagen = $url4;
+            $imageness5->id_publicacion = $publicacion->id;
+            $imageness5->save();
+        }
 
         session()->flash('estado_publicacion','Se publico de manera exitosa la Propiedad');
 

@@ -19,8 +19,13 @@ form.addEventListener('submit', (e) => {
         const precio = document.getElementById('inputPrecio');
         const titulo = document.getElementById('inputTitulo');
         const descripcion = document.getElementById('inputDescripcion');
-        const imagenes = document.getElementById('input-file');
-
+        const imagen = document.getElementById('input-file');
+        const imagen1 = document.getElementById('input-file-1');
+        const imagen2 = document.getElementById('input-file-2');
+        const imagen3 = document.getElementById('input-file-3');
+        const imagen4 = document.getElementById('input-file-4');
+        // contar la cantidad de imagenes
+        let cantidadImagenes = 0;
 
 
 
@@ -234,20 +239,34 @@ form.addEventListener('submit', (e) => {
         }
     }
 
-    if(imagenes.value === '') {
-        document.getElementById('divImagenes').innerText = 'Debe ingresar al menos una imagen';
+    if(imagen.value === '') {
+        document.getElementById('divImagenes').innerText = 'Debe ingresar la imagen principal de la propiedad';
+        document.getElementById('progresImagen').className = 'multisteps-form__progress-btn text-danger';
+        errores++;
+    }else {
+        cantidadImagenes ++;
+    }
+
+
+    if(imagen1.value !== '') {
+        cantidadImagenes ++;
+    }
+    if(imagen2.value !== '') {
+        cantidadImagenes ++;
+    }
+    if(imagen3.value !== '') {
+        cantidadImagenes ++;
+    }
+    if(imagen4.value !== '') {
+        cantidadImagenes ++;
+    }
+
+
+    if(cantidadImagenes < 3) {
+        document.getElementById('divImagenes').innerText += 'Debe ingresar al menos 3 imágenes';
         document.getElementById('progresImagen').className = 'multisteps-form__progress-btn text-danger';
         errores++;
     }
-
-    // si la cantidad de imagenes es mayor a de 6, error
-    if(imagenes.files.length > 6) {
-        document.getElementById('divImagenes').innerText = 'Debe ingresar un máximo de 6 imágenes';
-        document.getElementById('progresImagen').className = 'multisteps-form__progress-btn text-danger';
-        errores++;
-    }
-
-    // si no hay errores, se envia el formulario
     if(errores === 0) {
         document.getElementById('form').submit();
     }else {
