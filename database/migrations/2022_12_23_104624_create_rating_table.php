@@ -13,11 +13,19 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('calificacion', function (Blueprint $table) {
+        Schema::create('rating', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
 
             $table->integer('calificacion');
+            $table->longText('comentario')->nullable();
+            $table->boolean('estado')->default(1);
+
+            $table->timestamps();
+        });
+
+        Schema::table('rating', function (Blueprint $table) {
+            $table->foreignId('id_usuario')->constrained('users');
+            $table->foreignId('id_publicacion')->constrained('publicacion');
         });
     }
 
@@ -28,6 +36,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('calificacion');
+        Schema::dropIfExists('rating');
     }
 };

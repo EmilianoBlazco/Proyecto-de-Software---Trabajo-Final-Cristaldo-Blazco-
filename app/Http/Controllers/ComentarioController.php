@@ -46,21 +46,19 @@ class ComentarioController extends Controller
 
     public function update(Request $request, Comentario $id, Publicacion $idp)
     {
-        //CAMBIAR EL ESTADO DEL COMENTARIO DE 0 A 1 Y DE 1 A 0
-//        $comentario = Comentario::findOrFail($id);
-//        $comentario->estado_comentario = $request->estado_comentario;
-//        $comentario->save();
-//        return redirect()->back();
         $comentario = Comentario::findorFail($id);
+//        dd($id);
+
+        $publicacion = Publicacion::findorFail($idp);
+//        dd($publicacion);
 //        dd($comentario);
+//        dd($request);
 //        $comentario->estado_comentario = $request->estado_comentario;
-        if($comentario->estado_comentario == 1){
-            $comentario->estado_comentario = 0;
-        }elseif($comentario->estado_comentario == 0){
+        if ($comentario->id_publicacion == $publicacion->id){
             $comentario->estado_comentario = 1;
+            $comentario->save();
+            return redirect()->back();
         }
-        $comentario->save();
-        return redirect()->back();
     }
 
 

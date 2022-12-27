@@ -128,16 +128,27 @@ class Publicacion extends Model implements Auditable
     }
 
     //uno a muchos comentarios
-    public function Comentario()
+//    public function Comentario()
+//    {
+//        return $this->hasMany(Comentario::class, 'id_publicacion')->whereNull('id_comentario_padre');
+//    }
+//
+//    //uno a muchos calificaciones
+//    public function Calificacion()
+//    {
+//        return $this->hasMany(Calificacion::class, 'id_publicacion');
+//    }
+
+//uno a muchos rating
+
+    public function Rating()
     {
-        return $this->hasMany(Comentario::class, 'id_publicacion')->whereNull('id_comentario_padre');
+        return $this->hasMany(Rating::class, 'id_publicion');
     }
 
-    //uno a muchos calificaciones
-    public function Calificacion()
-    {
-        return $this->hasMany(Calificacion::class, 'id_publicacion');
-    }
-
+//    public function CalificacionComentario()
+//    {
+//        return $this->hasMany(CalificacionComentario::class, 'id_publicacion');
+//    }
 
 }

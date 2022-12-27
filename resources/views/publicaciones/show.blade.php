@@ -9,7 +9,6 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
 
 
-
     <body class="container bg-gray-200">
     <div class="container-fluid ">
         <div class="row px-xl-5">
@@ -38,27 +37,156 @@
 
             <div class="col-lg-7 pb-5 mt-9">
                 <h3 class="font-weight-semi-bold">{{$publicacion->titulo_publicacion}}</h3>
-                <div class="d-flex mb-3">
-                    <div class="text-primary mr-2">
-                        <small class="fas fa-star"></small>
-                        <small class="fas fa-star"></small>
-                        <small class="fas fa-star"></small>
-                        <small class="fas fa-star-half-alt"></small>
-                        <small class="far fa-star"></small>
-                    </div>
-                    <small class="pt-1">(50 Reviews)</small>
-                </div>
-
 
                 {{--                <%--                agregar a favoritos y contacto--%>--}}
                 <div class="d-flex mb-3">
-{{--                    <div class="text-primary mr-2 ms-2 me-2">--}}
-{{--                        <a href="#" class="btn btn-outline-primary btn-sm">Agregar a favoritos</a>--}}
-{{--                    </div>--}}
+                    {{--                    <div class="text-primary mr-2 ms-2 me-2">--}}
+                    {{--                        <a href="#" class="btn btn-outline-primary btn-sm">Agregar a favoritos</a>--}}
+                    {{--                    </div>--}}
                     <div class="text-primary mr-2 ms-2 me-2">
                         <a href="#" class="btn btn-outline-primary btn-sm">Contactar</a>
                     </div>
                 </div>
+
+                @php
+                    $promedio = App\Models\Rating::where('id_publicacion', $publicacion->id)->avg('calificacion');
+                    $avg = (float)$promedio;
+                    $avg = round($avg, 2);
+                @endphp
+
+                <style>
+                    body {
+                        margin: 0;
+                        padding: 0;
+                        font-family: 'Open Sans', serif;
+                        background: #eee;
+                    }
+
+                    .content{
+                        width: 350px;
+                        /*height: 200px;*/
+                        margin-top: 30px;
+                    }
+
+                    .ratings{
+                        background-color:#fff;
+                        padding: 50px;
+                        border: 1px solid rgba(0, 0, 0, 0.1);
+                        box-shadow: 0px 10px 10px #E0E0E0;
+                    }
+
+                    .product-rating{
+
+                        font-size: 50px;
+                    }
+
+                    .stars i{
+
+                        font-size: 18px;
+                        color: #e91e63;
+                    }
+
+                    .rating-text{
+                        margin-top: 10px;
+                    }
+                </style>
+
+                <div class="d-flex">
+                    <div class="content text-center">
+                        <div class="ratings">
+                            <span class="product-rating">{{$avg}}</span><span>/5</span>
+                            @if($avg == 5)
+                                <div class="stars">
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                </div>
+                            @elseif($avg < 5 && $avg > 4)
+                                <div class="stars">
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star-half-alt"></i>
+                                </div>
+                            @elseif($avg == 4)
+                                <div class="stars">
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                </div>
+                            @elseif($avg < 4 && $avg > 3)
+                                <div class="stars">
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star-half-alt"></i>
+                                </div>
+                            @elseif($avg == 3)
+                                <div class="stars">
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                </div>
+                            @elseif($avg < 3 && $avg > 2)
+                                <div class="stars">
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star-half-alt"></i>
+                                </div>
+                            @elseif($avg == 2)
+                                <div class="stars">
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                </div>
+                            @elseif($avg < 2 && $avg > 1)
+                                <div class="stars">
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star-half-alt"></i>
+                                </div>
+                            @elseif($avg == 1)
+                                <div class="stars">
+                                <i class="fa fa-star"></i>
+                                </div>
+                            @elseif($avg < 1 && $avg > 0)
+                                <div class="stars">
+                                <i class="fa fa-star-half-alt"></i>
+                                </div>
+                            @elseif($avg == 0)
+                                <div class="stars">
+                                <i class="fa fa-star"></i>
+                                </div>
+                            @endif
+                            <div class="rating-text">
+                                <span>{{$ratings->count()}} calificaciones y {{$ratings->where('comentario', '!=', null)->count()}} comentarios</span>
+                                <span>poner codigo php visitas</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col w-70 mt-4">
+                    <div class="card border-0 shadow-sm mb-4">
+                        <div class="card-body">
+                            <h5 class="font-weight-semi-bold">Precio mensual</h5>
+                            <div class="row align-items-start">
+                                <h3 class="font-weight-semi-bold mb-4 col">$ {{ number_format($publicacion->precio_publicacion, 2, ',', '.')  }} ARS</h3>
+                                {{--           -----------------ACÁ VA EL BOTÓN DE MERCADO PAGO-----------------------------------------------------------}}
+                                @if($publicacion->estado_publicacion == "Activo")
+                                    <a href="#" class="btn btn-primary btn-block col">Solicitar Alquiler</a>
+                                @elseif($publicacion->estado_publicacion == "Alquilado")
+                                    <input type="number">
+                                @endif
+                                <div class="cho-container"></div>
+                                {{--           -----------------ACÁ VA EL BOTÓN DE MERCADO PAGO-----------------------------------------------------------}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
                 <div class="row mt-4">
                     <div class="col-6 ">
@@ -99,26 +227,14 @@
 
                 </div>
 
-                <div class="col w-70 mt-4">
-                    <div class="card border-0 shadow-sm mb-4">
-                        <div class="card-body">
-                            <h5 class="font-weight-semi-bold">Precio mensual</h5>
-                            <div class="row align-items-start">
-                                <h3 class="font-weight-semi-bold mb-4 col">$ {{ number_format($publicacion->precio_publicacion, 2, ',', '.')  }} ARS</h3>
-                                {{--           -----------------ACÁ VA EL BOTÓN DE MERCADO PAGO-----------------------------------------------------------}}
-                                @if($publicacion->estado_publicacion == "Activo")
-                                    <a href="#" class="btn btn-primary btn-block col">Solicitar Alquiler</a>
-                                @elseif($publicacion->estado_publicacion == "Alquilado")
-                                    <input type="number">
-                                @endif
-                                <div class="cho-container"></div>
-                                {{--           -----------------ACÁ VA EL BOTÓN DE MERCADO PAGO-----------------------------------------------------------}}
-                            </div>
-                        </div>
+{{--                Tipo de inquilinos aceptados      --}}
+
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <h6 class="font-weight-semi-bold">Tipo de inquilinos aceptos/Perfil de inquilinos permitidos</h6>
+                        <p class="text-muted"></p>
                     </div>
                 </div>
-
-            </div>
 
             {{--            Descripción de la publicación--}}
             <div class="row px-xl-5">
@@ -226,65 +342,117 @@
                 </div>
             </div>
 
-            {{--            Comentarios--}}
-{{--            <a href="{{route('comentarios.index')}}">Comentarios</a>--}}
-{{--            @foreach($comentarios as $comentario)--}}
-{{--                $comentario->comentario--}}
-{{--            @endforeach--}}
-            <h4 class="text-center mb-5">{{$comentarios->where('estado_comentario', 0)->count()}} comentarios</h4>
+{{--         Calficiacion y comentario       --}}
+            <style>
+                *{
+                margin: 0;
+                padding: 0;
+                }
+                .rate {
+                float: left;
+                height: 46px;
+                padding: 0 10px;
+                }
+                .rate:not(:checked) > input {
+                position:absolute;
+                top:-9999px;
+                }
+                .rate:not(:checked) > label {
+                float:right;
+                width:1em;
+                overflow:hidden;
+                white-space:nowrap;
+                cursor:pointer;
+                font-size:30px;
+                color:#ccc;
+                }
+                .rate:not(:checked) > label:before {
+                content: '★ ';
+                }
+                .rate > input:checked ~ label {
+                color: #e91e63;
+                }
+                .rate:not(:checked) > label:hover,
+                .rate:not(:checked) > label:hover ~ label {
+                color: #e91e63;
+                }
+                .rate > input:checked + label:hover,
+                .rate > input:checked + label:hover ~ label,
+                .rate > input:checked ~ label:hover,
+                .rate > input:checked ~ label:hover ~ label,
+                .rate > label:hover ~ input:checked ~ label {
+                color: #e91e63;
+                }
+            </style>
 
+{{--            si el usuario autenticado ya envio una puntuacion esnconder el fomrulario--}}
+            @foreach($ratings as $rating)
+                @if($rating->id_usuario == Auth::user()->id)
+                    <h5>Solo se permite calificar una vez por usuario. Gracias por su calificacion</h5>
+                @else
+                    <div id="calificar">
+                        <h4 class="text center mb-5"> Califique esta publicacion y deje su comentario  </h4>
+                        <div class="border p-2">
+                            <form action="{{route('rating.store',$publicacion)}}" method="Post" name="ratingForm" id="ratingForm">
+                                @csrf
+                                <input type="hidden" name="id_publicacion" value="{{$publicacion->id}}">
+                                <input type="hidden" name="id_usuario" value="{{auth()->id()}}">
+                                <div class="rate">
+                                    <input type="radio" id="star5" name="rate" value="5" />
+                                    <label for="star5" title="text">5 stars</label>
+                                    <input type="radio" id="star4" name="rate" value="4" />
+                                    <label for="star4" title="text">4 stars</label>
+                                    <input type="radio" id="star3" name="rate" value="3" />
+                                    <label for="star3" title="text">3 stars</label>
+                                    <input type="radio" id="star2" name="rate" value="2" />
+                                    <label for="star2" title="text">2 stars</label>
+                                    <input type="radio" id="star1" name="rate" value="1" />
+                                    <label for="star1" title="text">1 star</label>
+                                </div>
+                                <div class="form-group">
+                                    <textarea class="form-control" name="comentario" id="comentario" placeholder="Escriba su comentario aqui"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <button type="submit" name="Submit" class="btn btn-dark">Publicar</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                @endif
+            @endforeach
 
-            <form action="{{route('comentario.store',$publicacion)}}" method="post">
-                @csrf
-{{--                @if(isset($comentario->id))--}}
-{{--                    <input type="hidden" name="id_comentario_padre" value="{{$comentario->id}}">--}}
-{{--                @endif--}}
-                <div class="form-group">
-                    <textarea class="form-control" name="descripcion" id="descripcion" rows="3" placeholder="Comentar:"></textarea>
-                </div>
-                <button type="submit" class="btn btn-dark">Enviar</button>
-            </form>
-        @foreach($comentarios as $comentario)
-            @if($comentario->estado_comentario == 0)
-                <div class="border p-3">
-                    <p class="font-weight-bolder"><b>Escrito por:<b> {{$comentario->user->name}} </p>
-                    <form action="{{route('comentario.update',[$publicacion->id,$comentario->id])}}" method="POST">
-                        @csrf @method('PATCH')
-                        <button type="submit" class="btn btn-danger">Eliminar</button>
-                    </form>
-
-                    <p>{{$comentario->comentario}}</p>
-                    <button class="btn btn-success" data-toggle="collapse" data-target="#respuesta-{{$comentario->id}}">Responder</button>
-{{--                    <div id="respuesta-{{$comentario->id}}" class="collapse">--}}
-{{--                        <form action="{{route('comentarios.store')}}" method="post">--}}
-{{--                            @csrf--}}
-{{--                            <input type="hidden" name="publicacion_id" value="{{$publicacion->id}}">--}}
-{{--                            <input type="hidden" name="comentario_id" value="{{$comentario->id}}">--}}
-{{--                            <textarea name="comentario" id="" cols="30" rows="10"></textarea>--}}
-{{--                            <button type="submit">Enviar</button>--}}
-{{--                        </form>--}}
-                        <form action="{{route('comentario.store',$publicacion)}}" method="post">
-                            @csrf
-                            @if(isset($comentario->id))
-                                <input type="hidden" name="id_comentario_padre" value="{{$comentario->id}}">
-                            @endif
-                            {{--                    <input type="hidden" name="user_id" value="{{auth()->id}}">--}}
-                            <div class="form-group">
-                                <textarea class="form-control" name="descripcion" id="descripcion" rows="3" placeholder="Comentar:"></textarea>
-                            </div>
-                            <button type="submit" class="btn btn-dark">Enviar</button>
-                        </form>
-
-{{--                    </div>--}}
-                </div>
+             @if($ratings->where('estado', 1)->count() <= 1)
+                <h4 class="text-center mb-5">{{$ratings->where('estado', 1)->count()}} comentario</h4>
+            @elseif($ratings->where('estado', 1)->count() > 1)
+                <h4 class="text-center mb-5">{{$ratings->where('estado', 1)->count()}} comentarios</h4>
             @endif
+
+
+            @foreach($ratings as $rating)
+                    <div class="border p-3">
+                        <p class="font-weight-bolder"><b>Escrito por:</b> {{$rating->user->name}} </p>
+                        @if($rating->calificacion == 5)
+                            <p><b>Calificacion:</b> {{$rating->calificacion}} <span class="red">★★★★★</span> </p>
+                        @elseif($rating->calificacion == 4)
+                            <p><b>Calificacion:</b> {{$rating->calificacion}} <span class="red">★★★★</span> </p>
+                        @elseif($rating->calificacion == 3)
+                            <p><b>Calificacion:</b> {{$rating->calificacion}} <span class="red">★★★</span> </p>
+                        @elseif($rating->calificacion == 2)
+                            <p><b>Calificacion:</b> {{$rating->calificacion}} <span class="red">★★</span> </p>
+                        @elseif($rating->calificacion == 1)
+                            <p><b>Calificacion:</b> {{$rating->calificacion}} <span class="red">★</span> </p>
+                        @endif
+                        <p>{{$rating->comentario}}</p>
+                    </div>
             @endforeach
 
 
 {{--            @include('comentarios.index' , ['comentarios' => $comentarios])--}}
-           @livewire('publicaciones.show-coments', ['publicacion' => $publicacion])
+{{--           @livewire('publicaciones.show-coments', ['publicacion' => $publicacion])--}}
         </div>
     </div>
+
+    <script src="http://code.jquery.com/jquery-3.4.0.min.js" integrity="sha256-BJeo0qm959uMBGb65z40ejJYGSgR7REI4+CW1fNKwOg=" crossorigin="anonymous"></script>
 
 
     @php
@@ -386,6 +554,69 @@
                 moreText.style.display = "inline";
             }
         }
+    </script>
+
+
+{{--    Estrellas--}}
+{{--    <script>--}}
+{{--        var ratedIndex = -1, uID = 0;--}}
+
+{{--        $(document).ready(function () {--}}
+{{--            resetStarColors();--}}
+
+{{--            if (localStorage.getItem('ratedIndex') != null) {--}}
+{{--                setStars(parseInt(localStorage.getItem('ratedIndex')));--}}
+{{--                uID = {{auth()->id()}};--}}
+{{--            }--}}
+
+{{--            $('.fa-star').on('click', function () {--}}
+{{--                ratedIndex = parseInt($(this).data('index'));--}}
+{{--                localStorage.setItem('ratedIndex', ratedIndex);--}}
+{{--                saveToTheDB();--}}
+{{--            });--}}
+
+{{--            $('.fa-star').mouseover(function () {--}}
+{{--                resetStarColors();--}}
+{{--                var currentIndex = parseInt($(this).data('index'));--}}
+{{--                setStars(currentIndex);--}}
+{{--            });--}}
+
+{{--            $('.fa-star').mouseleave(function () {--}}
+{{--                resetStarColors();--}}
+
+{{--                if (ratedIndex !== -1)--}}
+{{--                    setStars(ratedIndex);--}}
+{{--            });--}}
+{{--        });--}}
+
+{{--        function saveToTheDB() {--}}
+{{--            $.ajax({--}}
+{{--                url: '{{route('publicaciones.show', $publicacion)}}',--}}
+{{--                method: 'POST',--}}
+{{--                dataType: 'json',--}}
+{{--                data: {--}}
+{{--                    save: 1,--}}
+{{--                    calificacion: ratedIndex,--}}
+{{--                    id_usuario: uID,--}}
+{{--                    id_publicacion: {{$publicacion->id}}--}}
+{{--                }, success: function (r) {--}}
+{{--                    uID = r.id_usuario;--}}
+{{--                }--}}
+{{--                // }, success: function (r) {--}}
+{{--                //     uID = r.id;--}}
+{{--                //     localStorage.setItem('uID', uID);--}}
+{{--                // }--}}
+{{--            });--}}
+{{--        }--}}
+
+{{--        function setStars(max) {--}}
+{{--            for (var i=0; i <= max; i++)--}}
+{{--                $('.fa-star:eq('+i+')').css('color', 'red');--}}
+{{--        }--}}
+
+{{--        function resetStarColors() {--}}
+{{--            $('.fa-star').css('color', 'grey');--}}
+{{--        }--}}
     </script>
 
 

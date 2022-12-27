@@ -139,8 +139,26 @@ class User extends Authenticatable implements Auditable
 //        return $this->hasMany(Publicacion::class, 'id_usuario');
 //    }
 
-    public function comentario()
+//    public function comentario()
+//    {
+//        return $this->hasMany(Comentario::class, 'id_usuario');
+//    }
+//
+//    //una a muchos calificaciones
+//    public function calificacion()
+//    {
+//        return $this->hasMany(Calificacion::class, 'id_usuario');
+//    }
+
+//uno a muchos rating
+    public function rating()
     {
-        return $this->hasMany(Comentario::class, 'id_usuario');
+        return $this->hasMany(Rating::class, 'id_usuario');
     }
+
+//uno a muchos calificacion_comentario
+//    public function CalificacionComentario()
+//    {
+//        return $this->hasMany(CalificacionComentario::class, 'id_usuario');
+//    }
 }

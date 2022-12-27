@@ -4,12 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\CaracteristicaComodidad;
 use App\Models\Ciudad;
-use App\Models\Comentario;
 use App\Models\Comodidad;
 use App\Models\Imagen;
 use App\Models\MercadoPagoTransaccion;
 use App\Models\Provincia;
 use App\Models\Publicacion;
+use App\Models\Rating;
 use App\Models\TipoPropiedad;
 use App\Models\User;
 use App\Models\Contrato;
@@ -45,6 +45,15 @@ class PublicacionController extends Controller
         $imagenes = Imagen::get();
 
         return view('publicaciones.index',compact('publicaciones','tiposPropiedades', 'imagenes'));
+    }
+
+    public function publicacionesAdmin()
+    {
+        $publicaciones = Publicacion::all();
+        $tiposPropiedades = TipoPropiedad::get();
+        $usuarios = User::get();
+
+        return view('admin.publicaciones.activas',compact('publicaciones','tiposPropiedades', 'usuarios'));
     }
 
     public function pagar(Publicacion $publicacion, Request $request){
@@ -112,9 +121,10 @@ class PublicacionController extends Controller
 
         $caracteristicaComodidades = CaracteristicaComodidad::get()->where('id_publicacion',$publicacion->id);
         $imagenes = Imagen::get();
-        $comentarios = Comentario::get()->where('id_publicacion',$publicacion->id);
+//        $comentarios = Comentario::get()->where('id_publicacion',$publicacion->id);
+        $ratings = Rating::get()->where('id_publicacion',$publicacion->id);
 
-        return view('publicaciones.show',compact('publicacion','caracteristicaComodidades', 'imagenes', 'comentarios'));
+        return view('publicaciones.show',compact('publicacion','caracteristicaComodidades', 'imagenes', 'ratings'));
 //        return view('publicaciones.show',['publicacion'=> $publicacion]);
     }
 

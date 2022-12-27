@@ -42,7 +42,7 @@ return [
     | google fonts may be useful if your admin panel internet access is
     | restricted somehow.
     |
-    | For detailed instructions you can look the google fonts section here:
+    | For detailed instructions you can look the Google fonts section here:
     | https://github.com/jeroennoten/Laravel-AdminLTE/wiki/Basic-Configuration
     |
     */
@@ -329,13 +329,18 @@ return [
 //            'label_color' => 'success',
         ],
         [
-            'text'        => 'Propiedades',
+            'text'        => 'Propiedades Inactivas',
             'url'         => '/publicaciones/borrado',
             'icon'        => 'fas fa-fw fa-home',
+//            'icon'        => 'fa-solid fa-house-circle-xmark',
 //            'label'       => 4,
 //            'label_color' => 'success',
+        ],
+        [
+            'text'        => 'Propiedades Activas',
+            'url'         => '/admin/publicaciones',
+            'icon'        => 'fas fa-fw fa-home',
         ]
-        //boton para ingresar en los registros de Auditoria
         ,
         [
             'text'        => 'Auditoria',

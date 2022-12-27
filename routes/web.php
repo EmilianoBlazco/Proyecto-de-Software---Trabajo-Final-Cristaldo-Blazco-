@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\ComentarioController;
 use App\Http\Controllers\ContratoController;
 use App\Http\Controllers\OCRController;
+use App\Http\Controllers\RatingController;
 use App\Http\Controllers\WebHooksController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PublicacionController;
@@ -58,13 +59,23 @@ Route::get('/registroPropiedad/{publicacion}/edit',[PublicacionController::class
 Route::get('/registroPropiedad/{publicacion}/pagar',[PublicacionController::class, 'pagar'])->name('publicaciones.pagar');//Pagar Publicacion
 Route::patch('/registroPropiedad/{publicacion}',[PublicacionController::class, 'update'])->name('publicaciones.update');//Cambiar en BD Publicacion
 Route::delete('/registroPropiedad/{publicacion}',[PublicacionController::class, 'destroy'])->name('publicaciones.destroy');//Eliminar Publicacion
+//Pagina de Publicaciones admin
+Route::get('/admin/publicaciones',[PublicacionController::class,'publicacionesAdmin'])->name('admin.publicacionesIndex');
+
+//Pagina de Rating
+Route::post('/registroPropiedad/{publicacion}',[RatingController::class, 'store'])->name('rating.store');//Almacenar en la base de datos
+//Pagina rating admin
+Route::get('/admin/rating',[RatingController::class, 'index'])->name('admin.rating');//Pagina principal para el registro de propiedad
+Route::patch('/admin/rating/{rating}',[RatingController::class, 'update'])->name('admin.rating.update');//Eliminar Rating
+
+
 
 //Pagina de Comentarios
-Route::get('/registroPropiedad/{publicacion}/comentarios',[ComentarioController::class, 'index'])->name('comentarios.index');//Comentarios de la Publicacion
-Route::post('/registroPropiedad/{publicacion}/comentarios',[ComentarioController::class, 'store'])->name('comentario.store');//Almacenar Comentario
-//Route::get('/registroPropiedad/{publicacion}/comentarios/{comentario}/edit',[ComentarioController::class, 'editComentario'])->name('publicaciones.editComentario');//Modificar Comentario
-Route::patch('/registroPropiedad/{publicacion}/comentarios/{comentario}',[ComentarioController::class, 'update'])->name('comentario.update');//Cambiar en BD Comentario
-Route::delete('/registroPropiedad/{publicacion}/comentarios/{comentario}',[ComentarioController::class, 'destroy'])->name('comentario.destroy');//Eliminar Comentario
+//Route::get('/registroPropiedad/{publicacion}/comentarios',[ComentarioController::class, 'index'])->name('comentarios.index');//Comentarios de la Publicacion
+//Route::post('/registroPropiedad/{publicacion}/comentarios',[ComentarioController::class, 'store'])->name('comentario.store');//Almacenar Comentario
+////Route::get('/registroPropiedad/{publicacion}/comentarios/{comentario}/edit',[ComentarioController::class, 'editComentario'])->name('publicaciones.editComentario');//Modificar Comentario
+//Route::patch('/registroPropiedad/{publicacion}/comentarios/{comentario}',[ComentarioController::class, 'update'])->name('comentario.update');//Cambiar en BD Comentario
+//Route::delete('/registroPropiedad/{publicacion}/comentarios/{comentario}',[ComentarioController::class, 'destroy'])->name('comentario.destroy');//Eliminar Comentario
 
 
 //Pagina de Contratos
