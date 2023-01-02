@@ -8,7 +8,7 @@
             integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
             crossorigin=""></script>
 
-    @vite(['resources/css/material-kit.css', 'resources/css/nucleo-icons.css','resources/css/multistep.css', 'resources/js/multistep.js', 'resources/css/nucleo-svg.css','resources/js/validacionModificar.js', 'resources/js/modificarUbicacion.js'])
+    @vite(['resources/css/material-kit.css', 'resources/css/nucleo-icons.css','resources/css/multistep.css', 'resources/js/multistep.js', 'resources/css/nucleo-svg.css','resources/js/validacionModificar.js', 'resources/js/modificarUbicacion.js', 'resources/css/dragAndDropImg.css', 'resources/js/EditDragAndDropImg.js'])
 
     <body>
 
@@ -299,73 +299,59 @@
 
 
                                         <h3 class="mt-4">Imagenes</h3>
-                                        <div class="form-row mt-4  shadow-none p-3 mb-5 bg-light rounded">
-                                            <div class="col">
-                                                <h6>Esta sera la imagen de portada de la publicacion</h6>
-                                                <input name="file" type="file" accept="image/*" value="{{old('imagen')}}" id="input-file">
-                                                @error('file')
-                                                <small style="color:red">{{$message}}</small>
-                                                @enderror
+                                        <div class="flex-container">
+                                            <div class="drop-zone">
+
+                                                <span class="drop-zone__prompt">
+                                                    <h7 class="drop-zone__principal">Foto principal</h7><i class="fa-solid fa-upload fa-2x"></i> <br>
+                                                    Arrastra la foto de la propiedad
+                                                </span>
+                                                <input type="file" name="file" class="drop-zone__input" id="input-file">
                                             </div>
-                                        </div>
-                                        <div class="form-row mt-4  shadow-none p-3 mb-5 bg-light rounded">
-                                            <div class="col">
-                                                <input name="file1" type="file" accept="image/*" value="{{old('imagen')}}">
-                                                @error('file')
-                                                <small style="color:red">{{$message}}</small>
-                                                @enderror
+
+                                            <div class="drop-zone">
+                                                <span class="drop-zone__prompt"><i class="fa-solid fa-upload fa-2x"></i> <br>
+                                                    Arrastra la foto de la propiedad
+                                                </span>
+                                                <input type="file" name="file1" class="drop-zone__input" id="input-file-1" >
                                             </div>
-                                        </div>
-                                        <div class="form-row mt-4  shadow-none p-3 mb-5 bg-light rounded">
-                                            <div class="col">
-                                                <input name="file2" type="file" accept="image/*" value="{{old('imagen')}}">
-                                                @error('file')
-                                                <small style="color:red">{{$message}}</small>
-                                                @enderror
+
+                                            <div class="drop-zone">
+                                                <span class="drop-zone__prompt"><i class="fa-solid fa-upload fa-2x"></i> <br>
+                                                    Arrastra la foto de la propiedad
+                                                </span>
+                                                <input type="file" name="file2" class="drop-zone__input" id="input-file-2">
                                             </div>
-                                        </div>
-                                        <div class="form-row mt-4  shadow-none p-3 mb-5 bg-light rounded">
-                                            <div class="col">
-                                                <input name="file3" type="file" accept="image/*" value="{{old('imagen')}}">
-                                                @error('file')
-                                                <small style="color:red">{{$message}}</small>
-                                                @enderror
+
+                                            <div class="drop-zone">
+                                                <span class="drop-zone__prompt"><i class="fa-solid fa-upload fa-2x"></i> <br>
+                                                    Arrastra la foto de la propiedad
+                                                </span>
+                                                <input type="file" name="file3" class="drop-zone__input" id="input-file-3">
                                             </div>
-                                        </div>
-                                        <div class="form-row mt-4  shadow-none p-3 mb-5 bg-light rounded">
-                                            <div class="col">
-                                                <input name="file4" type="file" accept="image/*" value="{{old('imagen')}}">
-                                                @error('file')
-                                                <small style="color:red">{{$message}}</small>
-                                                @enderror
+
+                                            <div class="drop-zone">
+                                                <span class="drop-zone__prompt"><i class="fa-solid fa-upload fa-2x"></i> <br>
+                                                    Arrastra la foto de la propiedad
+                                                </span>
+                                                <input type="file" name="file4" class="drop-zone__input" id="input-file-4">
                                             </div>
+
                                         </div>
 
-                                        <div class="text-danger"  id="divImagenes" ></div>
 
-
-{{--                                        <div class="form-row mt-4  shadow-none p-3 mb-5 bg-light rounded" style="display: flex; justify-content: center;">--}}
-{{--                                            <div class="col">--}}
-{{--                                                @foreach($imagenes as $imagen)--}}
-{{--                                                    @if($imagen->id_publicacion == $publicacion->id)--}}
-{{--                                                        <img src="{{asset($imagen->url_imagen)}}" alt="imagen" class="w-20">--}}
-{{--                                                    @endif--}}
-{{--                                                @endforeach--}}
-{{--                                            </div>--}}
-{{--                                        </div>--}}
-
-
+                                        <div class="text-danger" id="divImagenes"></div>
                                     </div>
 
-                                    <div class="form-row mt-4 shadow-none p-3 mb-5 bg-light rounded flex flex-row justify-center align-items-center">
-                                        <div class="col">
+
                                             @foreach($imagenes as $imagen)
                                                 @if($imagen->id_publicacion == $publicacion->id)
-                                                    <img src="{{asset($imagen->url_imagen)}}" alt="imagen" class="h-20">
+{{--                                                    <img src="{{asset($imagen->url_imagen)}}" alt="imagen" class="imagenesActuales">--}}
+                                                    <img src="{{$imagen->url_imagen}}" alt="imagen" class="imagenesActuales">
                                                 @endif
                                             @endforeach
-                                        </div>
-                                    </div>
+
+
 
 
 

@@ -8,7 +8,7 @@
             integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
             crossorigin=""></script>
 
-    @vite(['resources/css/material-kit.css', 'resources/css/nucleo-icons.css','resources/css/multistep.css', 'resources/js/multistep.js', 'resources/css/nucleo-svg.css','resources/js/material-kit.js','resources/js/validacionCrear.js','resources/js/crearUbicacion.js', 'resources/css/dragAndDropImg.css', 'resources/js/dragAndDropImg.js'])
+    @vite(['resources/css/material-kit.css', 'resources/css/nucleo-icons.css','resources/css/multistep.css', 'resources/js/multistep.js', 'resources/css/nucleo-svg.css','resources/js/material-kit.js','resources/js/validacionCrear.js','resources/js/crearUbicacion.js', 'resources/css/dragAndDropImg.css', 'resources/js/CreateDragAndDropImg.js'])
 
 
     <body>
