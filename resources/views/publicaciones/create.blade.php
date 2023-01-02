@@ -47,6 +47,9 @@
                                 <button class="multisteps-form__progress-btn" type="button" title="Comments"
                                         id="progresComodidad">Caracerísticas específicas
                                 </button>
+                                <button class="multisteps-form__progress-btn" type="button" title="Comments"
+                                        id="progresTipoInq">Tipo de Inquilino
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -491,6 +494,48 @@
                                                 @endforeach
                                             </div>
                                         @endforeach
+
+                                    </div>
+                                    <div class="button-row d-flex mt-4 ">
+                                        <div class="col">
+                                            <button class="btn btn-primary js-btn-prev" type="button" title="Prev">
+                                                Anterior
+                                            </button>
+                                        </div>
+{{--                                        <div class="col text-md-end">--}}
+{{--                                            <button class="btn btn-success ml-auto" type="submit" title="Send">Enviar--}}
+{{--                                            </button>--}}
+{{--                                        </div>--}}
+                                        <div class="col text-md-end">
+                                            <button class="btn btn-primary js-btn-next " type="button" title="Next">
+                                                Siguiente
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+{{--                                Tipo de Inquilino--}}
+                                <div class="multisteps-form__panel shadow p-4 rounded bg-white"
+                                     data-animation="scaleIn">
+                                    <h3 class="multisteps-form__title">Tipos de inquilinos aceptados </h3>
+                                    <div class="multisteps-form__content">
+
+{{--                                        @foreach($tipoInquilino as $tipo)--}}
+                                            <div class="form-row mt-4  shadow-none p-3 mb-5 bg-light rounded">
+{{--                                                <h6 class="p-2">{{$tipo->nombre_tipo_inquilino}}</h6>--}}
+                                                @foreach($tipoInquilino as $tipo)
+                                                    <div class="col form-check-inline">
+                                                        <input type="checkbox" name="inquilinos[]"
+                                                               value="{{$tipo->id}}"
+                                                               id="{{$tipo->id}}" class="form-check-input ">
+                                                        <label
+                                                            for="{{$tipo->id}}">{{$tipo->nombre_tipo_inquilino}}
+                                                        </label>
+                                                    </div>
+                                                @endforeach
+                                            </div>
+{{--                                        @endforeach--}}
 
                                     </div>
                                     <div class="button-row d-flex mt-4 ">

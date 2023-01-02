@@ -9,7 +9,10 @@ use App\Models\Imagen;
 use App\Models\MercadoPagoTransaccion;
 use App\Models\Provincia;
 use App\Models\Publicacion;
+use App\Models\PublicacionTipoInquilino;
 use App\Models\Rating;
+use App\Models\Solicitud;
+use App\Models\TipoInquilino;
 use App\Models\TipoPropiedad;
 use App\Models\User;
 use App\Models\Contrato;
@@ -118,13 +121,25 @@ class PublicacionController extends Controller
 
     public function show(Publicacion $publicacion, CaracteristicaComodidad $caracteristicaComodidad)
     {
-
-        $caracteristicaComodidades = CaracteristicaComodidad::get()->where('id_publicacion',$publicacion->id);
         $imagenes = Imagen::get();
 //        $comentarios = Comentario::get()->where('id_publicacion',$publicacion->id);
         $ratings = Rating::get()->where('id_publicacion',$publicacion->id);
+//        $solicitud = Solicitud::get()->where('id_publicacion',$publicacion->id)->where('id_usuario',Auth::user()->id)->first();
+        $solicitud = Solicitud::get()->where('id_publicacion',$publicacion->id)->where('id_usuario',Auth::user()->id)->where('estado_solicitud','!=','Nulo')->first();
+        if ($solicitud == null){
+            $solicitud = new Solicitud();
+            $solicitud->estado_solicitud = 'Nulo';
+        }elseif ($solicitud->estado_solicitud == 'Rechazado'){
+            //establecer mensaje de sesion
+            session()->flash('rechazado','ok');
+        }elseif ($solicitud->estado_solicitud == 'Aceptado'){
+            //establecer mensaje de sesion
+            session()->flash('aceptado','ok');
+//            session()->forget('aceptado');
+        }
+//        dd($caracteristicaComodidades);
 
-        return view('publicaciones.show',compact('publicacion','caracteristicaComodidades', 'imagenes', 'ratings'));
+        return view('publicaciones.show',compact('publicacion', 'imagenes', 'ratings', 'solicitud'));
 //        return view('publicaciones.show',['publicacion'=> $publicacion]);
     }
 
@@ -135,8 +150,10 @@ class PublicacionController extends Controller
         $ciudades = Ciudad::get();
         $comodidades = Comodidad::get();
         $caracteristicasComodidades = CaracteristicaComodidad::get();
+        $tipoInquilino = TipoInquilino::get();
+//        $publicacion_tipo_inquilino = PublicacionTipoInquilino::get();
 
-        return view('publicaciones.create', compact('provincias', 'tiposPropiedad', 'ciudades', 'comodidades', 'caracteristicasComodidades'));
+        return view('publicaciones.create', compact('provincias', 'tiposPropiedad', 'ciudades', 'comodidades', 'caracteristicasComodidades', 'tipoInquilino'));
 //        return to_route('publicaciones.create', compact('provincias', 'tiposPropiedad', 'ciudades', 'comodidades', 'caracteristicasComodidades'))->with('creacion','ok');
     }
 
@@ -205,6 +222,11 @@ class PublicacionController extends Controller
 
         $publicacion->save();
         $publicacion->caracteristica_comodidades()->attach($request->input('caracteristicas'));
+        //almacenar los tipos de inquilinos
+        $publicacion->publicacion_tipo_inquilino()->attach($request->input('inquilinos'));
+
+//        $publicacion->id_tipo_inquilino = $request->input('inquilinos');
+
 
 
         //Se guarda las imagenes en la tabla imagenes despues que se creo la publicacion
@@ -247,7 +269,7 @@ class PublicacionController extends Controller
 
         session()->flash('estado_publicacion','Se publico de manera exitosa la Propiedad');
 
-        return to_route('publicaciones.index');
+        return to_route('publicaciones.index')->with('creacion','ok');
     }
 
     public function edit(Publicacion $publicacion, Provincia $provincia, TipoPropiedad $tipoPropiedad, Ciudad $ciudad, Comodidad $comodidad, CaracteristicaComodidad $caracteristicaComodidad)

@@ -53,4 +53,10 @@ class CaracteristicaComodidad extends Model implements Auditable
 					->withPivot('id', 'deleted_at')
 					->withTimestamps();
 	}
+
+    //relacion con caracteristicas_esperadas muchos a muchos con caracteristica_comodidad
+    public function caracteristicaEsperada()
+    {
+        return $this->belongsToMany(CaracteristicaEsperada::class, 'caracteristica_comodidad_respuesta', 'id_caracteristica_comodidad', 'id_caracteriticas_esperadas');
+    }
 }

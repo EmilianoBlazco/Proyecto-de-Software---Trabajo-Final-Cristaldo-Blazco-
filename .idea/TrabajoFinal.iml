@@ -41,5 +41,9 @@
     <orderEntry type="library" name="ckeditor" level="application" />
     <orderEntry type="library" name="sweetalert2" level="application" />
     <orderEntry type="library" name="jquery-3.4.0" level="application" />
+    <orderEntry type="library" name="leaflet" level="application" />
+    <orderEntry type="library" name="leaflet-routing-machine" level="application" />
+    <orderEntry type="library" name="font-awesome" level="application" />
+    <orderEntry type="library" name="intro.js" level="application" />
   </component>
 </module>

@@ -19,11 +19,13 @@ class UserSeeder extends Seeder
         \App\Models\User::factory(1)->create([
             'email' => 'a@gmail.com',
             'password' => bcrypt('12345678'),
+//            'rol' => 'Admin',
         ]);
 
         \App\Models\User::factory(1)->create([
             'email' => 'e@gmail.com',
             'password' => bcrypt('12345678'),
+//            'rol' => 'Admin',
         ]);
 
         \App\Models\User::factory(50)->create();

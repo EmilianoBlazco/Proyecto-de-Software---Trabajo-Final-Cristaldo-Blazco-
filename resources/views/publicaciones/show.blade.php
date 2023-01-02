@@ -1,5 +1,7 @@
 <x-app-layout>
 
+{{--    libreria boostrap 5--}}
+{{--    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">--}}
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
     @vite(['resources/css/material-kit.css', 'resources/css/nucleo-icons.css','resources/css/multistep.css', 'resources/js/multistep.js', 'resources/css/nucleo-svg.css', 'resources/js/map.js', 'resources/js/bootstrap.js'])
@@ -7,6 +9,7 @@
     <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+
 
 
     <body class="container bg-gray-200">
@@ -176,11 +179,73 @@
                                 <h3 class="font-weight-semi-bold mb-4 col">$ {{ number_format($publicacion->precio_publicacion, 2, ',', '.')  }} ARS</h3>
                                 {{--           -----------------ACÁ VA EL BOTÓN DE MERCADO PAGO-----------------------------------------------------------}}
                                 @if($publicacion->estado_publicacion == "Activo")
-                                    <a href="#" class="btn btn-primary btn-block col">Solicitar Alquiler</a>
+{{--                                    <a href="{{route('correos.solicitud')}}" class="btn btn-primary btn-block col">Solicitar Alquiler</a>--}}
+{{--                                    <input type="month" >--}}
+
+                                @if($solicitud->estado_solicitud == "Nulo")
+                                        <form action="{{route('correos.solicitud')}}" method="Get">
+                                            @csrf
+                                            <input type="hidden" name="id_publicacion" value="{{$publicacion->id}}">
+                                            <input type="hidden" name="id_usuario" value="{{auth()->id()}}">
+                                            <input type="submit" class="btn btn-primary btn-block col" value="Solicitar Alquiler">
+                                        </form>
+                                @elseif($solicitud->estado_solicitud == "Rechazado")
+                                        <form action="{{route('correos.solicitud')}}" method="Get">
+                                            @csrf
+                                            <input type="hidden" name="id_publicacion" value="{{$publicacion->id}}">
+                                            <input type="hidden" name="id_usuario" value="{{auth()->id()}}">
+                                            <input type="submit" class="btn btn-primary btn-block col" value="Solicitar Alquiler">
+{{--                                            <p>--}}
+{{--                                            <hr>--}}
+{{--                                                <small class="text-danger">*Su solicitud fue rechazada.</small>--}}
+{{--                                            <br>--}}
+{{--                                                <small class="text-danger">*Si desea puede realizar otra solicitud, pero recomendamos que revise los terminos de la propiedad.</small>--}}
+{{--                                            <br>--}}
+{{--                                            <br>--}}
+{{--                                                <small class="text-danger">Gracias.</small>--}}
+
+{{--                                            </p>--}}
+                                            @if (session('rechazado') == 'ok')
+                                                <script>
+                                                    Swal.fire(
+                                                        'Su solicitud fue rechazada!',
+                                                        'Si desea puede realizar otra solicitud, pero recomendamos que revise los terminos de la propiedad.',
+                                                        'Error'
+                                                    )
+                                                </script>
+                                            @endif
+                                        </form>
+                                    @elseif($solicitud->estado_solicitud == "Aceptado")
+                                        <div class="cho-container"></div>
+{{--                                        <p>--}}
+{{--                                        <hr>--}}
+{{--                                        <small class="text-success">*Su solicitud fue aceptada.</small>--}}
+{{--                                        <br>--}}
+{{--                                        <small class="text-success">*Ya puede realizar el primer pago de la propiedad</small>--}}
+                                        @if (session('aceptado') == 'ok')
+                                            <script>
+                                                Swal.fire(
+                                                    'Su solicitud fue aceptada!',
+                                                    'Ya puede realizar el primer pago de la propiedad.',
+                                                    'Success'
+                                                )
+                                            </script>
+                                        @endif
+
+                                    @elseif($solicitud->estado_solicitud == "Pendiente")
+                                        <div class="alert alert-default-info" role="alert">
+                                            <h4 class="alert-heading">Solicitud Pendiente</h4>
+                                            <p>La solicitud de alquiler está pendiente de a probación por parte del propietario.</p>
+                                            <hr>
+                                            <p class="mb-0">Si el propietario no aprueba la solicitud en 5 dias, se cancelará automáticamente.</p>
+                                        </div>
+                                    @endif
+
+
                                 @elseif($publicacion->estado_publicacion == "Alquilado")
                                     <input type="number">
+
                                 @endif
-                                <div class="cho-container"></div>
                                 {{--           -----------------ACÁ VA EL BOTÓN DE MERCADO PAGO-----------------------------------------------------------}}
                             </div>
                         </div>
@@ -229,12 +294,48 @@
 
 {{--                Tipo de inquilinos aceptados      --}}
 
-                <div class="row mt-4">
-                    <div class="col-12">
-                        <h6 class="font-weight-semi-bold">Tipo de inquilinos aceptos/Perfil de inquilinos permitidos</h6>
-                        <p class="text-muted"></p>
+{{--                <div class="row mt-4">--}}
+{{--                    <div class="col-12">--}}
+{{--                        <h6 class="font-weight-semi-bold">Tipo de inquilinos aceptos/Perfil de inquilinos permitidos</h6>--}}
+{{--                        <p class="text-muted"></p>--}}
+{{--                        --}}
+{{--                    </div>--}}
+{{--                </div>--}}
+             @foreach($publicacion->publicacion_tipo_inquilino()->get() as $tipoInquilino)
+                <div class="col-6">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="bg-primary p-2 mr-3 rounded-circle position-relative" style="height: 32px; width: 32px;">
+{{--                            <i class="fas fa-car text-white w-50 h-50 position-absolute"></i>--}}
+                            @switch($tipoInquilino->nombre_tipo_inquilino)
+                                @case("Familia")
+                                    <i class="fa-solid fa-family-pants text-white w-50 h-50 position-absolute"></i>
+                                    @break
+                                @case("Estudiante")
+                                    <i class="fas fa-user-graduate text-white w-50 h-50 position-absolute"></i>
+                                    @break
+                                @case("Adultos mayores(60 años en adelante)")
+                                    <i class="fa-solid fa-person-cane text-white w-50 h-50 position-absolute"></i>
+                                    @break
+                                @case("Adultos(27 a 59 años)")
+                                    <i class="fa-solid fa-user-tie-hair text-white w-50 h-50 position-absolute"></i>
+                                    @break
+                                @case("Jóvenes(18 a 26 años)")
+                                    <i class="fa-solid fa-child text-white w-50 h-50 position-absolute"></i>
+                                    @break
+                                @case("Pareja")
+                                    <i class="fa-solid fa-people w-50 h-50 position-absolute"></i>
+                                    @break
+                                @case("Persona con discapacidad")
+                                    <i class="fa-solid fa-wheelchair text-white w-50 h-50 position-absolute"></i>
+                                    @break
+                            @endswitch
+                        </div>
+                        <div>
+                            <h6 class="font-weight-semi-bold ms-2 mb-0">{{$tipoInquilino->nombre_tipo_inquilino}}</h6>
+                        </div>
                     </div>
                 </div>
+             @endforeach
 
             {{--            Descripción de la publicación--}}
             <div class="row px-xl-5">
@@ -386,10 +487,10 @@
             </style>
 
 {{--            si el usuario autenticado ya envio una puntuacion esnconder el fomrulario--}}
-            @foreach($ratings as $rating)
-                @if($rating->id_usuario == Auth::user()->id)
-                    <h5>Solo se permite calificar una vez por usuario. Gracias por su calificacion</h5>
-                @else
+{{--            @foreach($ratings as $rating)--}}
+{{--                @if($rating->id_usuario == Auth::user()->id)--}}
+{{--                    <h5>Solo se permite calificar una vez por usuario. Gracias por su calificacion</h5>--}}
+{{--                @else--}}
                     <div id="calificar">
                         <h4 class="text center mb-5"> Califique esta publicacion y deje su comentario  </h4>
                         <div class="border p-2">
@@ -418,8 +519,8 @@
                             </form>
                         </div>
                     </div>
-                @endif
-            @endforeach
+{{--                @endif--}}
+{{--            @endforeach--}}
 
              @if($ratings->where('estado', 1)->count() <= 1)
                 <h4 class="text-center mb-5">{{$ratings->where('estado', 1)->count()}} comentario</h4>
@@ -513,6 +614,16 @@
         </script>
     @endif
 
+    @if(session('solicitud') == 'ok')
+        <script>
+            Swal.fire(
+                'Solicitud Enviada!',
+                'Se envio de manera exitosa un correo con su solicitud del alquiler al propietario.',
+                'success'
+            )
+        </script>
+    @endif
+
     <script>
         const mp = new MercadoPago("{{config('services.mercadopago.key')}}", {
             locale: 'es-AR'
@@ -554,69 +665,6 @@
                 moreText.style.display = "inline";
             }
         }
-    </script>
-
-
-{{--    Estrellas--}}
-{{--    <script>--}}
-{{--        var ratedIndex = -1, uID = 0;--}}
-
-{{--        $(document).ready(function () {--}}
-{{--            resetStarColors();--}}
-
-{{--            if (localStorage.getItem('ratedIndex') != null) {--}}
-{{--                setStars(parseInt(localStorage.getItem('ratedIndex')));--}}
-{{--                uID = {{auth()->id()}};--}}
-{{--            }--}}
-
-{{--            $('.fa-star').on('click', function () {--}}
-{{--                ratedIndex = parseInt($(this).data('index'));--}}
-{{--                localStorage.setItem('ratedIndex', ratedIndex);--}}
-{{--                saveToTheDB();--}}
-{{--            });--}}
-
-{{--            $('.fa-star').mouseover(function () {--}}
-{{--                resetStarColors();--}}
-{{--                var currentIndex = parseInt($(this).data('index'));--}}
-{{--                setStars(currentIndex);--}}
-{{--            });--}}
-
-{{--            $('.fa-star').mouseleave(function () {--}}
-{{--                resetStarColors();--}}
-
-{{--                if (ratedIndex !== -1)--}}
-{{--                    setStars(ratedIndex);--}}
-{{--            });--}}
-{{--        });--}}
-
-{{--        function saveToTheDB() {--}}
-{{--            $.ajax({--}}
-{{--                url: '{{route('publicaciones.show', $publicacion)}}',--}}
-{{--                method: 'POST',--}}
-{{--                dataType: 'json',--}}
-{{--                data: {--}}
-{{--                    save: 1,--}}
-{{--                    calificacion: ratedIndex,--}}
-{{--                    id_usuario: uID,--}}
-{{--                    id_publicacion: {{$publicacion->id}}--}}
-{{--                }, success: function (r) {--}}
-{{--                    uID = r.id_usuario;--}}
-{{--                }--}}
-{{--                // }, success: function (r) {--}}
-{{--                //     uID = r.id;--}}
-{{--                //     localStorage.setItem('uID', uID);--}}
-{{--                // }--}}
-{{--            });--}}
-{{--        }--}}
-
-{{--        function setStars(max) {--}}
-{{--            for (var i=0; i <= max; i++)--}}
-{{--                $('.fa-star:eq('+i+')').css('color', 'red');--}}
-{{--        }--}}
-
-{{--        function resetStarColors() {--}}
-{{--            $('.fa-star').css('color', 'grey');--}}
-{{--        }--}}
     </script>
 
 

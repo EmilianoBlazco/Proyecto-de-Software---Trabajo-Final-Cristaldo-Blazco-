@@ -71,6 +71,8 @@ class Comodidades extends Seeder
                 'Internet/Wifi',
                 'Lavanderia',
                 'Servicio de limpieza',
+                'Luz',
+                'Agua',
             ],
             'Caracteristicas' => [
                 'Aire acondicionado',

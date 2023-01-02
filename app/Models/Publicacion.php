@@ -151,4 +151,21 @@ class Publicacion extends Model implements Auditable
 //        return $this->hasMany(CalificacionComentario::class, 'id_publicacion');
 //    }
 
+
+    //muchos publicaciones a muchos publicacion_tipo_inquilino
+    public function publicacion_tipo_inquilino()
+    {
+        return $this->belongsToMany(TipoInquilino::class, 'publicacion_tipo_inquilino', 'id_publicacion', 'id_tipo_inquilino');
+    }
+//    public function PublicacionTipoInquilino()
+//    {
+//        return $this->belongsToMany(PublicacionTipoInquilino::class, 'id_publicion');
+//    }
+
+    //union con tabla solicitud
+    public function Solicitud()
+    {
+        return $this->hasMany(Solicitud::class, 'id_publicacion');
+    }
+
 }

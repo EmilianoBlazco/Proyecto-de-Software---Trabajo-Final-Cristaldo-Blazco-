@@ -2,14 +2,16 @@
 
 use App\Http\Controllers\Admin\AuditoriaController;
 use App\Http\Controllers\Admin\UserController;
-use App\Http\Controllers\ComentarioController;
+use App\Http\Controllers\CharjsController;
 use App\Http\Controllers\ContratoController;
+use App\Http\Controllers\CorreoController;
+use App\Http\Controllers\EncuestaController;
 use App\Http\Controllers\OCRController;
+use App\Http\Controllers\PruebaController;
+use App\Http\Controllers\PublicacionController;
 use App\Http\Controllers\RatingController;
 use App\Http\Controllers\WebHooksController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\PublicacionController;
-use App\Http\Controllers\CharjsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -89,6 +91,27 @@ Route::delete('/contratos/{contrato}',[ContratoController::class, 'destroy'])->n
 
 //Pagina de Alquileres
 Route::view('/alquileres','alquileres')->name('alquileres');
+
+//Pagina de Correos
+Route::get('/correosp',[CorreoController::class, 'indexprop'])->name('correos.index');//Pagina principal para ver los correos registrados
+Route::get('/correos',[CorreoController::class, 'solicitud'])->name('correos.solicitud');//Pagina principal para ver los correos registrados
+//Route::get('/correos/create',[CorreoController::class, 'create'])->name('correos.create');//Crear Correo
+//Route::post('/correos',[CorreoController::class,'store'])->name('correos.store');//Alcenar en la base de datos
+//Route::get('/correos/{correo}',[CorreoController::class, 'show'])->name('correos.show');//Consultar Correo
+//Route::get('/correos/{correo}/edit',[CorreoController::class, 'edit'])->name('correos.edit');//Modificar Correo
+Route::patch('/correos/{solicitud}',[CorreoController::class, 'aceptar'])->name('correos.update');//Cambiar en BD Correo
+Route::patch('/correos/{solicitud}',[CorreoController::class, 'rechazar'])->name('correos.update');//Cambiar en BD Correo
+
+//Pagina de encuestas
+//Route::get('/encuestas',[EncuestaController::class, 'index'])->name('encuestas.index');//Pagina principal para ver las encuestas registradas
+//Route::get('/encuestas/create',[EncuestaController::class, 'create'])->name('encuestas.create');//Crear Encuesta
+Route::post('/encuestas',[EncuestaController::class,'store'])->name('encuesta.store');//Alcenar en la base de datos
+
+
+//ruta de pruebas
+Route::get('/prueba',[PruebaController::class, 'index'])->name('prueba.index');//Pagina principal para ver los correos registrados
+
+
 
 //Ruta para webhooks
 Route::post('/webhooks', WebHooksController::class);

@@ -29,6 +29,7 @@ $this->call([
     RoleSeeder::class,
     Comodidades::class,
     ProvinciasCiudades::class,
+    SeederGeneral::class,
 ]);
 
 

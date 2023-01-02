@@ -161,4 +161,16 @@ class User extends Authenticatable implements Auditable
 //    {
 //        return $this->hasMany(CalificacionComentario::class, 'id_usuario');
 //    }
+
+//uno a muchos solicitud
+    public function solicitud()
+    {
+        return $this->hasMany(Solicitud::class, 'id_usuario');
+    }
+
+    //uno a uno encuesta
+    public function encuesta()
+    {
+        return $this->hasOne(Encuesta::class, 'id_usuario');
+    }
 }

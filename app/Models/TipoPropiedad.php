@@ -39,4 +39,9 @@ class TipoPropiedad extends Model implements Auditable
 	{
 		return $this->hasMany(Publicacion::class, 'id_tipo_propiedad');
 	}
+
+    public function caracteristica_esperada()
+    {
+        return $this->belongsToMany(CaracteristicaEsperada::class, 'tipo_propiedad_respuesta', 'id_tipo_propiedad', 'id_caracteriticas_esperadas');
+    }
 }
