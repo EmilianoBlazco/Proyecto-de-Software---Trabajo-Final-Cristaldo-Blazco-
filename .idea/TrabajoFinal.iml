@@ -32,6 +32,17 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/mercadopago/dx-php" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/_laravel_idea" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/smalot/pdfparser" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/grpc/grpc" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/firebase/php-jwt" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/rize/uri-template" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/google/auth" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/google/cloud-core" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/google/cloud-vision" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/google/common-protos" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/google/gax" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/google/grpc-gcp" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/google/longrunning" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/google/protobuf" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

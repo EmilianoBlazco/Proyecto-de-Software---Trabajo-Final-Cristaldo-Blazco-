@@ -110,7 +110,7 @@ Route::post('/encuestas',[EncuestaController::class,'store'])->name('encuesta.st
 
 //ruta de pruebas
 Route::get('/prueba',[PruebaController::class, 'index'])->name('prueba.index');//Pagina principal para ver los correos registrados
-
+Route::post('/prueba',[PruebaController::class, 'extraerTexto'])->name('prueba.store');//Pagina principal para ver los correos registrados
 
 
 //Ruta para webhooks
