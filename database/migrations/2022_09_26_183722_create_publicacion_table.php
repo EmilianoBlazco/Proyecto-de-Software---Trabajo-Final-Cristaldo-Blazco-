@@ -24,9 +24,6 @@ return new class extends Migration
             $table->integer('cochera_publicacion')->nullable();
             $table->integer('ambientes_publicacion')->nullable();
             $table->double('superficie_cubierta_casa')->nullable();
-//            $table->string('imagen_uno_publicacion');
-//            $table->string('imagen_dos_publicacion');
-//            $table->string('imagen_tres_publicacion');
             $table->double('superficie_total_terreno')->nullable();
             $table->double('precio_publicacion');
             $table->string('titulo_publicacion');

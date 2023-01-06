@@ -27,8 +27,10 @@
                                     <span class="input-group-text"><i class="fas fa-search" aria-hidden="true"></i></span>
                                     <input class="form-control" placeholder="Buscar" type="text" >
                                 </div>
-                                <div>
-                                    <a href="{{route('publicaciones.create')}}" class="btn btn-primary">Publicar una nueva propiedad</a>
+                                <div class="btn-group btn-group-horizontal">
+                                    <a href="{{route('publicaciones.create')}}" class="btn bt n-primary">Publicar una nueva propiedad</a>
+                                    <span>ㅤㅤ</span>
+                                    <a href="{{route('contratos.index')}}" class="btn btn-primary">Consultar contratos definidos</a>
                                 </div>
                             </div>
                         </div>
@@ -99,7 +101,7 @@
                                         </td>
                                         <td>
                                             @if($publicacion->estado_publicacion == "Activo")
-                                                <a href="{{route('contratos.index')}}" class="fa fa-file-text-o" style="color: #4fa952" data-toggle="tooltip" title="Definir contrato"></a>
+                                                <a href="{{route('contratos.create',$publicacion)}}" class="fa fa-file-text-o" style="color: #4fa952" data-toggle="tooltip" title="Definir contrato"></a>
                                             @elseif($publicacion->estado_publicacion == "Alquilado")
                                                 <a class="fa fa-file-text-o" style="color: red" data-toggle="tooltip" title="Definir contrato"></a>
                                             @endif

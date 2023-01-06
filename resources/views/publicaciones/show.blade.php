@@ -578,7 +578,7 @@
             "failure" => route('publicaciones.pagar', $publicacion),
             "pending" => route('publicaciones.pagar', $publicacion)
         );
-        $preference->auto_return = "approved";
+//        $preference->auto_return = "approved";
 
         $preference->save();
     @endphp
@@ -641,7 +641,7 @@
             },
             render: {
                 container: '.cho-container',
-                label: 'Pagar',
+                label: 'Abonar pago mensual',
             }
         });
     </script>

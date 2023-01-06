@@ -70,6 +70,7 @@ class PublicacionController extends Controller
 
         $id_transaccion = $respuesta->id;
         $status = $respuesta->status;//Aprobado o Rechazado o Pendiente
+//        dd($status);
         $transaction_amount = $respuesta->transaction_amount;//obtener el monto de transaccion
         $payment_method_id = $respuesta->payment_method_id;//Obtener el metodo de pago(visa, mastercard, etc)
         $payment_type_id = $respuesta->payment_type_id;//Obtener el tipo de pago(credit_card, ticket, etc)
@@ -87,7 +88,8 @@ class PublicacionController extends Controller
             $mercadoPagoTransaccion->tipo_pago = $payment_type_id;
             $mercadoPagoTransaccion->id_usuario = Auth::user()->id;
             $mercadoPagoTransaccion->nombre_usuario = Auth::user()->name;
-            //$mercadoPagoTransaccion->id_contrato = $contrato->id;
+//            $mercadoPagoTransaccion->id_contrato = $contrato->id;
+            $mercadoPagoTransaccion->id_contrato = 1;
             $mercadoPagoTransaccion->save();
 
 //            //enviar correo al propietario de la publicacion (ver que onda con el envio de correos)
@@ -102,6 +104,8 @@ class PublicacionController extends Controller
             return redirect()->route('publicaciones.index')->with('alquilado','ok');
         }elseif ($status == 'pending'){
             return redirect()->route('publicaciones.index')->with('pendiente','pend');
+        }elseif ($status == 'in_process'){
+            return redirect()->route('publicaciones.index')->with('pendiente','pend');
         }elseif ($status == 'rejected'){
 
             $mercadoPagoTransaccion = new MercadoPagoTransaccion();
@@ -113,6 +117,7 @@ class PublicacionController extends Controller
             $mercadoPagoTransaccion->id_usuario = Auth::user()->id;
             $mercadoPagoTransaccion->nombre_usuario = Auth::user()->name;
             //$mercadoPagoTransaccion->id_contrato = $contrato->id;
+            $mercadoPagoTransaccion->id_contrato = 1;
             $mercadoPagoTransaccion->save();
 
             return redirect()->route('publicaciones.index')->with('rechazado', 'rej');
@@ -125,7 +130,8 @@ class PublicacionController extends Controller
 //        $comentarios = Comentario::get()->where('id_publicacion',$publicacion->id);
         $ratings = Rating::get()->where('id_publicacion',$publicacion->id);
 //        $solicitud = Solicitud::get()->where('id_publicacion',$publicacion->id)->where('id_usuario',Auth::user()->id)->first();
-        $solicitud = Solicitud::get()->where('id_publicacion',$publicacion->id)->where('id_usuario',Auth::user()->id)->where('estado_solicitud','!=','Nulo')->first();
+        $solicitud = Solicitud::get()->where('id_publicacion',$publicacion->id)->where('id_usuario',Auth::user()->id)->where('estado_solicitud','!=','Nulo')->sortBy('created_at', SORT_REGULAR, true)->first();
+//        dd($solicitud);
         if ($solicitud == null){
             $solicitud = new Solicitud();
             $solicitud->estado_solicitud = 'Nulo';

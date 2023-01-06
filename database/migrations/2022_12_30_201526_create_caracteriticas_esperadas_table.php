@@ -17,9 +17,9 @@ return new class extends Migration
             $table->id();
 
             $table->string('estado_respuesta')->nullable();
-            $table->string('calle_respuesta_1')->nullable();
-            $table->string('calle_respuesta_2')->nullable();
-            $table->string('calle_respuesta_3')->nullable();
+//            $table->string('calle_respuesta_1')->nullable();
+//            $table->string('calle_respuesta_2')->nullable();
+//            $table->string('calle_respuesta_3')->nullable();
             $table->integer('ambientes_respuesta')->nullable();
             $table->integer('dormitorios_respuesta')->nullable();
             $table->integer('banios_respuesta')->nullable();

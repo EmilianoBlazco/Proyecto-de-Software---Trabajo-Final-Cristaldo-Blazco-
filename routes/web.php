@@ -11,6 +11,8 @@ use App\Http\Controllers\PruebaController;
 use App\Http\Controllers\PublicacionController;
 use App\Http\Controllers\RatingController;
 use App\Http\Controllers\WebHooksController;
+use App\Http\Livewire\Contrato\CreateContrato;
+use App\Http\Livewire\Contrato\IndexContrato;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -81,13 +83,18 @@ Route::patch('/admin/rating/{rating}',[RatingController::class, 'update'])->name
 
 
 //Pagina de Contratos
-Route::get('/contratos',[ContratoController::class, 'index'])->name('contratos.index');//Pagina principal para ver los contratos registrados
-Route::get('/contratos/create',[ContratoController::class, 'create'])->name('contratos.create');//Crear Contrato
-Route::post('/contratos',[ContratoController::class,'store'])->name('contratos.store');//Alcenar en la base de datos
-Route::get('/contratos/{contrato}',[ContratoController::class, 'show'])->name('contratos.show');//Consultar Contrato
-Route::get('/contratos/{contrato}/edit',[ContratoController::class, 'edit'])->name('contratos.edit');//Modificar Contrato
-Route::patch('/contratos/{contrato}',[ContratoController::class, 'update'])->name('contratos.update');//Cambiar en BD Contrato
-Route::delete('/contratos/{contrato}',[ContratoController::class, 'destroy'])->name('contratos.destroy');//Eliminar Contrato
+//Route::get('/contratos',[ContratoController::class, 'index'])->name('contratos.index');//Pagina principal para ver los contratos registrados
+//Route::get('/contratos/create',[ContratoController::class, 'create'])->name('contratos.create');//Crear Contrato
+//Route::post('/contratos',[ContratoController::class,'store'])->name('contratos.store');//Alcenar en la base de datos
+//Route::get('/contratos/{contrato}',[ContratoController::class, 'show'])->name('contratos.show');//Consultar Contrato
+//Route::get('/contratos/{contrato}/edit',[ContratoController::class, 'edit'])->name('contratos.edit');//Modificar Contrato
+//Route::patch('/contratos/{contrato}',[ContratoController::class, 'update'])->name('contratos.update');//Cambiar en BD Contrato
+//Route::delete('/contratos/{contrato}',[ContratoController::class, 'destroy'])->name('contratos.destroy');//Eliminar Contrato
+
+//Pagina de Contratos livewire
+Route::get('/contratos',IndexContrato::class)->name('contratos.index');//Pagina principal para ver los contratos registrados
+Route::get('/contratos/create',CreateContrato::class)->name('contratos.create');//Crear Contrato
+
 
 //Pagina de Alquileres
 Route::view('/alquileres','alquileres')->name('alquileres');
@@ -100,10 +107,12 @@ Route::get('/correos',[CorreoController::class, 'solicitud'])->name('correos.sol
 //Route::get('/correos/{correo}',[CorreoController::class, 'show'])->name('correos.show');//Consultar Correo
 //Route::get('/correos/{correo}/edit',[CorreoController::class, 'edit'])->name('correos.edit');//Modificar Correo
 Route::patch('/correos/{solicitud}',[CorreoController::class, 'aceptar'])->name('correos.update');//Cambiar en BD Correo
-Route::patch('/correos/{solicitud}',[CorreoController::class, 'rechazar'])->name('correos.update');//Cambiar en BD Correo
+
+
+//Route::patch('/correos/{solicitud}',[CorreoController::class, 'rechazar'])->name('correos.actualizar');//Cambiar en BD Correo
 
 //Pagina de encuestas
-//Route::get('/encuestas',[EncuestaController::class, 'index'])->name('encuestas.index');//Pagina principal para ver las encuestas registradas
+//Route::get('/dashboard',[EncuestaController::class, 'index'])->name('encuesta.index');//Pagina principal para ver las encuestas registradas
 //Route::get('/encuestas/create',[EncuestaController::class, 'create'])->name('encuestas.create');//Crear Encuesta
 Route::post('/encuestas',[EncuestaController::class,'store'])->name('encuesta.store');//Alcenar en la base de datos
 
@@ -129,12 +138,12 @@ Route::get('admin/users/pdf', [UserController::class, 'pdf'])->name('admin.users
 Route::get('/pdf', [AuditoriaController::class, 'pdf'])->name('auditoria.pdf');
 Route::get('/pdfs', [AuditoriaController::class, 'pdfmas'])->name('auditoriamas.pdf'); //ver
 
+
+
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
     'verified'
 ])->group(function () {
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
+    Route::get('/dashboard', [EncuestaController::class, 'index'])->name('dashboard');
 });

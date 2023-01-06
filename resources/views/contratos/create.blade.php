@@ -24,12 +24,13 @@
                     <h1 class="text-white">Defina su contrato</h1>
                 </div>
             </div>
+{{--            @livewire('contrato.create-contrato')--}}
             <div class="card h-100 align-content-xxl-center mt-3">
                 <div class="card">
                     <div class="row text-center py-2 mt-3">
                         <div class="col-4 mx-auto">
                             <div class="input-group input-group-dynamic mb-4">
-                                <p>Aca iria el dropimage de lens para reconocimiento del texto</p>
+                                <p>En la localidad de Apostoles etc.... en la fecha<input type="date"> </p>
                             </div>
                         </div>
                     </div>

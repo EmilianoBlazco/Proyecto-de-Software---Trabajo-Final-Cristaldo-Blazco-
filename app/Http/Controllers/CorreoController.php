@@ -31,7 +31,8 @@ class CorreoController extends Controller
     {
         $publicaciones = Publicacion::all();
         $usuarios = User::all();
-        $solicitudes = Solicitud::all()->where('estado_solicitud', '=','Pendiente');
+//        dd($usuarios);
+        $solicitudes = Solicitud::all()->where('estado_solicitud', '=','Pendiente');//->where($usuarios->id, auth()->user()->id);
         return view('correos.indexProp', compact('solicitudes', 'publicaciones', 'usuarios'));
     }
 
@@ -68,21 +69,41 @@ class CorreoController extends Controller
 
 
 //funcion para cambiar el estado de la solicitud
-    public function aceptar(Request $request, $id)
+    public function aceptar(Request $request, Solicitud $id)
     {
-        $solicitud = Solicitud::find($id);
-        $publicacion = Publicacion::find($solicitud->id_publicacion);
-        $solicitante = User::all()->where('id', $solicitud->id_usuario)->first();
-//        dd($solicitante);
-        $solicitud->estado_solicitud = 'Aceptado';
-        $solicitud->save();
-        $info = [
-            'solicitante' => $solicitante->name,
-            'titulo_pub' => $publicacion->titulo_publicacion,
-        ];
-        $correo = new AceptarSolicitudMailable($info);
-        Mail::to($solicitante->email)->send($correo);
-        return redirect()->route('correos.index')->with('aceptar', 'ok');
+//        $respuesta = $request->input('respuesta');
+//        dd($request);
+        //recuperar en una variable los datos enviados por javascript
+        $respuesta = $request->input('respuesta');
+//        dd($respuesta);
+        if ($respuesta == 'aceptar'){
+            $solicitud = Solicitud::find($id);
+            $publicacion = Publicacion::find($solicitud->id_publicacion);
+            $solicitante = User::all()->where('id', $solicitud->id_usuario)->first();
+    //        dd($solicitante);
+            $solicitud->estado_solicitud = 'Aceptado';
+            $solicitud->save();
+            $info = [
+                'solicitante' => $solicitante->name,
+                'titulo_pub' => $publicacion->titulo_publicacion,
+            ];
+            $correo = new AceptarSolicitudMailable($info);
+            Mail::to($solicitante->email)->send($correo);
+            return redirect()->route('correos.index')->with('aceptar', 'ok');
+        }elseif ($respuesta == 'rechazar'){
+            $solicitud = Solicitud::find($id);
+            $publicacion = Publicacion::find($solicitud->id_publicacion);
+            $solicitante = User::all()->where('id', $solicitud->id_usuario)->first();
+            $solicitud->estado_solicitud = 'Rechazado';
+            $solicitud->save();
+            $info = [
+                'solicitante' => $solicitante->name,
+                'titulo_pub' => $publicacion->titulo_publicacion,
+            ];
+            $correo = new RechazarSolicitudMailable($info);
+            Mail::to($solicitante->email)->send($correo);
+            return redirect()->route('correos.index')->with('rechazar', 'ok');
+        }
     }
 
     public function rechazar(Request $request, $id)

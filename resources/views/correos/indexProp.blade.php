@@ -5,11 +5,20 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>Solicitudes de alquileres</title>
+
+{{--    @vite(['resources/css/material-kit.css', 'resources/css/nucleo-icons.css','resources/css/nucleo-svg.css'])--}}
+{{--    <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>--}}
+{{--    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>--}}
 
     @vite(['resources/css/material-kit.css', 'resources/css/nucleo-icons.css','resources/css/nucleo-svg.css'])
     <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- Fonts -->
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900|Roboto+Slab:400,700" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/js/all.min.js" integrity="sha512-rpLlll167T5LJHwp0waJCh3ZRf7pO6IT1+LZOhAyP6phAirwchClbTZV3iqL3BMrVxIYRbzGTpli4rfxsCK6Vw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
 </head>
 <body>
 
@@ -37,13 +46,12 @@
                             </div>
                         </div>
 
-
                         <div class="table-responsive">
                             <table class="table align-items-center mb-0">
                                 <thead>
                                 <tr>
-                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-15">Publicacion solicitada</th>
-                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-15 ps-2">Estado de solicitud</th>
+                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-15">Publicacion solicitada</th>
+                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-15 ps-2">Estado de solicitud</th>
                                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-15">Solicitante</th>
                                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-15">Fecha de solicitud</th>
 {{--                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-15">Tipo de contrato</th>--}}
@@ -56,62 +64,56 @@
                                 <tbody>
                                 @foreach($solicitudes as $solicitud)
                                     <tr style="height:100px">
-                                        <td>
+                                        <td class="align-middle text-center">
 {{--                                            @foreach($solicitudes as $solicitud)--}}
                                                 @foreach($publicaciones as $publicacion)
                                                     @if($publicacion->id == $solicitud->id_publicacion)
                                                         <div class="d-flex flex-column justify-content-center">
-                                                            <h6 class="mb-0">{{$publicacion->titulo_publicacion}}</h6>
+{{--                                                            <h6 class="mb-0">{{$publicacion->titulo_publicacion}}</h6>--}}
+                                                            <span class="text-dark text-lg font-weight-bold">{{$publicacion->titulo_publicacion}} </span>
                                                         </div>
                                                     @endif
                                                 @endforeach
 {{--                                            @endforeach--}}
                                         </td>
-                                        <td>
-{{--                                            @foreach($solicitudes as $solicitud)--}}
-                                                    <div class="d-flex flex-column justify-content-center">
-{{--                                                            @if($solicitud->estado_solicitud == 0)--}}
-{{--                                                            <span class="badge bg-gradient-success">Pendiente</span>--}}
-{{--                                                            @endif--}}
-                                                        <span class="badge bg-gradient-success">{{$solicitud->estado_solicitud}}</span>
-
-                                                    </div>
-{{--                                            @endforeach--}}
+                                        <td class="align-middle text-center">
+                                            <span class="badge bg-gradient-success">{{$solicitud->estado_solicitud}}</span>
                                         </td>
-                                        <td>
+                                        <td class="align-middle text-center">
 {{--                                            @foreach($solicitudes as $solicitud)--}}
                                                 @foreach($usuarios as $user)
                                                     @if($user->id == $solicitud->id_usuario)
-                                                        <div class="d-flex flex-column justify-content-center">
-                                                            <h6 class="mb-0">{{$user->name}}</h6>
-                                                        </div>
+{{--                                                        <div class="d-flex flex-column justify-content-center">--}}
+{{--                                                            <h6 class="mb-0">{{$user->name}}</h6>--}}
+                                                    <span class="text-dark text-lg font-weight-normal">{{$user->name}}</span>
+                                                    {{--                                                        </div>--}}
                                                     @endif
                                                 @endforeach
 {{--                                            @endforeach--}}
                                         </td>
-                                        <td>
+                                        <td class="align-middle text-center">
 {{--                                            @foreach($solicitudes as $solicitud)--}}
-                                                <div class="d-flex flex-column justify-content-center">
-                                                    <h6 class="mb-0">{{$solicitud->created_at->format('d-m-Y')}}</h6>
-                                                </div>
+{{--                                                <div class="d-flex flex-column justify-content-center">--}}
+{{--                                                    <h6 class="mb-0">{{$solicitud->created_at->format('d-m-Y')}}</h6>--}}
+                                            <span class="text-secondary text-sm font-weight-normal">{{$solicitud->created_at->format('d-m-Y')}}</span>
+
+                                            {{--                                                </div>--}}
 {{--                                            @endforeach--}}
                                         </td>
-                                        <td
-                                            class="align-middle text-center text-sm">
-{{--                                            <a href="{{route('correos.update',$solicitud->id)}}" class="btn btn-success">Aceptar</a>--}}
+                                        <td class="align-middle text-center text-sm">
                                             <form action="{{route('correos.update',$solicitud->id)}}" method="POST">
                                                 @csrf
                                                 @method('Patch')
-                                                <button type="submit" class="btn btn-success">Aceptar</button>
+                                                <input type="hidden" name="respuesta" value="aceptar">
+                                                <button type="submit" class="fa-solid fa-check fa-lg" style="color: #4fa952" data-toggle="tooltip" title="Aceptar solicitud"></button>
                                             </form>
                                         </td>
-                                        <td
-                                            class="align-middle text-center text-sm">
-{{--                                            <a href="#" class="btn btn-danger">Rechazar</a>--}}
+                                        <td class="align-middle text-center text-sm">
                                             <form action="{{route('correos.update',$solicitud->id)}}" method="POST">
                                                 @csrf
                                                 @method('Patch')
-                                                <button type="submit" class="btn btn-danger">Rechazar</button>
+                                                <input type="hidden" name="respuesta" value="rechazar">
+                                                <button type="submit" class="fa-solid fa-xmark fa-lg" style="color: red" data-toggle="tooltip" title="Definir contrato"></button>
                                             </form>
                                         </td>
                                     </tr>
