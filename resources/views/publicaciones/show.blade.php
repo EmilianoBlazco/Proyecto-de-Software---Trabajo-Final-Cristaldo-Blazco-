@@ -243,7 +243,49 @@
 
 
                                 @elseif($publicacion->estado_publicacion == "Alquilado")
-                                    <input type="number">
+
+{{--                                    si existe la variable de session pagado--}}
+                                    @if (Session::has('pagado'))
+
+                                         @if(Session::get('pagado') === true)
+                                            <div class="alert alert-success" role="alert">
+                                                <h6 class="alert-heading">Su factura fue pagada!</h6>
+                                            </div>
+                                        @elseif(Session::get('pagado') === false)
+
+                                            <form action="{{ route('facturas.validar')}}" method="post" enctype="multipart/form-data">
+                                                @csrf
+                                                <div class="form-group">
+                                                    <label for="imagen"></label>
+                                                    <input type="file" class="form-control-file" id="imagen" name="imagen" required>
+                                                    <input type="hidden" name="id_publicacion" value="{{$publicacion->id}}">
+                                                </div>
+
+                                                <button type="submit" class="btn btn-primary">Verificar pago de factura</button>
+                                            </form>
+
+                                            <div class="alert alert-danger" role="alert">
+                                                <h6 class="alert-heading">Su factura no fue pagada!</h6>
+                                            </div>
+                                        @endif
+                                    @elseif(Session::get('pagado') === null)
+
+                                        <form action="{{ route('facturas.validar')}}" method="post" enctype="multipart/form-data">
+                                            @csrf
+                                            <div class="form-group">
+                                                <label for="imagen"></label>
+                                                <input type="file" class="form-control-file" id="imagen" name="imagen" required>
+                                                <input type="hidden" name="id_publicacion" value="{{$publicacion->id}}">
+                                            </div>
+
+                                            <button type="submit" class="btn btn-primary">Verificar pago de factura</button>
+                                        </form>
+
+
+                                        <div class="alert alert-warning" role="alert">
+                                            <h6 class="alert-heading">Su factura aún no ha sido pagada!</h6>
+                                        </div>
+                                    @endif
 
                                 @endif
                                 {{--           -----------------ACÁ VA EL BOTÓN DE MERCADO PAGO-----------------------------------------------------------}}
@@ -442,6 +484,17 @@
                     </div>
                 </div>
             </div>
+
+
+
+            <div class="row">
+                <div class="col-12">
+                    <a href="https://t.me/EasyRentBot" target="_blank" class="boton-telegram" style="position: fixed; bottom: 0; right: 0; z-index: 9999; margin: 25px ;">
+                        <i class="fa fa-telegram fa-4x" aria-hidden="true"></i>
+                    </a>
+                </div>
+            </div>
+
 
 {{--         Calficiacion y comentario       --}}
             <style>

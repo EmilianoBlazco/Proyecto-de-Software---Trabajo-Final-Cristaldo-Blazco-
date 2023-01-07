@@ -144,6 +144,7 @@ class PublicacionController extends Controller
 //            session()->forget('aceptado');
         }
 //        dd($caracteristicaComodidades);
+//        $pagado =null;
 
         return view('publicaciones.show',compact('publicacion', 'imagenes', 'ratings', 'solicitud'));
 //        return view('publicaciones.show',['publicacion'=> $publicacion]);

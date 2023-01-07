@@ -6,6 +6,7 @@ use App\Http\Controllers\CharjsController;
 use App\Http\Controllers\ContratoController;
 use App\Http\Controllers\CorreoController;
 use App\Http\Controllers\EncuestaController;
+use App\Http\Controllers\FacturasController;
 use App\Http\Controllers\OCRController;
 use App\Http\Controllers\PruebaController;
 use App\Http\Controllers\PublicacionController;
@@ -66,6 +67,10 @@ Route::delete('/registroPropiedad/{publicacion}',[PublicacionController::class, 
 //Pagina de Publicaciones admin
 Route::get('/admin/publicaciones',[PublicacionController::class,'publicacionesAdmin'])->name('admin.publicacionesIndex');
 
+
+//Pagina de facturas
+Route::post('/registroPropiedad',[FacturasController::class, 'validarFactura'])->name('facturas.validar');//Almacenar en la base de datos
+
 //Pagina de Rating
 Route::post('/registroPropiedad/{publicacion}',[RatingController::class, 'store'])->name('rating.store');//Almacenar en la base de datos
 //Pagina rating admin
@@ -119,7 +124,7 @@ Route::post('/encuestas',[EncuestaController::class,'store'])->name('encuesta.st
 
 //ruta de pruebas
 Route::get('/prueba',[PruebaController::class, 'index'])->name('prueba.index');//Pagina principal para ver los correos registrados
-Route::post('/prueba',[PruebaController::class, 'extraerTexto'])->name('prueba.store');//Pagina principal para ver los correos registrados
+Route::post('/prueba',[PruebaController::class, 'enviarMensaje'])->name('prueba.store');//Pagina principal para ver los correos registrados
 
 
 //Ruta para webhooks

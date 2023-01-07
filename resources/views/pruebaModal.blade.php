@@ -6,49 +6,16 @@
 </head>
 <body>
 <div class="container mt-5">
-    <form action="{{ route('prueba.store') }}" method="post" enctype="multipart/form-data">
-        @csrf
-        <div class="form-group">
-            <label for="imagen">Imagen</label>
-            <input type="file" class="form-control-file" id="imagen" name="imagen" required>
-        </div>
-        <button type="submit" class="btn btn-primary">Extraer Texto</button>
-    </form>
-    @if (isset($texto))
-        <div class="card mt-5">
-            <div class="card-header">
-                Texto Extraído
-            </div>
-            <div class="card-body">
-                {{ $texto }}
-            </div>
-        </div>
-    @endif
-
-<h3>esto es {{$pagado}}</h3>
-
-    @if($pagado === true)
-{{--        mensaje de pago--}}
-        <div class="alert alert-success mt-5" role="alert">
-            <h4 class="alert-heading">Esta factura fue pagada!</h4>
-        </div>
-    @endif
-
-    @if($pagado === false)
-{{--        factura pagada--}}
-        <div class="alert alert-danger mt-5" role="alert">
-            <h4 class="alert-heading">Esta factura no se encuentra pagada!</h4>
-        </div>
-    @endif
 
 
 
 
-{{--    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#botModal">--}}
-{{--        Abrir bot de Telegram--}}
-{{--    </button>--}}
 
-    <!-- Button trigger modal -->
+
+
+
+
+        <!-- Button trigger modal -->
     <button type="button" class="btn btn-primary mt-4" data-bs-toggle="modal" data-bs-target="#botModal">
         Abrir bot de Telegram
     </button>
@@ -57,6 +24,7 @@
     <div class="modal fade" id="botModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
+
                 <form action="{{ route('prueba.store') }}" method="post" enctype="multipart/form-data">
                     @csrf
                     <div class="modal-header">
@@ -64,15 +32,16 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-    {{--                    text area para el bot--}}
+                        text area para el bot
 
                             <input type="text" name="mensaje" id="texto" class="form-control" placeholder="Escriba el texto">
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-    {{--                    boton de enviar--}}
+                        boton de enviar
                         <button type="submit" class="btn btn-primary">Enviar</button>
                     </div>
+
                 </form>
             </div>
         </div>
