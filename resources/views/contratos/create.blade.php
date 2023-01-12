@@ -224,29 +224,61 @@
                                 <h4 class="multisteps-form__title">Aqui puede escribir otros terminos y condiciones que tendra el contrato</h4>
                                 <div class="multisteps-form__content">
 
-                                    <div class="mt-3">
-                                        <div class="input-group input-group-outline my-3 is-focused">
-            {{--                                <label class="form-label">Descripción de la publicación (*)</label>--}}
-                                            <textarea class="form-control" name="condiciones" id="inputCondiciones">
-                                                {{old('condiciones')}}
-                                            </textarea>
-                                        </div>
-                                        <div class="text-danger" id="divCondiciones"></div>
-                                    </div>
 
-                                    <div class="row my-2">
-                                        <h6 class="text-center mx-2" >Ejemplo de carga de terminos y condiciones extras</h6>
-                                        <p class="text-info text-sm my-1 bg-yellow-100 text-grey">
-                                            (1) <b>Debe</b> utilizar <b>numeros</b> para iniciar cada condicion, <b>seguida de un punto(3.)</b>, luego escribir la condicion.
-                                            <br>
-                                            (2) <b>Debe</b> colocar un <b>punto(.) final</b> para cada terminar cada condicion.
-                                        </p>
-                                        <div class="form-group">
-                                            <div class="form-control">
-                                                <textarea class="w-full" disabled placeholder="1.Este contrato se firmara por un plazo de 12 meses, a partir de la fecha de firma del mismo." ></textarea>
+
+                                    <section>
+                                        <div class="container py-4">
+                                            <div class="row">
+                                                <div id="padre" class="col-lg-10 mx-auto d-flex justify-content-center flex-column">
+{{--                                                    <h1 class="text-center">CLAUSULAS</h1>--}}
+
+                                                    <div class="row py-2 mt-5">
+                                                        <h7 class="text-dark">Clausula 1</h7>
+                                                        <div class="input-group input-group-dynamic mb-4">
+                                                            <textarea class="form-control" id="clausula1" rows="3" name="clausula1"></textarea>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-10 mx-auto d-flex justify-content-center flex-column">
+                                                    <button id="agregar" class="btn btn-primary btn-round" type="button">Agregar cláusula</button>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    </section>
+
+
+
+
+
+
+
+
+
+
+
+{{--                                    <div class="mt-3">--}}
+{{--                                        <div class="input-group input-group-outline my-3 is-focused">--}}
+{{--            --}}{{--                                <label class="form-label">Descripción de la publicación (*)</label>--}}
+{{--                                            <textarea class="form-control" name="condiciones" id="inputCondiciones">--}}
+{{--                                                {{old('condiciones')}}--}}
+{{--                                            </textarea>--}}
+{{--                                        </div>--}}
+{{--                                        <div class="text-danger" id="divCondiciones"></div>--}}
+{{--                                    </div>--}}
+
+{{--                                    <div class="row my-2">--}}
+{{--                                        <h6 class="text-center mx-2" >Ejemplo de carga de terminos y condiciones extras</h6>--}}
+{{--                                        <p class="text-info text-sm my-1 bg-yellow-100 text-grey">--}}
+{{--                                            (1) <b>Debe</b> utilizar <b>numeros</b> para iniciar cada condicion, <b>seguida de un punto(3.)</b>, luego escribir la condicion.--}}
+{{--                                            <br>--}}
+{{--                                            (2) <b>Debe</b> colocar un <b>punto(.) final</b> para cada terminar cada condicion.--}}
+{{--                                        </p>--}}
+{{--                                        <div class="form-group">--}}
+{{--                                            <div class="form-control">--}}
+{{--                                                <textarea class="w-full" disabled placeholder="1.Este contrato se firmara por un plazo de 12 meses, a partir de la fecha de firma del mismo." ></textarea>--}}
+{{--                                            </div>--}}
+{{--                                        </div>--}}
+{{--                                    </div>--}}
 
                                 </div>
                                 <div class="button-row d-flex mt-4 ">
@@ -269,6 +301,58 @@
     </div>
 
     </body>
+
+    <script>
+        let agregar = document.getElementById('agregar');
+        let div =document.getElementById('padre');
+
+        let clausula = 1;
+        agregar.addEventListener("click", function () {
+            clausula++;
+            let divrow = document.createElement("div");
+            divrow.setAttribute("class", "row py-2 mt-5");
+            let h7 = document.createElement("h7");
+            h7.setAttribute("class", "text-dark");
+            h7.innerHTML = "Clausula "+clausula;
+            let divinput = document.createElement("div");
+            divinput.setAttribute("class", "input-group input-group-dynamic mb-4");
+            let textarea = document.createElement("textarea");
+            textarea.setAttribute("class", "form-control");
+            textarea.setAttribute("id", "clausula"+clausula);
+            textarea.setAttribute("name", "clausula"+clausula);
+            textarea.setAttribute("rows", "3");
+            divinput.appendChild(textarea);
+            divrow.appendChild(h7);
+            divrow.appendChild(divinput);
+            div.appendChild(divrow);
+            // agregar boton eliminar
+            let button = document.createElement("button");
+            button.setAttribute("class", "btn btn-danger btn-round");
+            button.setAttribute("id", "eliminar-"+clausula);
+            button.innerHTML = "Eliminar";
+            divinput.appendChild(button);
+
+
+            button.addEventListener("click", function(){
+                let id = this.getAttribute("id").replace("eliminar-","");
+                let textarea = document.getElementById("clausula"+ id);
+                //Eliminar todo el div row
+                textarea.parentNode.parentNode.remove();
+                this.remove();
+                // cambiar el nombre de la clausula y de los id de los textarea
+                for (let i = id; i < clausula; i++) {
+                    let textarea = document.getElementById("clausula"+(parseInt(i)+1));
+                    textarea.setAttribute("id", "clausula"+i);
+                    textarea.setAttribute("name", "clausula"+i);
+                    let h7 = textarea.parentNode.parentNode.firstChild;
+                    h7.innerHTML = "Clausula "+i;
+                    let button = textarea.nextSibling;
+                    button.setAttribute("id", "eliminar-"+i);
+                }
+                clausula--;
+            });
+        });
+    </script>
 
     <script>
         $(document).ready(function () {

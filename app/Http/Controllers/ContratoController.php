@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\CaracteristicaComodidad;
 use App\Models\Ciudad;
+use App\Models\ClausulasContrato;
 use App\Models\Comodidad;
 use App\Models\Contrato;
 use App\Models\DatosExtraUsuarios;
@@ -47,7 +48,7 @@ class ContratoController extends Controller
 //        dd($publicacion->titulo_publicacion .' contrato');
         $contrato = new Contrato();
         $contrato->titulo_contrato = $publicacion->titulo_publicacion . ' contrato';
-        $contrato->descripcion_contrato = $request->condiciones;
+//        $contrato->descripcion_contrato = $request->condiciones;
         $contrato->tipo_contrato = 1; //definido por el usuario
         $contrato->monto_contrato = $publicacion->precio_publicacion;
         $contrato->fecha_inicial_pago_contrato = $request->fechaInicio;
@@ -66,6 +67,19 @@ class ContratoController extends Controller
 
 
         $contrato->save();
+
+//        guardar los campos de clausulas
+//        recorrer los campos de clausulas y guardarlos en la tabla clausulas con el name="clausulaX" x va de 1 a 10
+        for ($i = 1; $i <= 10; $i++) {
+            if ($request->input('clausula' . $i) != null) {
+                $clausula = new ClausulasContrato();
+                $clausula->clausula = $request->input('clausula' . $i);
+                $clausula->id_clausula = $contrato->id;
+                $clausula->save();
+            }
+        }
+        dd($request->all());
+
 
         return redirect()->route('contratos.index')->with('contrato', 'ok');
     }

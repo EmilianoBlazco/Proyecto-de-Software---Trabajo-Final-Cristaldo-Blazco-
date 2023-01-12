@@ -56,8 +56,7 @@
                     <!--form panels-->
                     <div class="row">
                         <div class="col-12 col-lg-8 m-auto">
-                            <form class="multisteps-form__form" action="{{route('publicaciones.store')}}" method="POST"
-                                  enctype="multipart/form-data" id="form">
+                            <form class="multisteps-form__form" action="{{route('publicaciones.store')}}" method="POST" enctype="multipart/form-data" id="form">
                                 @csrf
 
                                 <!--PANEL TIPO DE PROPIEDAD-->

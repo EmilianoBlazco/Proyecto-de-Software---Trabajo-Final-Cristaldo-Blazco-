@@ -510,13 +510,24 @@
 
 
 
-            <div class="row">
-                <div class="col-12">
-                    <a href="https://t.me/EasyRentBot" target="_blank" class="boton-telegram" style="position: fixed; bottom: 0; right: 0; z-index: 9999; margin: 25px ;">
-                        <i class="fa fa-telegram fa-4x" aria-hidden="true"></i>
-                    </a>
+            @if($publicacion->id_usuario == Auth::user()->id)
+                <div class="row">
+                    <div class="col-12">
+                        <a href="{{route('preguntas.index',$publicacion)}}" target="_blank" class="boton-telegram" style="position: fixed; bottom: 0; right: 0; z-index: 9999; margin: 25px ;">
+                            <i class="fas fa-user-tie fa-4x" aria-hidden="true"> </i>
+                        </a>
+                    </div>
                 </div>
-            </div>
+            @else
+                <div class="row">
+                    <div class="col-12">
+                        <a href="https://t.me/EasyRentBot" target="_blank" class="boton-telegram" style="position: fixed; bottom: 0; right: 0; z-index: 9999; margin: 25px ;">
+                            <i class="fa fa-telegram fa-4x" aria-hidden="true"></i>
+                        </a>
+                    </div>
+                </div>
+            @endif
+
 
 
 {{--         Calficiacion y comentario       --}}

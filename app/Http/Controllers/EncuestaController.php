@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\CaracteristicaComodidad;
 use App\Models\CaracteristicaEsperada;
 use App\Models\Comodidad;
+use App\Models\Publicacion;
 use App\Models\TipoInquilino;
 use App\Models\TipoPropiedad;
 use Illuminate\Http\Request;
@@ -52,5 +53,18 @@ class EncuestaController extends Controller
         $encuesta->tipo_inquilino()->attach($request->input('inquilinos'));
 
         return redirect()->route('dashboard')->with('encuesta', 'ok');
+    }
+
+
+    public function preguntasFrecuentes(Publicacion $publicacion)
+    {
+        return view('preguntasFrecuentes.index', compact('publicacion'));
+    }
+
+    public function storePreguntasFrecuentes(Publicacion $publicacion)
+    {
+
+//        redireccionar con la variable publicacion
+        return redirect()->route('publicaciones.show', compact('publicacion'));
     }
 }

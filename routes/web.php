@@ -143,6 +143,9 @@ Route::get('/prueba',[PruebaController::class, 'index'])->name('prueba.index');/
 Route::post('/prueba',[PruebaController::class, 'enviarMensaje'])->name('prueba.store');//Pagina principal para ver los correos registrados
 
 
+Route::get('/registroPropiedad/{publicacion}/preguntas',[EncuestaController::class, 'preguntasFrecuentes'])->name('preguntas.index');//Pagina principal para ver las preguntas registradas
+Route::post('/registroPropiedad/{publicacion}/preguntas',[EncuestaController::class,'storePreguntasFrecuentes'])->name('preguntas.store');//Alcenar en la base de datos
+
 //Ruta para webhooks
 Route::post('/webhooks', WebHooksController::class);
 
