@@ -2,9 +2,11 @@
 
 use App\Http\Controllers\Admin\AuditoriaController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\AlquileresController;
 use App\Http\Controllers\CharjsController;
 use App\Http\Controllers\ContratoController;
 use App\Http\Controllers\CorreoController;
+use App\Http\Controllers\DatosExtraUsuariosController;
 use App\Http\Controllers\EncuestaController;
 use App\Http\Controllers\FacturasController;
 use App\Http\Controllers\OCRController;
@@ -14,6 +16,7 @@ use App\Http\Controllers\RatingController;
 use App\Http\Controllers\WebHooksController;
 use App\Http\Livewire\Contrato\CreateContrato;
 use App\Http\Livewire\Contrato\IndexContrato;
+use App\Http\Livewire\Contrato\ShowContrato;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -37,9 +40,9 @@ use Illuminate\Support\Facades\Route;
 //Pagina de Inicio
 Route::view('/','welcome')->name('inicio');
 
-//Prueba OCR
-Route::get('/ocr', [OCRController::class, 'ocr'])->name('ocr');
-Route::post('/upload', [OCRController::class, 'upload'])->name('upload');
+////Prueba OCR
+//Route::get('/ocr', [OCRController::class, 'ocr'])->name('ocr');
+//Route::post('/upload', [OCRController::class, 'upload'])->name('upload');
 
 //Pagina de Graficos
 Route::get('/admin/graficos',[CharjsController::class,'grafClientes'])->name('admin.graficos');
@@ -55,9 +58,18 @@ Route::post('/publicaciones/borrado/{id}/destroy',[PublicacionController::class,
 Route::get('/admin/auditoria', [AuditoriaController::class, 'index']) -> name('admin.auditoria');
 Route::get('/admin/auditoriamas/{auditoria}', [AuditoriaController::class, 'show']) -> name('admin.auditoriamas');
 
+//Pagina datos extra usuarios
+//Route::get('/datosExtraUsuarios',[DatosExtraUsuariosController::class,'index'])->name('datosExtraUsuarios.index');
+Route::get('/datosExtraUsuarios/create',[DatosExtraUsuariosController::class,'create'])->name('datosExtraUsuarios.create');
+Route::post('/datosExtraUsuarios',[DatosExtraUsuariosController::class,'store'])->name('datosExtraUsuarios.store');
+Route::get('/datosExtraUsuarios/{datosExtraUsuarios}',[DatosExtraUsuariosController::class,'show'])->name('datosExtraUsuarios.show');
+Route::get('/datosExtraUsuarios/{datosExtraUsuarios}/edit',[DatosExtraUsuariosController::class,'edit'])->name('datosExtraUsuarios.edit');
+Route::put('/datosExtraUsuarios/{datosExtraUsuarios}',[DatosExtraUsuariosController::class,'update'])->name('datosExtraUsuarios.update');
+
 //Pagina de Publicaciones
 Route::get('/registroPropiedad',[PublicacionController::class, 'index'])->name('publicaciones.index');//Pagina principal para el registro de propiedad
 Route::get('/registroPropiedad/create',[PublicacionController::class, 'create'])->name('publicaciones.create');//Crear Publicacion
+Route::post('/registroPropiedad',[FacturasController::class, 'validarFactura'])->name('facturas.validar');//Almacenar en la base de datos
 Route::post('/registroPropiedad',[PublicacionController::class,'store'])->name('publicaciones.store');//Alcenar en la base de datos
 Route::get('/registroPropiedad/{publicacion}',[PublicacionController::class, 'show'])->name('publicaciones.show');//Consultar Publicacion
 Route::get('/registroPropiedad/{publicacion}/edit',[PublicacionController::class, 'edit'])->name('publicaciones.edit');//Modificar Publicacion
@@ -69,13 +81,14 @@ Route::get('/admin/publicaciones',[PublicacionController::class,'publicacionesAd
 
 
 //Pagina de facturas
-Route::post('/registroPropiedad',[FacturasController::class, 'validarFactura'])->name('facturas.validar');//Almacenar en la base de datos
 
 //Pagina de Rating
 Route::post('/registroPropiedad/{publicacion}',[RatingController::class, 'store'])->name('rating.store');//Almacenar en la base de datos
 //Pagina rating admin
 Route::get('/admin/rating',[RatingController::class, 'index'])->name('admin.rating');//Pagina principal para el registro de propiedad
 Route::patch('/admin/rating/{rating}',[RatingController::class, 'update'])->name('admin.rating.update');//Eliminar Rating
+
+//Route::get('/datosExtraUsuarios/create',[DatosExtraUsuarios::class,'create'])->name('datosExtraUsuarios.create');
 
 
 
@@ -88,21 +101,24 @@ Route::patch('/admin/rating/{rating}',[RatingController::class, 'update'])->name
 
 
 //Pagina de Contratos
-//Route::get('/contratos',[ContratoController::class, 'index'])->name('contratos.index');//Pagina principal para ver los contratos registrados
-//Route::get('/contratos/create',[ContratoController::class, 'create'])->name('contratos.create');//Crear Contrato
-//Route::post('/contratos',[ContratoController::class,'store'])->name('contratos.store');//Alcenar en la base de datos
-//Route::get('/contratos/{contrato}',[ContratoController::class, 'show'])->name('contratos.show');//Consultar Contrato
-//Route::get('/contratos/{contrato}/edit',[ContratoController::class, 'edit'])->name('contratos.edit');//Modificar Contrato
-//Route::patch('/contratos/{contrato}',[ContratoController::class, 'update'])->name('contratos.update');//Cambiar en BD Contrato
-//Route::delete('/contratos/{contrato}',[ContratoController::class, 'destroy'])->name('contratos.destroy');//Eliminar Contrato
+Route::get('/contratos',[ContratoController::class, 'index'])->name('contratos.index');//Pagina principal para ver los contratos registrados
+Route::get('/contratos/create',[ContratoController::class, 'create'])->name('contratos.create');//Crear Contrato
+Route::post('/contratos',[ContratoController::class,'store'])->name('contratos.store');//Alcenar en la base de datos
+Route::get('/contratos/{contrato}',[ContratoController::class, 'show'])->name('contratos.show');//Consultar Contrato
+Route::get('/contratos/{contrato}/edit',[ContratoController::class, 'edit'])->name('contratos.edit');//Modificar Contrato
+Route::patch('/contratos/{contrato}',[ContratoController::class, 'update'])->name('contratos.update');//Cambiar en BD Contrato
+Route::delete('/contratos/{contrato}',[ContratoController::class, 'destroy'])->name('contratos.destroy');//Eliminar Contrato
 
 //Pagina de Contratos livewire
-Route::get('/contratos',IndexContrato::class)->name('contratos.index');//Pagina principal para ver los contratos registrados
-Route::get('/contratos/create',CreateContrato::class)->name('contratos.create');//Crear Contrato
+//Route::get('/contratos',IndexContrato::class)->name('contratos.index');//Pagina principal para ver los contratos registrados
+//Route::get('/contratos/create',CreateContrato::class)->name('contratos.create');//Crear Contrato
+//Route::get('/contratos/{contrato}',ShowContrato::class)->name('contratos.show');//Consultar Contrato
 
 
 //Pagina de Alquileres
-Route::view('/alquileres','alquileres')->name('alquileres');
+//Route::view('/alquileres','alquileres')->name('alquileres');
+Route::get('/alquileres',[AlquileresController::class, 'index'])->name('alquileres.index');//Pagina principal para ver los alquileres registrados
+
 
 //Pagina de Correos
 Route::get('/correosp',[CorreoController::class, 'indexprop'])->name('correos.index');//Pagina principal para ver los correos registrados

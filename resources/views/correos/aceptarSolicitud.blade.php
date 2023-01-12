@@ -17,8 +17,8 @@
             La solicitud de alquiler de la propiedad <b>{{$info['titulo_pub']}}</b> ha sido <b>Aceptada!!!</b>.
         </p>
         <p>
-            En breves momentos se le habilitara la disponibilidad de la propiedad para que pueda realizar el pago desde la plataforma.
-            Para hacerlo debe dirigirse a la seccion de <b>alquileres</b> y seleccionar la publicacion para la cual realizo la solicitud.
+            De ahora en más comenzará el proceso de definición de contrato.
+            Este proceso puede tomar hasta 3 días y puede ver los detalles en la plataforma ingresando con su cuenta en <a href="http://localhost:8000">Easy-Rent</a>.
         </p>
 
         <p>Saludos cordiales.</p>

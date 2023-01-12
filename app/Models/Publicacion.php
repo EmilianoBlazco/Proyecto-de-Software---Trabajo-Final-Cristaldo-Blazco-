@@ -100,11 +100,6 @@ class Publicacion extends Model implements Auditable
 		return $this->belongsTo(Ciudad::class, 'id_ciudad');
 	}
 
-	public function provincia()
-	{
-		return $this->belongsTo(Provincia::class, 'id_provincia');
-	}
-
 	public function tipo_propiedad()
 	{
 		return $this->belongsTo(TipoPropiedad::class, 'id_tipo_propiedad');

@@ -3,6 +3,7 @@
 
         @vite(['resources/css/material-kit.css', 'resources/css/nucleo-icons.css','resources/css/nucleo-svg.css'])
         <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
+        <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
         <x-slot name="title">Registrar Contrato</x-slot>
 
@@ -29,6 +30,7 @@
                                         <input class="form-control" placeholder="Buscar" type="text" wire:model="buscar" >
                                     </div>
                                     <div>
+                                        <a href="{{route('publicaciones.index')}}" class="btn btn-primary">Regresar a la lista de publicaciones</a>
                                         <a href="{{route('contratos.create')}}" class="btn btn-primary">Definir un nuevo contrato</a>
                                     </div>
                                 </div>
@@ -39,8 +41,8 @@
                                     <table class="table align-items-center mb-0">
                                         <thead>
                                         <tr>
-                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-15">Contrato</th>
-                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-15 ps-2">Tipo</th>
+                                            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-15">Contrato</th>
+                                            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-15 ps-2">Tipo</th>
                                             <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-15">Estado</th>
                                             <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-15">Fecha de celebracion</th>
                                             {{--                                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-15">Tipo de contrato</th>--}}
@@ -53,47 +55,55 @@
                                         <tbody>
 
                                         @foreach($contratos as $contrato)
+{{--                                            @livewire('contrato.show-contrato', ['contrato' => $contrato], key($contrato->id));--}}
                                             <tr style="height:100px">
-                                                <td>
+                                                <td class="align-middle text-center">
                                                     <div class="d-flex px-2 py-1">
-                                                        <p class="text-sm font-weight-bold mb-0">{{$contrato->titulo_contrato}}</p>
-                                                        {{--                                                <div class="">--}}
-                                                        {{--                                                    <img src="--}}
-                                                        {{--                                                    @foreach($imagenes as $imagen)--}}
-                                                        {{--                                                    @if($imagen->id_publicacion == $publicacion->id)--}}
-                                                        {{--                                                        {{asset($imagen->url_imagen)}}--}}
-                                                        {{--                                                        @break--}}
-                                                        {{--                                                    @endif--}}
-                                                        {{--                                                    @endforeach"--}}
-                                                        {{--                                                    class="avatar avatar-sm me-3" alt="user1">--}}
-                                                        {{--                                                </div>--}}
                                                         <div class="d-flex flex-column justify-content-center">
                                                             {{--                                                       aca va lo de show--}}
+{{--                                                            <p class="text-sm font-weight-bold mb-0">{{$contrato->titulo_contrato}}</p>--}}
+{{--                                                            <span class="text-dark text-lg font-weight-bold">{{$contrato->titulo_contrato}}</span>--}}
+                                                            <h3 class="mb-0">
+                                                                <a wire:click="showModal({{$contrato->id}})" target="_blank" title="{{$contrato->titulo_contrato}}" class="hover">
+                                                                    {{substr($contrato->titulo_contrato,0,17)}}
+                                                                    @if(strlen($contrato->titulo_contrato)>17)...@endif
+                                                                </a>
+                                                            </h3>
+{{--                                                            <button type="button" class="btn btn-primary" wire:click="emitTo('contrato.show-contrato,'mostrar')">Mostrar contrato</button>--}}
+{{--                                                            @livewire('contrato.show-contrato', ['contrato' => $contrato], key($contrato->id))--}}
                                                         </div>
                                                     </div>
                                                 </td>
-                                                <td>
-                                                    {{--                                            @foreach($tiposPropiedades as $tipo)--}}
-                                                    {{--                                                @if($tipo->id == $publicacion->id_tipo_propiedad)--}}
-                                                    {{--                                                    <p class="text-xs font-weight-bold mb-0">{{$tipo->nombre_tipo_propiedad}}</p>--}}
-                                                    {{--                                                @endif--}}
-                                                    {{--                                            @endforeach--}}
-
+                                                <td class="align-middle text-center">
+                                                    @if($contrato->tipo_contrato == 1)
+{{--                                                        <p class="text-xs font-weight-bold mb-0">Generado por el propietario</p>--}}
+                                                        <span class="badge bg-gradient-success">Generado por el propietario</span>
+                                                    @else
+{{--                                                        <p class="text-xs font-weight-bold mb-0">Autogenerado</p>--}}
+                                                        <span class="badge bg-gradient-warning">Autogenerado</span>
+                                                    @endif
                                                 </td>
                                                 <td class="align-middle text-center">
-                                                    {{--                                            <span class="badge bg-gradient-success">{{$publicacion->estado_publicacion}}</span>--}}
-                                                </td>
-                                                {{--                                        <td class="align-middle text-center">--}}
-                                                {{--                                            <span class="text-secondary text-xs font-weight-normal">420(Ver si implementar)</span>--}}
-                                                {{--                                        </td>--}}
-                                                <td class="align-middle text-center">
-                                                    {{--                                            <span class="text-secondary text-xs font-weight-normal">{{$publicacion->created_at->format('d-m-Y')}}</span>--}}
+                                                    @if($contrato->baja_contrato == null)
+                                                        <span class="badge bg-gradient-success">Vigente</span>
+                                                    @elseif($contrato->baja_contrato != null)
+                                                        <span class="badge bg-gradient-danger">Dado de baja</span>
+                                                    @endif
                                                 </td>
                                                 <td class="align-middle text-center">
-                                                    <span class="badge bg-gradient-success">XXXXX</span>
+                                                    @if($contrato->fecha_inicio_contrato == null)
+                                                        <span class="text-secondary text-xs font-weight-normal">Todavia no se asocio a un usuario</span>
+                                                    @elseif($contrato->fecha_inicio_contrato != null)
+                                                        {{$fecha = $contrato->fecha_inicio_contrato}}
+                                                        {{$timestamp = DateTime::createFromFormat($fecha, 'Y-m-d')}}
+                                                        <span class="text-secondary text-xs font-weight-normal">{{$timestamp}}</span>
+                                                    @endif
                                                 </td>
+{{--                                                <td class="align-middle text-center">--}}
+{{--                                                    <span class="badge bg-gradient-success">XXXXX</span>--}}
+{{--                                                </td>--}}
                                                 <td class="align-middle">
-                                                    <a href="#" class="fas fa-edit" data-toggle="tooltip" data-original-title="Editar"></a>
+                                                    <a href="javascript:void(0)" class="fas fa-edit" data-toggle="tooltip" data-original-title="Editar"></a>
                                                     {{--                                                {{route('publicaciones.edit',$publicacion)}}--}}
                                                     {{--                                                <a href="{{route('contratos.edit',$contrato)}}" class="fas fa-edit" data-toggle="tooltip" title="Editar contrato"></a>--}}
 
@@ -124,5 +134,16 @@
             </div>
         </div>
         </body>
+        <script src="http://code.jquery.com/jquery-3.4.0.min.js" integrity="sha256-BJeo0qm959uMBGb65z40ejJYGSgR7REI4+CW1fNKwOg=" crossorigin="anonymous"></script>
+
+        @if(session('contrato') == 'ok')
+            <script>
+                Swal.fire(
+                    'Creado!',
+                    'Se creo de manera exitosa su contrato.',
+                    'success'
+                )
+            </script>
+        @endif
     </x-app-layout>
 </div>

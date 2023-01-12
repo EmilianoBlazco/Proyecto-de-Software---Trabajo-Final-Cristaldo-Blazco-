@@ -7,6 +7,7 @@
     "require": {
         "php": "^8.0.2",
         "barryvdh/laravel-dompdf": "^2.0",
+        "barryvdh/laravel-translation-manager": "^0.6.3",
         "google/cloud-vision": "^1.6",
         "guzzlehttp/guzzle": "^7.2",
         "jeroennoten/laravel-adminlte": "^3.8",
@@ -16,6 +17,7 @@
         "laravel/tinker": "^2.7",
         "laravelcollective/html": "^6.3",
         "livewire/livewire": "^2.5",
+        "luecano/numero-a-letras": "^3.0",
         "mercadopago/dx-php": "^2.5",
         "owen-it/laravel-auditing": "^13.0",
         "smalot/pdfparser": "^2.2",

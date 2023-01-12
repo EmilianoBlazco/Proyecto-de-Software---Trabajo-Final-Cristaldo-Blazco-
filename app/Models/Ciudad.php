@@ -39,4 +39,15 @@ class Ciudad extends Model implements Auditable
 	{
 		return $this->hasMany(Publicacion::class, 'id_ciudad');
 	}
+
+    //una ciudad a una provincia
+    public function provincia()
+    {
+        return $this->belongsTo(Provincia::class, 'id_provincia');
+    }
+
+    public function datos_extra()
+    {
+        return $this->hasMany(Publicacion::class, 'id_ciudad');
+    }
 }

@@ -173,4 +173,12 @@ class User extends Authenticatable implements Auditable
     {
         return $this->hasOne(Encuesta::class, 'id_usuario');
     }
+
+    //uno a uno datos_extra_usuarios
+    public function datos_extra_usuarios()
+    {
+        return $this->hasOne(DatosExtraUsuario::class, 'id_usuario');
+    }
+
+
 }

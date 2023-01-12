@@ -47,6 +47,7 @@ class CorreoController extends Controller
         //crear una solicitud
         $solicitud = new Solicitud();
         $solicitud->id_publicacion = $publicacion->id;
+        $solicitud->id_propietario = $publicacion->id_usuario;
         $solicitud->id_usuario = $solicitante->id;
         $solicitud->estado_solicitud = 'Pendiente';
         $solicitud->save();

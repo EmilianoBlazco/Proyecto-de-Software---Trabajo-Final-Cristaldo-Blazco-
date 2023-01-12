@@ -181,79 +181,114 @@
                                 @if($publicacion->estado_publicacion == "Activo")
 {{--                                    <a href="{{route('correos.solicitud')}}" class="btn btn-primary btn-block col">Solicitar Alquiler</a>--}}
 {{--                                    <input type="month" >--}}
+                                    @if(Auth::user()->hasRole('inquilino'))
 
-                                @if($solicitud->estado_solicitud == "Nulo")
-                                        <form action="{{route('correos.solicitud')}}" method="Get">
-                                            @csrf
-                                            <input type="hidden" name="id_publicacion" value="{{$publicacion->id}}">
-                                            <input type="hidden" name="id_usuario" value="{{auth()->id()}}">
-                                            <input type="submit" class="btn btn-primary btn-block col" value="Solicitar Alquiler">
-                                        </form>
-                                @elseif($solicitud->estado_solicitud == "Rechazado")
-                                        <form action="{{route('correos.solicitud')}}" method="Get">
-                                            @csrf
-                                            <input type="hidden" name="id_publicacion" value="{{$publicacion->id}}">
-                                            <input type="hidden" name="id_usuario" value="{{auth()->id()}}">
-                                            <input type="submit" class="btn btn-primary btn-block col" value="Solicitar Alquiler">
-{{--                                            <p>--}}
-{{--                                            <hr>--}}
-{{--                                                <small class="text-danger">*Su solicitud fue rechazada.</small>--}}
-{{--                                            <br>--}}
-{{--                                                <small class="text-danger">*Si desea puede realizar otra solicitud, pero recomendamos que revise los terminos de la propiedad.</small>--}}
-{{--                                            <br>--}}
-{{--                                            <br>--}}
-{{--                                                <small class="text-danger">Gracias.</small>--}}
+                                        @if($solicitud->estado_solicitud == "Nulo")
+                                                <form action="{{route('correos.solicitud')}}" method="Get">
+                                                    @csrf
+                                                    <input type="hidden" name="id_publicacion" value="{{$publicacion->id}}">
+                                                    <input type="hidden" name="id_usuario" value="{{auth()->id()}}">
+                                                    <input type="submit" class="btn btn-primary btn-block col" value="Solicitar Alquiler">
+                                                </form>
+                                        @elseif($solicitud->estado_solicitud == "Rechazado")
+                                                <form action="{{route('correos.solicitud')}}" method="Get">
+                                                    @csrf
+                                                    <input type="hidden" name="id_publicacion" value="{{$publicacion->id}}">
+                                                    <input type="hidden" name="id_usuario" value="{{auth()->id()}}">
+                                                    <input type="submit" class="btn btn-primary btn-block col" value="Solicitar Alquiler">
+        {{--                                            <p>--}}
+        {{--                                            <hr>--}}
+        {{--                                                <small class="text-danger">*Su solicitud fue rechazada.</small>--}}
+        {{--                                            <br>--}}
+        {{--                                                <small class="text-danger">*Si desea puede realizar otra solicitud, pero recomendamos que revise los terminos de la propiedad.</small>--}}
+        {{--                                            <br>--}}
+        {{--                                            <br>--}}
+        {{--                                                <small class="text-danger">Gracias.</small>--}}
 
-{{--                                            </p>--}}
-                                            @if (session('rechazado') == 'ok')
-                                                <script>
-                                                    Swal.fire(
-                                                        'Su solicitud fue rechazada!',
-                                                        'Si desea puede realizar otra solicitud, pero recomendamos que revise los terminos de la propiedad.',
-                                                        'Error'
-                                                    )
-                                                </script>
-                                            @endif
-                                        </form>
-                                    @elseif($solicitud->estado_solicitud == "Aceptado")
-                                        <div class="cho-container"></div>
-{{--                                        <p>--}}
-{{--                                        <hr>--}}
-{{--                                        <small class="text-success">*Su solicitud fue aceptada.</small>--}}
-{{--                                        <br>--}}
-{{--                                        <small class="text-success">*Ya puede realizar el primer pago de la propiedad</small>--}}
-                                        @if (session('aceptado') == 'ok')
-                                            <script>
-                                                Swal.fire(
-                                                    'Su solicitud fue aceptada!',
-                                                    'Ya puede realizar el primer pago de la propiedad.',
-                                                    'Success'
-                                                )
-                                            </script>
+        {{--                                            </p>--}}
+                                                    @if (session('rechazado') == 'ok')
+                                                        <script>
+                                                            Swal.fire(
+                                                                'Su solicitud fue rechazada!',
+                                                                'Si desea puede realizar otra solicitud, pero recomendamos que revise los terminos de la propiedad.',
+                                                                'Error'
+                                                            )
+                                                        </script>
+                                                    @endif
+                                                </form>
+                                        @elseif($solicitud->estado_solicitud == "Aceptado")
+        {{--                                        si existen contratos--}}
+                                               @if($contratos->count() == 1)
+                                                    @if($contratos->first()->confirmacion_inquilino == 0)
+                                                        <div class="alert alert-default-info" role="alert">
+                                                            <h4 class="alert-heading text-success">Contrato Creado</h4>
+                                                            <p>Su contrato de locación ya fue creado</p>
+                                                            @if(isset($contrato_id))
+                                                                <p>Puede leerlo pulsando aquí: <a href="{{route('contratos.show',$contrato_id)}}">Leer Contrato</a> </p>
+                                                            @endif
+                                                            <hr>
+                                                            <p class="mb-0">Debera confirmar que acepta los términos y condiciones del mismo para asi habilitar el método de pago.</p>
+                                                            <p class="mb-0">Tiene un tiempo de 5 días para hacerlo <b>(Desde: </b>{{$contratos->first()->created_at->format('d-m-Y')}} <b>Hasta: </b>{{$contratos->first()->created_at->addDays(5)->format('d-m-Y')}}<b>)</b>.</p>
+                                                            <p class="mb-0">Pasado el plazo establecido, si no hubo confirmación, se dara como cancelado al contrato.</p>
+                                                        </div>
+                                                    @elseif($contratos->first()->confirmacion_inquilino == 1)
+                                                        <div class="cho-container"></div>
+                                                    @endif
+                                               @else
+                                                    <div class="alert alert-default-info" role="alert">
+                                                        <h4 class="alert-heading text-warning">Contrato en creación</h4>
+                                                        <p>Su solicitud de alquiler fue aceptada, pero debe esperar hasta que el propietario defina su contrato de locación</p>
+                                                        <hr>
+                                                        <p class="mb-0">Este proceso puede durar hasta 3 dias <b>(Desde: </b>{{now()->format('d-m-Y')}} <b>Hasta: </b>{{now()->addDays(3)->format('d-m-Y')}}<b>)</b>.</p>
+                                                        <p class="mb-0">Si el propietario no define el contrato en el tiempo estipulado se dara de baja su solicitud nuevamente.</p>
+                                                    </div>
+                                               @endif
+                                        @elseif($solicitud->estado_solicitud == "Pendiente")
+                                                <div class="alert alert-default-info" role="alert">
+                                                    <h4 class="alert-heading">Solicitud Pendiente</h4>
+                                                    <p>La solicitud de alquiler está pendiente de a probación por parte del propietario.</p>
+                                                    <hr>
+                                                    <p class="mb-0">Si el propietario no aprueba la solicitud en 5 dias, se cancelará automáticamente.</p>
+                                                </div>
                                         @endif
-
-                                    @elseif($solicitud->estado_solicitud == "Pendiente")
-                                        <div class="alert alert-default-info" role="alert">
-                                            <h4 class="alert-heading">Solicitud Pendiente</h4>
-                                            <p>La solicitud de alquiler está pendiente de a probación por parte del propietario.</p>
-                                            <hr>
-                                            <p class="mb-0">Si el propietario no aprueba la solicitud en 5 dias, se cancelará automáticamente.</p>
-                                        </div>
+                                    @elseif(Auth::user()->hasRole('propietario'))
+{{--                                        @if($solicitud->estado_solicitud == "Nulo")--}}
+{{--                                                <div class="alert alert-default-info" role="alert">--}}
+{{--                                                <h4 class="alert-heading">Atentos a las solicitudes de sus futuros inquilinos</h4>--}}
+{{--                                                <p>Eb caso de alguna actualización le esteremos informando.</p>--}}
+{{--                                            </div>--}}
+{{--                                        @endif--}}
                                     @endif
-
-
                                 @elseif($publicacion->estado_publicacion == "Alquilado")
 
-{{--                                    si existe la variable de session pagado--}}
-                                    @if (Session::has('pagado'))
+                                    @if(Auth::user()->hasRole('inquilino'))
+    {{--                                    si existe la variable de session pagado--}}
+                                        @if (Session::has('pagado'))
 
-                                         @if(Session::get('pagado') === true)
-                                            <div class="alert alert-success" role="alert">
-                                                <h6 class="alert-heading">Su factura fue pagada!</h6>
-                                            </div>
-                                        @elseif(Session::get('pagado') === false)
+                                             @if(Session::get('pagado') === true)
+                                                <div class="alert alert-success" role="alert">
+                                                    <h6 class="alert-heading">Su factura fue pagada!</h6>
+                                                </div>
+                                            @elseif(Session::get('pagado') === false)
+    {{--                                            poner ruta --}}
+                                                <form action="#" method="post" enctype="multipart/form-data">
+                                                    @csrf
+                                                    <div class="form-group">
+                                                        <label for="imagen"></label>
+                                                        <input type="file" class="form-control-file" id="imagen" name="imagen" required>
+                                                        <input type="hidden" name="id_publicacion" value="{{$publicacion->id}}">
+                                                    </div>
 
-                                            <form action="{{ route('facturas.validar')}}" method="post" enctype="multipart/form-data">
+                                                    <button type="submit" class="btn btn-primary">Verificar pago de factura</button>
+                                                </form>
+
+                                                <div class="alert alert-danger" role="alert">
+                                                    <h6 class="alert-heading">Su factura no fue pagada!</h6>
+                                                </div>
+                                            @endif
+                                        @elseif(Session::get('pagado') === null)
+
+                                            <form action="#" method="post" enctype="multipart/form-data">
                                                 @csrf
                                                 <div class="form-group">
                                                     <label for="imagen"></label>
@@ -264,27 +299,15 @@
                                                 <button type="submit" class="btn btn-primary">Verificar pago de factura</button>
                                             </form>
 
-                                            <div class="alert alert-danger" role="alert">
-                                                <h6 class="alert-heading">Su factura no fue pagada!</h6>
+
+                                            <div class="alert alert-warning" role="alert">
+                                                <h6 class="alert-heading">Su factura aún no ha sido pagada!</h6>
                                             </div>
                                         @endif
-                                    @elseif(Session::get('pagado') === null)
-
-                                        <form action="{{ route('facturas.validar')}}" method="post" enctype="multipart/form-data">
-                                            @csrf
-                                            <div class="form-group">
-                                                <label for="imagen"></label>
-                                                <input type="file" class="form-control-file" id="imagen" name="imagen" required>
-                                                <input type="hidden" name="id_publicacion" value="{{$publicacion->id}}">
-                                            </div>
-
-                                            <button type="submit" class="btn btn-primary">Verificar pago de factura</button>
-                                        </form>
-
-
-                                        <div class="alert alert-warning" role="alert">
-                                            <h6 class="alert-heading">Su factura aún no ha sido pagada!</h6>
-                                        </div>
+                                    @elseif(Auth::user()->hasRole('propietario'))
+                                        <h1>soy propietario xd</h1>
+{{--                                        si se puede hacer que mientras no este verificada la factura que le diga un mensaje que se esta esperando hasta que suba las facturas--}}
+{{--                                        despues cuandi se suba la facura y se pague decirle que se verifico la factura y esta pagado el alquiler--}}
                                     @endif
 
                                 @endif

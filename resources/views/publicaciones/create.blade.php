@@ -67,10 +67,7 @@
                                     <div class="multisteps-form__content">
 
                                         <div class="form-row mt-4 shadow-none p-3 mb-5 bg-light rounded">
-
-
-                                            <select class="multisteps-form__select form-control" name="tipo_propiedad"
-                                                    id="inputTipo">
+                                            <select class="multisteps-form__select form-control" name="tipo_propiedad" id="inputTipo">
                                                 <option value="" selected="selected">Seleccione el tipo de propiedad
                                                 </option>
                                                 @foreach($tiposPropiedad as $tipo_propiedad)
@@ -105,29 +102,6 @@
                                         {{--                                            <input class="form-control" name="calle" type="text" value="{{old('calle')}}">--}}
                                         {{--                                        </div>--}}
 
-                                        <div>
-                                            <div class="input-group input-group-outline my-3 ">
-                                                <label class="form-label">Calle (*)</label>
-                                                <input class="form-control" name="calle" type="text"
-                                                       value="{{old('calle')}}" id="inputCalle">
-                                            </div>
-                                            <div class="text-danger" id="divCalle"></div>
-                                        </div>
-
-                                        <div class="mt-5">
-                                            <div class="input-group input-group-outline my-3 ">
-                                                <label class="form-label">Altura (*)</label>
-                                                <input class="form-control" name="altura" type="number"
-                                                       value="{{old('altura')}}" id="inputAlturaPublicacion">
-                                            </div>
-                                            <div class="text-danger" id="divAltura"></div>
-                                        </div>
-
-                                        {{--                                        <div class="input-group input-group-outline mt-5 bg-light rounded">--}}
-                                        {{--                                            <label class="form-label">Altura</label>--}}
-                                        {{--                                            <input class="form-control" name="altura" type="number" value="{{old('altura')}}">--}}
-                                        {{--                                        </div>--}}
-
                                         <div class="form-row shadow-none p-2 mb-5 bg-light rounded mt-5">
                                             <select class="multisteps-form__select form-control" name="provincia"
                                                     id="inputProvincia">
@@ -157,6 +131,29 @@
                                             </select>
                                             <div class="text-danger" id="divCiudad"></div>
                                         </div>
+                                        <div>
+                                            <div class="input-group input-group-outline my-3 ">
+                                                <label class="form-label">Calle (*)</label>
+                                                <input class="form-control" name="calle" type="text"
+                                                value="{{old('calle')}}" id="inputCalle">
+                                            </div>
+                                            <div class="text-danger" id="divCalle"></div>
+                                        </div>
+
+                                        <div class="mt-5">
+                                            <div class="input-group input-group-outline my-3 ">
+                                                <label class="form-label">Altura (*)</label>
+                                                <input class="form-control" name="altura" type="number"
+                                                value="{{old('altura')}}" id="inputAlturaPublicacion">
+                                            </div>
+                                            <div class="text-danger" id="divAltura"></div>
+                                        </div>
+
+                                        {{--                                        <div class="input-group input-group-outline mt-5 bg-light rounded">--}}
+                                        {{--                                            <label class="form-label">Altura</label>--}}
+                                        {{--                                            <input class="form-control" name="altura" type="number" value="{{old('altura')}}">--}}
+                                        {{--                                        </div>--}}
+
                                     </div>
 
                                     {{--                                    <div class="form-row mt-4  shadow-none p-3 mb-5 bg-light rounded">--}}
@@ -563,5 +560,16 @@
 
 
     </body>
+
+    <script>
+        $(document).ready(function () {
+            $('#inputProvincia').select2();
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            $('#inputCiudad').select2();
+        });
+    </script>
 
 </x-app-layout>

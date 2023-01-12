@@ -55,7 +55,8 @@
                                                             @if($tipoPropiedad->id == $publicacion->id_tipo_propiedad)
                                                                 selected
                                                         @endif
-                                                    >{{$tipoPropiedad->nombre_tipo_propiedad}}</option>
+                                                    >{{$tipoPropiedad->nombre_tipo_propiedad}}
+                                                    </option>
                                                 @endforeach
                                             </select>
                                             <div class="text-danger"  id="divTipo" ></div>
@@ -79,41 +80,12 @@
                                     <div class="multisteps-form__content">
 
 
-                                        <div>
-                                            <div class="input-group input-group-outline o my-3 is-focused">
-                                                <label class="form-label">Calle (*)</label>
-                                                <input class="form-control" name="calle" type="text" value="{{old('calle',$publicacion->calle_publicacion)}}" id="inputCalle">
-                                            </div>
-                                            <div class="text-danger"  id="divCalle" ></div>
-                                        </div>
-
-{{--                                        <div class="form-row mt-4  shadow-none p-3 mb-5 bg-light rounded">--}}
-{{--                                            <div class="col">--}}
-{{--                                                <input class="form-control" name="calle" type="text" value="{{old('calle',$publicacion->calle_publicacion)}}">--}}
-{{--                                            </div>--}}
-{{--                                        </div>--}}
-
-                                        <div class="mt-5">
-                                            <div class="input-group input-group-outline o my-3 is-focused">
-                                                <label class="form-label">Altura (*)</label>
-                                                <input class="form-control" name="altura" type="number" value="{{old('altura',$publicacion->altura_publicacion)}}" id="inputAlturaPublicacion">
-                                            </div>
-                                            <div class="text-danger"  id="divAltura" ></div>
-                                        </div>
-
-{{--                                        <div class="form-row mt-4 shadow-none p-3 mb-5 bg-light rounded">--}}
-{{--                                            <div class="col">--}}
-{{--                                                <input class="form-control" name="altura" type="number" placeholder="Altura" value="{{old('altura',$publicacion->altura_publicacion)}}">--}}
-{{--                                            </div>--}}
-{{--                                        </div>--}}
-
-
                                         <div class="form-row mt-4 shadow-none p-3 mb-5 bg-light rounded">
                                             <select class="multisteps-form__select form-control" name="provincia" id="inputProvincia">
                                                 <option selected="selected" name="provincia">Seleccione la provincia</option>
                                                 @foreach($provincias as $provincia)
                                                     <option value="{{$provincia->id}}"
-                                                            @if($provincia->id == $publicacion->id_provincia)
+                                                            @if($provincia->id == $publicacion->ciudad()->first()->provincia()->first()->id)
                                                                 selected
                                                         @endif
                                                     >{{$provincia->nombre_provincia}}</option>
@@ -135,6 +107,35 @@
                                             </select>
                                             <div class="text-danger"  id="divCiudad" ></div>
                                         </div>
+                                        <div>
+                                            <div class="input-group input-group-outline o my-3 is-focused">
+                                                <label class="form-label">Calle (*)</label>
+                                                <input class="form-control" name="calle" type="text" value="{{old('calle',$publicacion->calle_publicacion)}}" id="inputCalle">
+                                            </div>
+                                            <div class="text-danger"  id="divCalle" ></div>
+                                        </div>
+
+                                        {{--                                        <div class="form-row mt-4  shadow-none p-3 mb-5 bg-light rounded">--}}
+                                        {{--                                            <div class="col">--}}
+                                        {{--                                                <input class="form-control" name="calle" type="text" value="{{old('calle',$publicacion->calle_publicacion)}}">--}}
+                                        {{--                                            </div>--}}
+                                        {{--                                        </div>--}}
+
+                                        <div class="mt-5">
+                                            <div class="input-group input-group-outline o my-3 is-focused">
+                                                <label class="form-label">Altura (*)</label>
+                                                <input class="form-control" name="altura" type="number" value="{{old('altura',$publicacion->altura_publicacion)}}" id="inputAlturaPublicacion">
+                                            </div>
+                                            <div class="text-danger"  id="divAltura" ></div>
+                                        </div>
+
+                                        {{--                                        <div class="form-row mt-4 shadow-none p-3 mb-5 bg-light rounded">--}}
+                                        {{--                                            <div class="col">--}}
+                                        {{--                                                <input class="form-control" name="altura" type="number" placeholder="Altura" value="{{old('altura',$publicacion->altura_publicacion)}}">--}}
+                                        {{--                                            </div>--}}
+                                        {{--                                        </div>--}}
+
+
                                     </div>
 
                                     <div class="form-row mt-4  shadow-none p-3 mb-5 bg-light rounded">
@@ -473,4 +474,15 @@
 
 
     </body>
+
+    <script>
+        $(document).ready(function () {
+            $('#inputProvincia').select2();
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            $('#inputCiudad').select2();
+        });
+    </script>
 </x-app-layout>

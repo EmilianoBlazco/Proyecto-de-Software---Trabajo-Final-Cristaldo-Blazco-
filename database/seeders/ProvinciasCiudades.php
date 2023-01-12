@@ -162,11 +162,19 @@ class ProvinciasCiudades extends Seeder
             'Wanda',
         ];
 
+//        modificar los datos del array de ciudad con su provincia correspondiente
         foreach ($ciudades as $ciudad) {
             \App\Models\Ciudad::create([
-                'nombre_ciudad' => $ciudad
+                'nombre_ciudad' => $ciudad,
+                'id_provincia' => 15,
             ]);
         }
+
+//        foreach ($ciudades as $ciudad) {
+//            \App\Models\Ciudad::create([
+//                'nombre_ciudad' => $ciudad
+//            ]);
+//        }
 
 //        agregar los tipos de propiedades
 //    - Casa

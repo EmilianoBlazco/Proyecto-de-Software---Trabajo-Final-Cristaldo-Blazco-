@@ -30,6 +30,7 @@ return new class extends Migration
             $table->string('descripcion_publicacion');
             $table->string('longitud_publicacion');
             $table->string('latitud_publicacion');
+            $table->integer('id_inquilino')->nullable();
 
             $table->softDeletes();
             $table->timestamps();
@@ -125,7 +126,7 @@ return new class extends Migration
             $table->foreignId('id_tipo_propiedad')->constrained('tipo_propiedad');
         });
         //crear clave foreanea de provincia
-        Schema::table('publicacion', function (Blueprint $table) {
+        Schema::table('ciudad', function (Blueprint $table) {
             $table->foreignId('id_provincia')->constrained('provincia');
         });
         //crear clave foreanea de ciudad

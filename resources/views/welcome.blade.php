@@ -110,7 +110,7 @@
                     <h1 class=" text-white" >Easy-Rent</h1>
                     <p class="lead mb-4 text-white opacity-8">Tu proximo lugar esta aca</p>
 
-                    <a class="btn bg-gradient-primary text-white border-radius-lg" href="{{route('alquileres')}}">Quiero buscar un alquiler</a>
+                    <a class="btn bg-gradient-primary text-white border-radius-lg" href="{{route('alquileres.index')}}">Quiero buscar un alquiler</a>
                     @if (Route::has('login'))
                         @auth
                             <span>ㅤㅤ</span>

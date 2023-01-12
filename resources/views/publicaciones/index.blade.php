@@ -44,7 +44,7 @@
                                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-15 ps-2">Tipo</th>
                                         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-15">Estado</th>
                                         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-15">Fecha de publicacion</th>
-                                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-15">Tipo de contrato</th>
+                                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-15">Vencimiento de contrato</th>
                                         <th></th>
                                         <th></th>
                                         <th></th>
@@ -97,13 +97,25 @@
                                             <span class="text-secondary text-xs font-weight-normal">{{$publicacion->created_at->format('d-m-Y')}}</span>
                                         </td>
                                         <td class="align-middle text-center">
-                                            <span class="badge bg-gradient-success">XXXXX</span>
+                                            @if($contrato->where('id_publicacion',$publicacion->id)->first() == null)
+                                                <span class="text-secondary text-xs font-weight-normal">No se encuentra ningún contrato activo</span>
+                                            @else
+                                                <span class="text-secondary text-xs font-weight-normal">{{date('d-m-Y', strtotime($contrato->where('id_publicacion',$publicacion->id)->first()->fecha_vencimiento_contrato))}}</span>
+                                            @endif
                                         </td>
                                         <td>
                                             @if($publicacion->estado_publicacion == "Activo")
-                                                <a href="{{route('contratos.create',$publicacion)}}" class="fa fa-file-text-o" style="color: #4fa952" data-toggle="tooltip" title="Definir contrato"></a>
+                                                @if($solicitud_prop->count() > 0)
+                                                    <a href="{{route('contratos.create')}}" class="fa fa-file-text-o" style="color: #4fa952" data-toggle="tooltip" title="Definir contrato"></a>
+                                                @else
+                                                    <a class="fa fa-file-text-o" style="color: red" data-toggle="tooltip" title="Deben existir solicitudes para crear un contrato"></a>
+                                                @endif
                                             @elseif($publicacion->estado_publicacion == "Alquilado")
-                                                <a class="fa fa-file-text-o" style="color: red" data-toggle="tooltip" title="Definir contrato"></a>
+                                                @if(Auth::user()->hasRole('inquilino'))
+                                                    <a href="{{route('contratos.show',$contrato->where('id_publicacion', $publicacion->id)->first()->id)}}" class="fa fa-file-text-o" style="color: #4fa952" data-toggle="tooltip" title="Consultar contrato"></a>
+                                                @elseif(Auth::user()->hasRole('propietario'))
+                                                    <a class="fa fa-file-text-o" style="color: red" data-toggle="tooltip" title="Definir contrato"></a>
+                                                @endif
                                             @endif
                                         </td>
                                         <td class="align-middle">
@@ -111,7 +123,11 @@
                                             @if($publicacion->estado_publicacion == "Activo")
                                                 <a href="{{route('publicaciones.edit',$publicacion)}}" class="fas fa-edit" style="color: #4fa952" data-toggle="tooltip" title="Editar publicación"></a>
                                             @elseif($publicacion->estado_publicacion == "Alquilado")
-                                                <a class="fas fa-edit" style="color: red" disabled data-toggle="tooltip" title="Editar publicación"></a>
+                                                @if(Auth::user()->hasRole('inquilino'))
+
+                                                @elseif(Auth::user()->hasRole('propietario'))
+                                                    <a class="fas fa-edit" style="color: red" disabled data-toggle="tooltip" title="Editar publicación"></a>
+                                                @endif
                                             @endif
                                         </td>
                                         <td class="align-middle">
@@ -121,10 +137,14 @@
                                                     <button type="submit" class="fa fa-house-damage" style="color: #4fa952" data-toggle="tooltip" title="Desactivar publicación"></button>
                                                 </form>
                                             @elseif($publicacion->estado_publicacion == "Alquilado")
-                                                <form action="{{route('publicaciones.destroy',$publicacion)}}" class="formulariodeshabilitar" method="POST">
-                                                    @csrf @method('DELETE')
-                                                    <button type="submit" class="fa fa-house-damage" style="color: red" disabled data-toggle="tooltip" title="Desactivar publicación"></button>
-                                                </form>
+                                                @if(Auth::user()->hasRole('inquilino'))
+
+                                                @elseif(Auth::user()->hasRole('propietario'))
+                                                    <form action="{{route('publicaciones.destroy',$publicacion)}}" class="formulariodeshabilitar" method="POST">
+                                                        @csrf @method('DELETE')
+                                                        <button type="submit" class="fa fa-house-damage" style="color: red" disabled data-toggle="tooltip" title="Desactivar publicación"></button>
+                                                    </form>
+                                                @endif
                                             @endif
                                     </tr>
 
@@ -144,149 +164,4 @@
 {{--    <script src="{{asset('js/jquery.min.js')}}"></script>--}}
     <script src="http://code.jquery.com/jquery-3.4.0.min.js" integrity="sha256-BJeo0qm959uMBGb65z40ejJYGSgR7REI4+CW1fNKwOg=" crossorigin="anonymous"></script>
 
-
-
-
-@if(session('deshabilitar') == 'ok')
-        <script>
-            Swal.fire(
-                'Deshabilitado!',
-                'La publicación ha sido deshabilitada de manera exitosa.',
-                'success',
-            )
-        </script>
-    @endif
-{{--    @else--}}
-{{--        <script>--}}
-{{--            Swal.fire(--}}
-{{--                'Error!',--}}
-{{--                'La publicación no pudo ser deshabilitada.',--}}
-{{--                'error',--}}
-{{--            )--}}
-{{--        </script>--}}
-{{--    @endif--}}
-
-    @if(session('alquilado') == 'ok')
-        <script>
-            Swal.fire(
-                'Alquilado!',
-                'Ya puede acceder a la comodidad de su nuevo hogar.',
-                'success'
-            )
-        </script>
-    @elseif(session('pendiente') == 'pend')
-        <script>
-            Swal.fire(
-                'Pendiente!',
-                'Su pago esta pendiente a ser aprobado.',
-                'warning'
-            )
-        </script>
-    @elseif(session('rechazado') == 'rej')
-        <script>
-            Swal.fire(
-                'Rechazado!',
-                'Su pago fue rechazo. Por favor intente por otro medio de pago.',
-                'Error'
-            )
-        </script>
-    @endif
-
-    @if(session('restaurar') == 'ok')
-        <script>
-            Swal.fire(
-                'Restaurado!',
-                'La publicación ha sido restaurada de manera exitosa.',
-                'success'
-            )
-        </script>
-    @endif
-{{--    @else--}}
-{{--        <script>--}}
-{{--            Swal.fire(--}}
-{{--                'Error!',--}}
-{{--                'La publicación no pudo ser restaurada.',--}}
-{{--                'error'--}}
-{{--            )--}}
-{{--        </script>--}}
-{{--    @endif--}}
-
-    @if(session('modificar') == 'ok')
-        <script>
-            Swal.fire(
-                'Modificado!',
-                'Los cambios fueron aplicados de manera exitosa.',
-                'success'
-            )
-        </script>
-    @endif
-{{--    @else--}}
-{{--        <script>--}}
-{{--            Swal.fire(--}}
-{{--                'Error!',--}}
-{{--                'Los cambios no pudieron ser aplicados.',--}}
-{{--                'error'--}}
-{{--            )--}}
-{{--        </script>--}}
-{{--    @endif--}}
-
-    @if(session('creacion') == 'ok')
-        <script>
-            Swal.fire(
-                'Publicado!',
-                'Se publico de manera exitosa su alquiler.',
-                'success'
-            )
-        </script>
-    @endif
-{{--    @else--}}
-{{--        <script>--}}
-{{--            Swal.fire(--}}
-{{--                'Error!',--}}
-{{--                'No se pudo publicar su alquiler.',--}}
-{{--                'error'--}}
-{{--            )--}}
-{{--        </script>--}}
-{{--    @endif--}}
-
-    <script>
-
-        // document.getElementsByClassName('formulariodeshabilitar').addEventListener('submit', function(e){
-        //     e.preventDefault();
-        //     console.log(result.value);
-        //     Swal.fire({
-        //         title: '¿Está seguro?',
-        //         text: "¡No podrá revertir esto!",
-        //         icon: 'warning',
-        //         showCancelButton: true,
-        //         confirmButtonColor: '#3085d6',
-        //         cancelButtonColor: '#d33',
-        //         confirmButtonText: '¡Sí, deshabilitar!',
-        //         cancelButtonText: 'Cancelar'
-        //     }).then((result) => {
-        //         if (result.isConfirmed) {
-        //             this.submit();
-        //         }
-        //     })
-        //     console.log(result.value);
-        // });
-
-        $('.formulariodeshabilitar').submit(function(e){
-            e.preventDefault();
-            Swal.fire({
-                title: '¿Estás seguro que deseas deshabilitar la publicacion?',
-                text: "Puedes volver a habilitarla en cualquier momento!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: '¡Sí, deshabilitar!',
-                cancelButtonText: 'Cancelar'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    this.submit();
-                }
-            })
-        });
-    </script>
 </x-app-layout>

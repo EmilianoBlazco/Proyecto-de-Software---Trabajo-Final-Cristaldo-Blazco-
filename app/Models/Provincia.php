@@ -35,8 +35,9 @@ class Provincia extends Model implements Auditable
 		'nombre_provincia'
 	];
 
-	public function publicacion()
-	{
-		return $this->hasMany(Publicacion::class, 'id_provincia');
-	}
+    //una provincia muchas ciudades
+    public function ciudades()
+    {
+        return $this->hasMany(Ciudad::class, 'id_provincia');
+    }
 }

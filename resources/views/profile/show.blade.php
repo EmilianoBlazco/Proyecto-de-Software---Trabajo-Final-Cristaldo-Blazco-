@@ -15,12 +15,20 @@
 {{--                <x-jet-section-border />--}}
 
             @endif
-
             @if (Laravel\Fortify\Features::enabled(Laravel\Fortify\Features::updatePasswords()))
 {{--                <div class="mt-10 sm:mt-0">--}}
                     @livewire('profile.update-password-form')
 {{--                </div>--}}
 
+                <x-jet-section-border />
+                    {{--                Agregar boton centrado con etiqueta buscar sin livewire--}}
+                    <div class="text-center">
+                        <form action="{{route('datosExtraUsuarios.edit',auth()->user()->id)}}" method="get">
+                            <button type="submit" class="btn btn-primary btn-round">
+                                <i class="material-icons"></i> Editar datos extras del perfil
+                            </button>
+                        </form>
+                    </div>
                 <x-jet-section-border />
 
             @endif

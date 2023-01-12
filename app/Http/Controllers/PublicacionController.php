@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\CaracteristicaComodidad;
 use App\Models\Ciudad;
 use App\Models\Comodidad;
+use App\Models\DatosExtraUsuarios;
 use App\Models\Imagen;
 use App\Models\MercadoPagoTransaccion;
 use App\Models\Provincia;
@@ -33,21 +34,31 @@ class PublicacionController extends Controller
     {
         //si el usuario tiene el rol de inquilino mostrar solo las publicaciones que esten alquiladas para ese usuario
         if(Auth::user()->hasRole('inquilino')){
-            $publicaciones = Publicacion::where('estado_publicacion', 'Alquilado')->where('id_usuario', Auth::user()->id)->get();
+            $publicaciones = Publicacion::get()->where('estado_publicacion','==', 'Alquilado')->where('id_inquilino', Auth::user()->id);
+            $contrato = Contrato::get()->where('id_inquilino', Auth::user()->id);
         }elseif(Auth::user()->hasRole('propietario')){
             $publicaciones = Publicacion::where('id_usuario', Auth::user()->id)->get();
+            $contrato = Contrato::get()->where('id_usuario', Auth::user()->id);
         }elseif(Auth::user()->hasRole('admin')){
             $publicaciones = Publicacion::all();
         }
         //mostrar las publicaciones que tengan el estado en 'Activo' y que pertenezcan al usuario autenticado
 //        $publicaciones = Publicacion::where('estado_publicacion', 'Activo')->where('id_usuario', Auth::user()->id)->get();
-
+        $solicitud_prop = Solicitud::get()->where('id_propietario',Auth::user()->id);
 
 //        $publicaciones = Publicacion::get()->where('id_usuario',Auth::user()->id);
         $tiposPropiedades = TipoPropiedad::get();
         $imagenes = Imagen::get();
 
-        return view('publicaciones.index',compact('publicaciones','tiposPropiedades', 'imagenes'));
+        $datosExtraUsuarios = DatosExtraUsuarios::get()->where('id_usuario',Auth::user()->id)->first();
+        if ($datosExtraUsuarios == null){
+            return redirect()->route('datosExtraUsuarios.create')->with('registro','no');
+        }else{
+            return view('publicaciones.index', compact('publicaciones', 'tiposPropiedades', 'imagenes', 'solicitud_prop', 'contrato'));
+        }
+//        dd($datosExtraUsuarios);
+
+//        return view('publicaciones.index',compact('publicaciones','tiposPropiedades', 'imagenes'));
     }
 
     public function publicacionesAdmin()
@@ -61,7 +72,7 @@ class PublicacionController extends Controller
 
     public function pagar(Publicacion $publicacion, Request $request){
 
-        $contrato = Contrato::where('id_publicacion', $publicacion->id)->where('id_usuario', Auth::user()->id)->first();
+        $contrato = Contrato::where('id_publicacion', $publicacion->id)->where('id_inquilino', Auth::user()->id)->first();
 
         $payment_id = $request->get('payment_id');
 
@@ -77,6 +88,7 @@ class PublicacionController extends Controller
 
         if($status == 'approved'){
             $publicacion->estado_publicacion = 'Alquilado';
+            $publicacion->id_inquilino = Auth::user()->id;
             $publicacion->save();
 
             //guardar datos en la tabla de mercado-pago-transacciones
@@ -88,8 +100,8 @@ class PublicacionController extends Controller
             $mercadoPagoTransaccion->tipo_pago = $payment_type_id;
             $mercadoPagoTransaccion->id_usuario = Auth::user()->id;
             $mercadoPagoTransaccion->nombre_usuario = Auth::user()->name;
-//            $mercadoPagoTransaccion->id_contrato = $contrato->id;
-            $mercadoPagoTransaccion->id_contrato = 1;
+            $mercadoPagoTransaccion->id_contrato = $contrato->id;
+//            $mercadoPagoTransaccion->id_contrato = 100;
             $mercadoPagoTransaccion->save();
 
 //            //enviar correo al propietario de la publicacion (ver que onda con el envio de correos)
@@ -116,8 +128,8 @@ class PublicacionController extends Controller
             $mercadoPagoTransaccion->tipo_pago = $payment_type_id;
             $mercadoPagoTransaccion->id_usuario = Auth::user()->id;
             $mercadoPagoTransaccion->nombre_usuario = Auth::user()->name;
-            //$mercadoPagoTransaccion->id_contrato = $contrato->id;
-            $mercadoPagoTransaccion->id_contrato = 1;
+            $mercadoPagoTransaccion->id_contrato = $contrato->id;
+//            $mercadoPagoTransaccion->id_contrato = 100;
             $mercadoPagoTransaccion->save();
 
             return redirect()->route('publicaciones.index')->with('rechazado', 'rej');
@@ -131,7 +143,8 @@ class PublicacionController extends Controller
         $ratings = Rating::get()->where('id_publicacion',$publicacion->id);
 //        $solicitud = Solicitud::get()->where('id_publicacion',$publicacion->id)->where('id_usuario',Auth::user()->id)->first();
         $solicitud = Solicitud::get()->where('id_publicacion',$publicacion->id)->where('id_usuario',Auth::user()->id)->where('estado_solicitud','!=','Nulo')->sortBy('created_at', SORT_REGULAR, true)->first();
-//        dd($solicitud);
+//        $solicitud_prop = Solicitud::get()->where('id_publicacion',$publicacion->id)->where('id_propietario',$publicacion->id_usuario)->where('estado_solicitud','=','Aceptado')->where('id_usuario',$solicitud->id_usuario)->first();
+//        dd($solicitud_prop);
         if ($solicitud == null){
             $solicitud = new Solicitud();
             $solicitud->estado_solicitud = 'Nulo';
@@ -143,18 +156,34 @@ class PublicacionController extends Controller
             session()->flash('aceptado','ok');
 //            session()->forget('aceptado');
         }
+        $contratos = Contrato::get()->where('id_publicacion',$publicacion->id)->where('baja_contrato',null);//Ver si esta condicion nunca falla
+//        dd($contratos->first()->id);
+        if (isset($contratos->first()->id)){
+            $contrato_id = $contratos->first()->id;
+        }else{
+            $contrato_id = null;
+        }
+//        dd($contrato_id);
+//        ->sortBy('created_at', SORT_REGULAR, true)->first()
+//        dd($contratos);
+//        if ($contratos == null) {
+//            $contratos = new Contrato();
+//            $contratos->baja_contrato = 'Nulo';
+//        }
 //        dd($caracteristicaComodidades);
 //        $pagado =null;
 
-        return view('publicaciones.show',compact('publicacion', 'imagenes', 'ratings', 'solicitud'));
+        return view('publicaciones.show',compact('publicacion', 'imagenes', 'ratings', 'solicitud', 'contratos', 'contrato_id'));
 //        return view('publicaciones.show',['publicacion'=> $publicacion]);
     }
 
     public function create(Provincia $provincia, TipoPropiedad $tipoPropiedad, Ciudad $ciudad, Comodidad $comodidad, CaracteristicaComodidad $caracteristicaComodidad)
     {
-        $provincias = Provincia::get();
+        $provincias = Provincia::get()->sortBy('nombre_provincia');
         $tiposPropiedad = TipoPropiedad::get();
-        $ciudades = Ciudad::get();
+//        devlver ciudades ordenado por el id de provincia seleccionado
+        $ciudades = Ciudad::get()->sortBy('nombre_ciudad');
+//        $ciudades = Ciudad::get();
         $comodidades = Comodidad::get();
         $caracteristicasComodidades = CaracteristicaComodidad::get();
         $tipoInquilino = TipoInquilino::get();
@@ -199,7 +228,7 @@ class PublicacionController extends Controller
         $publicacion->titulo_publicacion = $request->input('titulo');
         $publicacion->descripcion_publicacion = $request->input('descripcion');
         $publicacion->id_tipo_propiedad = $request->input('tipo_propiedad');
-        $publicacion->id_provincia = $request->input('provincia');
+//        $publicacion->id_provincia = $request->input('provincia');
         $publicacion->id_ciudad = $request->input('ciudad');
         $publicacion->longitud_publicacion = $request->input('longitud');
         $publicacion->latitud_publicacion = $request->input('latitud');

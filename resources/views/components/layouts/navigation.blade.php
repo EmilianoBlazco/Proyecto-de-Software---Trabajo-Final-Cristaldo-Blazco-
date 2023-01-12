@@ -12,7 +12,7 @@
 {{--                    </a>--}}
 {{--                </li>--}}
                 <li class="nav-item">
-                    <a class="nav-link text-black" href="{{ route('alquileres')}}">
+                    <a class="nav-link text-black" href="{{ route('alquileres.index')}}">
                         Alquilar
                     </a>
                 </li>

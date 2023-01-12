@@ -17,21 +17,25 @@ return new class extends Migration
             //para tabla general
             $table->id();
 //            $table->string('estado_contrato');
-            $table->timestamp('baja_contrato');
-            $table->boolean('tipo_contrato');//bolean (Con o sin contrato)
+            $table->dateTime('baja_contrato')->nullable();
+            $table->boolean('tipo_contrato')->nullable();//bolean (Con o sin contrato)
 
             //para contrato especifico mezclado con lens
-            $table->string('titulo_contrato');
-            $table->longText('descripcion_contrato');
-            $table->timestamp('fecha_inicio_contrato');
-            $table->timestamp('fecha_vencimiento_contrato');
-            $table->string('monto_contrato');
-            $table->integer('fecha_inicial_pago_contrato');//Intervalo de pago 1 a 10 de cada mes
-            $table->integer('fecha_final_pago_contrato');//Intervalo de pago 1 a 10 de cada mes
-            $table->double('porcentaje_aumento_contrato');
-            $table->integer('periodo_aumento_contrato');//cada 6 meses aumenta en el porcentaje establecido
-            $table->integer('retraso_maximo_pago_contrato');//periodo de tiempo en el que se puede retrasar el pago antes de que se desaloje
+            $table->boolean('confirmacion_propietario');
+            $table->boolean('confirmacion_inquilino');
+            $table->string('titulo_contrato')->nullable();
+            $table->longText('descripcion_contrato')->nullable();
+            $table->dateTime('fecha_inicio_contrato')->nullable();//Post alquiler
+            $table->dateTime('fecha_vencimiento_contrato')->nullable();//Post alquiler
+            $table->string('monto_contrato')->nullable();
+            $table->integer('fecha_inicial_pago_contrato')->nullable();//Intervalo de pago 1 a 10 de cada mes
+            $table->integer('fecha_final_pago_contrato')->nullable();//Intervalo de pago 1 a 10 de cada mes
+            $table->double('porcentaje_aumento_contrato_restraso')->nullable();//Pocentaje de pago si se retrasa en los dias
+            $table->integer('periodo_aumento_contrato')->nullable();//cada 6 meses aumenta en el porcentaje establecido
+            $table->double('porcentaje_aumento_contrato')->nullable();
+            $table->integer('retraso_maximo_pago_contrato')->nullable();//periodo de tiempo en el que se puede retrasar el pago antes de que se desaloje
             //dias
+            $table->integer('id_inquilino')->nullable();
 
             $table->softDeletes();
             $table->timestamps();
@@ -56,12 +60,12 @@ return new class extends Migration
 
         //una publicacion puede tener muchos contratos
         Schema::table('contrato', function (Blueprint $table) {
-            $table->foreignId('id_publicacion')->constrained('publicacion');
+            $table->foreignId('id_publicacion')->constrained('publicacion')->nullable();
         });
 
         //un usuario puede tener muchos contratos
         Schema::table('contrato', function (Blueprint $table) {
-            $table->foreignId('id_usuario')->constrained('users');
+            $table->foreignId('id_usuario')->constrained('users')->nullable(); //Post alquiler
         });
 
         Schema::table('mercado-pago-transacciones', function (Blueprint $table) {

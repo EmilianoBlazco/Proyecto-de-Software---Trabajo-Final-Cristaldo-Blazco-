@@ -32,18 +32,19 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/mercadopago/dx-php" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/_laravel_idea" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/smalot/pdfparser" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/grpc/grpc" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/firebase/php-jwt" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/rize/uri-template" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/google/auth" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/google/cloud-core" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/grpc/grpc" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/google/cloud-vision" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/google/common-protos" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/google/gax" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/google/grpc-gcp" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/google/longrunning" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/google/gax" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/rize/uri-template" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/google/protobuf" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/telegram-bot/api" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/google/common-protos" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/google/grpc-gcp" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/firebase/php-jwt" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/google/auth" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/luecano/numero-a-letras" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/barryvdh/laravel-translation-manager" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
@@ -57,5 +58,7 @@
     <orderEntry type="library" name="leaflet-routing-machine" level="application" />
     <orderEntry type="library" name="font-awesome" level="application" />
     <orderEntry type="library" name="intro.js" level="application" />
+    <orderEntry type="library" name="select2" level="application" />
+    <orderEntry type="library" name="58ef7b5c70" level="application" />
   </component>
 </module>

@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
 
             $table->string('estado_solicitud')->default('Pendiente');
+            $table->integer('id_propietario');
 
             $table->timestamps();
         });

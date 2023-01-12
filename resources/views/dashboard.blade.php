@@ -18,7 +18,7 @@
                     <div class="col-lg-8 text-center mx-auto my-auto">
                         <h1 class=" text-white" >Easy-Rent</h1>
                         <p class="lead mb-4 text-white opacity-8">Tu proximo lugar esta aca</p>
-                        <a class="btn bg-gradient-primary text-white border-radius-lg" href="{{route('alquileres')}}">Quiero buscar un alquiler</a>
+                        <a class="btn bg-gradient-primary text-white border-radius-lg" href="{{route('alquileres.index')}}">Quiero buscar un alquiler</a>
                         <span>ㅤㅤ</span>
                         <a class="btn bg-gradient-primary text-white border-radius-lg" href="{{route('publicaciones.index')}}">Quiero publicar un alquiler</a>
 {{--                        @foreach($caracteristicasEsperadas as $car)--}}
@@ -592,6 +592,7 @@
                                 </form>
                             </div>
                         </div>
+
                         <div class="modal-footer">
                             <button type="button" class="btn btn-success" data-bs-dismiss="modal">Responder luego</button>
                             {{--                    <button type="button" class="btn btn-primary">Save changes</button>--}}
