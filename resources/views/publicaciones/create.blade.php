@@ -15,7 +15,7 @@
 
 
     <div class="page-header align-items-start min-vh-100"
-         style="background-image: url('https://www.byverdleds.com/blog/wp-content/uploads/2019/08/LedSalon.jpg');">
+         style="background-image: url('{{ asset('img/bgdep2.jpg') }}');">
         <span class="mask bg-gradient-dark opacity-5"></span>
 
         <div class="container my-auto mt-9">
